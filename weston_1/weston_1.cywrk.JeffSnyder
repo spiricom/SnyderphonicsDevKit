@@ -171,6 +171,53 @@
 <VisibleNodeIds>
 <v>weston_1</v>
 <v>weston_1\weston_1</v>
+<v>weston_1\weston_1\CortexM3</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_AMuxCH0.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_CompCH0.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_CompCH0_PM.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_CSHL.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_IdacCH0.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_IdacCH0_PM.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_INT.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_IntClock.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_Pins.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_PM.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_SMS_Wrapper.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_TunerHelper.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\cy_em_eeprom.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CyDmac.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CySpc.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\Em_EEPROM.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\LED1.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_BOOT.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_INT.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_IntClock.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_PM.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\Sleep_isr.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\SleepTimer.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_audio.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_boot.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_cdc.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_cls.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_descr.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_Dm.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_Dp.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_drv.lst</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>

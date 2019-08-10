@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
   28:Generated_Source\PSoC5/USB.c **** * Global data allocation
   29:Generated_Source\PSoC5/USB.c **** ***************************************/
   30:Generated_Source\PSoC5/USB.c **** 
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 2
 
 
   31:Generated_Source\PSoC5/USB.c **** /** Indicates whether the USBFS has been initialized. The variable is
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
   85:Generated_Source\PSoC5/USB.c ****         USB_ep2_dma__TR_OUTPUT,
   86:Generated_Source\PSoC5/USB.c ****         0u,
   87:Generated_Source\PSoC5/USB.c ****         0u,
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 3
 
 
   88:Generated_Source\PSoC5/USB.c ****         0u,
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  142:Generated_Source\PSoC5/USB.c **** *   Note that global interrupts have to be enabled because interrupts are
  143:Generated_Source\PSoC5/USB.c **** *   required for USBFS component operation.
  144:Generated_Source\PSoC5/USB.c **** *
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 4
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 4
 
 
  145:Generated_Source\PSoC5/USB.c **** *   PSoC 4200L devices: when USBFS component configured to DMA with Automatic
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  199:Generated_Source\PSoC5/USB.c **** * Function Name: USB_Init
  200:Generated_Source\PSoC5/USB.c **** ****************************************************************************//**
  201:Generated_Source\PSoC5/USB.c **** *
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 5
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 5
 
 
  202:Generated_Source\PSoC5/USB.c **** * This function initializes or restores the component according to the
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  244:Generated_Source\PSoC5/USB.c ****     USB_INTR_LVL_SEL_REG = USB_DEFAULT_INTR_LVL_SEL;
  245:Generated_Source\PSoC5/USB.c **** 
  246:Generated_Source\PSoC5/USB.c ****     /* Configure interrupt sources from: SOF, Bus Reset and EP0. */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 6
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 6
 
 
  247:Generated_Source\PSoC5/USB.c ****     USB_INTR_SIE_MASK_REG = USB_DEFAULT_INTR_SIE_MASK;
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
   71 0038 FFF7FEFF 		bl	CyDelayUs
   72              	.LVL2:
  270:Generated_Source\PSoC5/USB.c ****     /* Disable USBIO by asserting PM.USB_CR0.fsusbio_pd_n(Inverted.
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 7
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 7
 
 
  271:Generated_Source\PSoC5/USB.c ****     *  high. These bits will be set low by the power manager out-of-reset.
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  106 0076 3343     		orrs	r3, r3, r6
  107 0078 2370     		strb	r3, [r4]
  292:Generated_Source\PSoC5/USB.c ****     CyDelayUs(USB_WAIT_PD_PULLUP_N_ENABLE);
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 8
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 8
 
 
  108              		.loc 1 292 0
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  328:Generated_Source\PSoC5/USB.c **** 
  329:Generated_Source\PSoC5/USB.c **** #else
  330:Generated_Source\PSoC5/USB.c ****     /* Set bus reset interrupt. */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 9
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 9
 
 
  331:Generated_Source\PSoC5/USB.c ****     CyIntSetPriority(USB_BUS_RESET_VECT_NUM, USB_BUS_RESET_PRIOR);
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  164 00d2 0420     		movs	r0, #4
  165 00d4 FFF7FEFF 		bl	CyIntSetVector
  166              	.LVL14:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 10
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 10
 
 
  348:Generated_Source\PSoC5/USB.c ****     #endif /* (USB_EP1_ISR_ACTIVE) */
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  392:Generated_Source\PSoC5/USB.c ****     /* Set ARB Interrupt. */
  393:Generated_Source\PSoC5/USB.c ****     #if (USB_EP_MANAGEMENT_DMA && USB_ARB_ISR_ACTIVE)
  394:Generated_Source\PSoC5/USB.c ****         CyIntSetPriority     (USB_ARB_VECT_NUM,  USB_ARB_PRIOR);
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 11
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 11
 
 
  395:Generated_Source\PSoC5/USB.c ****         (void) CyIntSetVector(USB_ARB_VECT_NUM, &USB_ARB_ISR);
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  411:Generated_Source\PSoC5/USB.c **** 
  412:Generated_Source\PSoC5/USB.c **** /*******************************************************************************
  413:Generated_Source\PSoC5/USB.c **** * Function Name: USB_InitComponent
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 12
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 12
 
 
  414:Generated_Source\PSoC5/USB.c **** ****************************************************************************//**
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  221              		.cfi_def_cfa_offset 8
  222              		.cfi_offset 3, -8
  223              		.cfi_offset 14, -4
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 13
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 13
 
 
  462:Generated_Source\PSoC5/USB.c ****     /* Initialize _hidProtocol variable to comply with
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  491:Generated_Source\PSoC5/USB.c ****     CyIntEnable(USB_INTR_LO_VECT_NUM);
  492:Generated_Source\PSoC5/USB.c **** #else
  493:Generated_Source\PSoC5/USB.c ****     CyIntEnable(USB_BUS_RESET_VECT_NUM);
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 14
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 14
 
 
  249              		.loc 1 493 0
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  532:Generated_Source\PSoC5/USB.c **** 
  533:Generated_Source\PSoC5/USB.c **** #if (USB_EP_MANAGEMENT_DMA && USB_ARB_ISR_ACTIVE)
  534:Generated_Source\PSoC5/USB.c ****     /* Enable ARB EP interrupt sources. */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 15
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 15
 
 
  535:Generated_Source\PSoC5/USB.c ****     USB_ARB_INT_EN_REG = USB_DEFAULT_ARB_INT_EN;
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  578:Generated_Source\PSoC5/USB.c ****         break;
  276              		.loc 1 578 0
  277 0052 0AE0     		b	.L9
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 16
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 16
 
 
  278              	.L8:
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  618:Generated_Source\PSoC5/USB.c ****             USB_LPM_CTRL_REG &= (uint32) ~USB_LPM_CTRL_LPM_EN;
  619:Generated_Source\PSoC5/USB.c ****         }
  620:Generated_Source\PSoC5/USB.c ****     #endif /* (USB_LPM_ACTIVE) */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 17
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 17
 
 
  621:Generated_Source\PSoC5/USB.c **** 
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  332              		.thumb
  333              		.thumb_func
  334              		.type	USB_Start, %function
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 18
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 18
 
 
  335              	USB_Start:
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  637:Generated_Source\PSoC5/USB.c **** 
  638:Generated_Source\PSoC5/USB.c **** 
  639:Generated_Source\PSoC5/USB.c **** /*******************************************************************************
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 19
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 19
 
 
  640:Generated_Source\PSoC5/USB.c **** * Function Name: USB_ReInitComponent
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  390 0002 0A4A     		ldr	r2, .L20
  391 0004 1370     		strb	r3, [r2]
  687:Generated_Source\PSoC5/USB.c ****     USB_configurationChanged = 0u;
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 20
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 20
 
 
  392              		.loc 1 687 0
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  430              		.cfi_endproc
  431              	.LFE3:
  432              		.size	USB_ReInitComponent, .-USB_ReInitComponent
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 21
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 21
 
 
  433              		.section	.text.USB_Stop,"ax",%progbits
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  739:Generated_Source\PSoC5/USB.c **** 
  740:Generated_Source\PSoC5/USB.c ****     /* Disable USB IP to respond to USB traffic. */
  741:Generated_Source\PSoC5/USB.c ****     USB_CR0_REG &= (uint8) ~USB_CR0_ENABLE;
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 22
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 22
 
 
  452              		.loc 1 741 0
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  763:Generated_Source\PSoC5/USB.c ****     /* Disable component interrupts. */
  764:Generated_Source\PSoC5/USB.c **** #if (CY_PSOC4)
  765:Generated_Source\PSoC5/USB.c ****     CyIntDisable(USB_INTR_HI_VECT_NUM);
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 23
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 23
 
 
  766:Generated_Source\PSoC5/USB.c ****     CyIntDisable(USB_INTR_LO_VECT_NUM);
@@ -1378,7 +1378,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  804:Generated_Source\PSoC5/USB.c **** 
  805:Generated_Source\PSoC5/USB.c ****     #if (USB_EP8_ISR_ACTIVE)
  806:Generated_Source\PSoC5/USB.c ****         CyIntDisable(USB_EP_8_VECT_NUM);
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 24
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 24
 
 
  807:Generated_Source\PSoC5/USB.c ****     #endif /* (USB_EP8_ISR_ACTIVE) */
@@ -1438,7 +1438,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  536 00a0 00000000 		.word	USB_configuration
  537 00a4 00000000 		.word	USB_interfaceNumber
  538 00a8 00000000 		.word	USB_deviceAddress
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 25
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 25
 
 
  539 00ac 00000000 		.word	USB_deviceStatus
@@ -1498,7 +1498,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  564 000a 1170     		strb	r1, [r2]
  565 000c 03F00403 		and	r3, r3, #4
  566              	.LVL30:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 26
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 26
 
 
  855:Generated_Source\PSoC5/USB.c **** 
@@ -1558,7 +1558,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  600 0006 00BF     		.align	2
  601              	.L31:
  602 0008 00000000 		.word	USB_configuration
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 27
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 27
 
 
  603              		.cfi_endproc
@@ -1618,7 +1618,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  628 000e C0B2     		uxtb	r0, r0
  629              	.LVL32:
  905:Generated_Source\PSoC5/USB.c ****         USB_configurationChanged = 0u;
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 28
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 28
 
 
  630              		.loc 1 905 0
@@ -1678,7 +1678,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  659              		@ frame_needed = 0, uses_anonymous_args = 0
  660              		@ link register save eliminated.
  661              	.LVL35:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 29
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 29
 
 
  930:Generated_Source\PSoC5/USB.c ****     return (USB_interfaceSetting[interfaceNumber]);
@@ -1738,7 +1738,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  685              		@ args = 0, pretend = 0, frame = 0
  686              		@ frame_needed = 0, uses_anonymous_args = 0
  687              		@ link register save eliminated.
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 30
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 30
 
 
  688              	.LVL37:
@@ -1798,7 +1798,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  984:Generated_Source\PSoC5/USB.c ****     uint16 cntr = 0u;
  985:Generated_Source\PSoC5/USB.c **** 
  986:Generated_Source\PSoC5/USB.c ****     if ((epNumber > USB_EP0) && (epNumber < USB_MAX_EP))
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 31
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 31
 
 
  719              		.loc 1 986 0
@@ -1858,7 +1858,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  763              	.LFB11:
  996:Generated_Source\PSoC5/USB.c **** 
  997:Generated_Source\PSoC5/USB.c **** 
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 32
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 32
 
 
  998:Generated_Source\PSoC5/USB.c **** #if (USB_EP_MANAGEMENT_DMA)
@@ -1918,7 +1918,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1052:Generated_Source\PSoC5/USB.c ****         #if (USB_DMA3_ACTIVE)
 1053:Generated_Source\PSoC5/USB.c ****             (void) USB_ep3_dma_SetInterruptCallback(&USB_EP3_DMA_DONE_ISR);
 1054:Generated_Source\PSoC5/USB.c ****         #endif /* (USB_DMA3_ACTIVE) */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 33
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 33
 
 
 1055:Generated_Source\PSoC5/USB.c **** 
@@ -1978,7 +1978,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1109:Generated_Source\PSoC5/USB.c ****         if ((USB_EP[epNumber].addr & USB_DIR_IN) != 0u)
 1110:Generated_Source\PSoC5/USB.c ****         {
 1111:Generated_Source\PSoC5/USB.c ****             /* IN endpoint: source is memory buffer. */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 34
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 34
 
 
 1112:Generated_Source\PSoC5/USB.c ****             src = HI16(pData);
@@ -2038,7 +2038,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1166:Generated_Source\PSoC5/USB.c **** 
 1167:Generated_Source\PSoC5/USB.c ****     #if (USB_DMA7_ACTIVE)
 1168:Generated_Source\PSoC5/USB.c ****         case USB_EP7:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 35
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 35
 
 
 1169:Generated_Source\PSoC5/USB.c ****                 USB_DmaChan[epNumber] = USB_ep7_DmaInitialize(USB_DMA_BYTES_PER_BURST,
@@ -2098,7 +2098,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1223:Generated_Source\PSoC5/USB.c ****         {
 1224:Generated_Source\PSoC5/USB.c ****         #if (CY_PSOC4)
 1225:Generated_Source\PSoC5/USB.c ****             if (0u != USB_DmaChan[i])
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 36
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 36
 
 
 1226:Generated_Source\PSoC5/USB.c ****             {
@@ -2158,7 +2158,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1280:Generated_Source\PSoC5/USB.c ****             /* CyDmaTdSetAddress API is optimized to change source address only. */
 1281:Generated_Source\PSoC5/USB.c ****             convert = (reg16 *) &CY_DMA_TDMEM_STRUCT_PTR[USB_DmaTd[epNumber]].TD1[0u];
 1282:Generated_Source\PSoC5/USB.c ****             CY_SET_REG16(convert, LO16((uint32)USB_inDataPointer[epNumber] +
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 37
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 37
 
 
 1283:Generated_Source\PSoC5/USB.c ****                                             USB_DMA_BYTES_PER_BURST));
@@ -2218,7 +2218,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1337:Generated_Source\PSoC5/USB.c **** *
 1338:Generated_Source\PSoC5/USB.c **** * \reentrant
 1339:Generated_Source\PSoC5/USB.c **** *  No.
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 38
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 38
 
 
 1340:Generated_Source\PSoC5/USB.c **** *
@@ -2278,7 +2278,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1353:Generated_Source\PSoC5/USB.c ****     #endif /* (!USB_EP_MANAGEMENT_DMA_AUTO) */
 1354:Generated_Source\PSoC5/USB.c **** 
 1355:Generated_Source\PSoC5/USB.c ****         /* Set count and data toggle. */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 39
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 39
 
 
 1356:Generated_Source\PSoC5/USB.c ****         USB_SIE_EP_BASE.sieEp[epNumber].epCnt0 = (uint8) HI8(length) | USB_EP[epNumber].epToggle;
@@ -2338,7 +2338,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  845              	.LVL55:
  846              	.L53:
  847              	.LBE3:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 40
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 40
 
 
 1367:Generated_Source\PSoC5/USB.c ****             }
@@ -2398,7 +2398,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1405:Generated_Source\PSoC5/USB.c ****                                                         CYDMA_BYTE | CYDMA_ELEMENT_WORD | CYDMA_INC
 1406:Generated_Source\PSoC5/USB.c **** 
 1407:Generated_Source\PSoC5/USB.c ****                 /* Validate descriptor to execute on following DMA request. */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 41
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 41
 
 
 1408:Generated_Source\PSoC5/USB.c ****                 USB_CyDmaValidateDescriptor(channelNum, USB_DMA_DESCR0);
@@ -2458,7 +2458,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1462:Generated_Source\PSoC5/USB.c **** 
 1463:Generated_Source\PSoC5/USB.c **** 
 1464:Generated_Source\PSoC5/USB.c ****                 /* Enable DMA channel: configuration complete. */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 42
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 42
 
 
 1465:Generated_Source\PSoC5/USB.c ****                 USB_CyDmaChEnable(channelNum);
@@ -2518,7 +2518,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1519:Generated_Source\PSoC5/USB.c ****                     USB_DmaEpBurstCnt[epNumber] = (uint8) (length / USB_DMA_BYTES_PER_BURST);
 1520:Generated_Source\PSoC5/USB.c **** 
 1521:Generated_Source\PSoC5/USB.c ****                     /* Get number of elements in the last burst. */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 43
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 43
 
 
 1522:Generated_Source\PSoC5/USB.c ****                     USB_DmaEpLastBurstEl[epNumber] = (uint8) (length % USB_DMA_BYTES_PER_BURST);
@@ -2578,7 +2578,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1576:Generated_Source\PSoC5/USB.c ****                         USB_DmaTd[epNumber], (length > USB_DMA_BYTES_PER_BURST) ?
 1577:Generated_Source\PSoC5/USB.c ****                         USB_DMA_BYTES_PER_BURST : length,
 1578:Generated_Source\PSoC5/USB.c ****                         USB_DmaNextTd[epNumber], TD_TERMIN_EN | TD_INC_SRC_ADR );
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 44
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 44
 
 
 1579:Generated_Source\PSoC5/USB.c ****                     (void) CyDmaTdSetAddress(USB_DmaTd[epNumber], LO16((uint32)  USB_inDataPointer[
@@ -2638,7 +2638,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1606:Generated_Source\PSoC5/USB.c **** 
 1607:Generated_Source\PSoC5/USB.c **** /*******************************************************************************
 1608:Generated_Source\PSoC5/USB.c **** * Function Name: USB_ReadOutEP
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 45
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 45
 
 
 1609:Generated_Source\PSoC5/USB.c **** ****************************************************************************//**
@@ -2698,7 +2698,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1663:Generated_Source\PSoC5/USB.c ****     #if (USB_EP_MANAGEMENT_MANUAL)
 1664:Generated_Source\PSoC5/USB.c ****         {
 1665:Generated_Source\PSoC5/USB.c ****             /* Copy data using arbiter data register. */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 46
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 46
 
 
 1666:Generated_Source\PSoC5/USB.c ****             uint16 i;
@@ -2758,7 +2758,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1720:Generated_Source\PSoC5/USB.c ****             USB_ARB_EP_BASE.arbEp[epNumber].epCfg &=  (uint8) ~USB_ARB_EPX_CFG_DMA_REQ;
 1721:Generated_Source\PSoC5/USB.c **** 
 1722:Generated_Source\PSoC5/USB.c ****             /* OUT endpoint has to be armed again by user when DMA transfers have been completed.
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 47
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 47
 
 
 1723:Generated_Source\PSoC5/USB.c ****             * NO_EVENT_PENDING: notifies that data has been copied from endpoint buffer.
@@ -2818,7 +2818,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1777:Generated_Source\PSoC5/USB.c ****             USB_CyDmaSetConfiguration(channelNum, USB_DMA_DESCR0, USB_DMA_COMMON_CFG  | lengthDescr
 1778:Generated_Source\PSoC5/USB.c ****                                                     CYDMA_BYTE | CYDMA_WORD_ELEMENT | CYDMA_INC_DST
 1779:Generated_Source\PSoC5/USB.c **** 
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 48
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 48
 
 
 1780:Generated_Source\PSoC5/USB.c ****             /* Configure DMA descriptor. */
@@ -2878,7 +2878,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1834:Generated_Source\PSoC5/USB.c **** *  the Descriptor Root in Component Configure window.
 1835:Generated_Source\PSoC5/USB.c **** *
 1836:Generated_Source\PSoC5/USB.c **** *  *Manual (Static/Dynamic Allocation):*
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 49
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 49
 
 
 1837:Generated_Source\PSoC5/USB.c **** *  This function loads and enables the specified USB data endpoint for an IN
@@ -2938,7 +2938,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1891:Generated_Source\PSoC5/USB.c ****             const uint16 *dataBuf = (uint16 *) pData;
 1892:Generated_Source\PSoC5/USB.c **** 
 1893:Generated_Source\PSoC5/USB.c ****             /* Copy data using 16-bits arbiter data register. */
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 50
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 50
 
 
 1894:Generated_Source\PSoC5/USB.c ****             uint16 i;
@@ -2998,7 +2998,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 1948:Generated_Source\PSoC5/USB.c ****         #if (USB_EP_MANAGEMENT_DMA_AUTO)
 1949:Generated_Source\PSoC5/USB.c ****             if (pData != NULL)
 1950:Generated_Source\PSoC5/USB.c ****             {
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 51
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 51
 
 
 1951:Generated_Source\PSoC5/USB.c ****                 uint32 channelNum = (uint32) USB_DmaChan[epNumber];
@@ -3058,7 +3058,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 2005:Generated_Source\PSoC5/USB.c ****                     /* Mark which descriptor is last one to execute. */
 2006:Generated_Source\PSoC5/USB.c ****                     USB_DmaEpLastBurstEl[epNumber] |= (0u != (USB_DmaEpBurstCnt[epNumber] & 0x1u)) 
 2007:Generated_Source\PSoC5/USB.c ****                                                                             USB_DMA_DESCR0_MASK : U
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 52
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 52
 
 
 2008:Generated_Source\PSoC5/USB.c **** 
@@ -3118,7 +3118,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 2062:Generated_Source\PSoC5/USB.c **** *   Descriptor Root in Component Configure window.
 2063:Generated_Source\PSoC5/USB.c **** *
 2064:Generated_Source\PSoC5/USB.c **** *   *Manual (Static/Dynamic Allocation):*
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 53
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 53
 
 
 2065:Generated_Source\PSoC5/USB.c **** *   This function moves the specified number of bytes from endpoint buffer to
@@ -3178,7 +3178,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 2119:Generated_Source\PSoC5/USB.c ****     adjLength =  length + ((uint32)length & 1u);
 2120:Generated_Source\PSoC5/USB.c **** 
 2121:Generated_Source\PSoC5/USB.c ****     #if (USB_EP_MANAGEMENT_MANUAL)
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 54
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 54
 
 
 2122:Generated_Source\PSoC5/USB.c ****         {
@@ -3238,7 +3238,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 2176:Generated_Source\PSoC5/USB.c **** 
 2177:Generated_Source\PSoC5/USB.c ****             /* Get number of elements in last burst. */
 2178:Generated_Source\PSoC5/USB.c ****             USB_DmaEpLastBurstEl[epNumber] = (uint8) (adjLength % USB_DMA_BYTES_PER_BURST);
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 55
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 55
 
 
 2179:Generated_Source\PSoC5/USB.c **** 
@@ -3298,7 +3298,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 2233:Generated_Source\PSoC5/USB.c ****             if (USB_DmaEpBurstCntBackup[epNumber] > 1u)
 2234:Generated_Source\PSoC5/USB.c ****             {
 2235:Generated_Source\PSoC5/USB.c ****                 USB_CyDmaValidateDescriptor(channelNum, USB_DMA_DESCR1);
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 56
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 56
 
 
 2236:Generated_Source\PSoC5/USB.c ****             }
@@ -3358,7 +3358,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 2279:Generated_Source\PSoC5/USB.c ****     {
 2280:Generated_Source\PSoC5/USB.c ****         USB_EP[epNumber].apiEpState = USB_NO_EVENT_PENDING;
  902              		.loc 1 2280 0
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 57
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 57
 
 
  903 0008 4200     		lsls	r2, r0, #1
@@ -3418,7 +3418,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  951              		.loc 1 1656 0 is_stmt 0 discriminator 1
  952 000a C8B1     		cbz	r0, .L71
 1656:Generated_Source\PSoC5/USB.c ****     {
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 58
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 58
 
 
  953              		.loc 1 1656 0 discriminator 2
@@ -3478,7 +3478,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  999              	.L71:
  1000 0040 0024     		movs	r4, #0
  1001 0042 00E0     		b	.L66
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 59
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 59
 
 
  1002              	.L72:
@@ -3538,7 +3538,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 2303:Generated_Source\PSoC5/USB.c ****     {
 2304:Generated_Source\PSoC5/USB.c ****         /* Set NAK response for OUT endpoint. */
 2305:Generated_Source\PSoC5/USB.c ****         USB_SIE_EP_BASE.sieEp[epNumber].epCr0 = USB_MODE_NAK_OUT;
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 60
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 60
 
 
  1036              		.loc 1 2305 0
@@ -3598,7 +3598,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1064              	.LVL73:
 2332:Generated_Source\PSoC5/USB.c ****     /* This registers is used only for manual control of SIE (no masking is
 2333:Generated_Source\PSoC5/USB.c ****     * needed before write into it).
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 61
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 61
 
 
 2334:Generated_Source\PSoC5/USB.c ****     */
@@ -3658,7 +3658,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1093 0004 072B     		cmp	r3, #7
  1094 0006 06D8     		bhi	.L85
 2360:Generated_Source\PSoC5/USB.c ****     {
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 62
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 62
 
 
 2361:Generated_Source\PSoC5/USB.c ****         cr = USB_SIE_EP_BASE.sieEp[epNumber].epCr0 & USB_MODE_ACKD;
@@ -3718,7 +3718,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 2383:Generated_Source\PSoC5/USB.c **** *  Power Status                                |Description
 2384:Generated_Source\PSoC5/USB.c **** *  --------------------------------------------|---------------------------
 2385:Generated_Source\PSoC5/USB.c **** *  USB_DEVICE_STATUS_BUS_POWERED  | Set the device to bus powered
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 63
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 63
 
 
 2386:Generated_Source\PSoC5/USB.c **** *  USB_DEVICE_STATUS_SELF_POWERED | Set the device to self powered
@@ -3778,7 +3778,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1161              	.LFB18:
 2405:Generated_Source\PSoC5/USB.c ****     }
 2406:Generated_Source\PSoC5/USB.c **** }
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 64
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 64
 
 
 2407:Generated_Source\PSoC5/USB.c **** 
@@ -3838,7 +3838,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
 2455:Generated_Source\PSoC5/USB.c ****     uint8 result = USB_FALSE;
 2456:Generated_Source\PSoC5/USB.c **** 
 2457:Generated_Source\PSoC5/USB.c ****     if (0u != (USB_deviceStatus & USB_DEVICE_STATUS_REMOTE_WAKEUP))
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 65
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 65
 
 
  1168              		.loc 1 2457 0
@@ -3898,7 +3898,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1200              		@ frame_needed = 0, uses_anonymous_args = 0
  1201              		@ link register save eliminated.
 2479:Generated_Source\PSoC5/USB.c ****     return (uint8)(USB_CR0_REG & USB_CR0_DEVICE_ADDRESS_MASK);
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 66
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 66
 
 
  1202              		.loc 1 2479 0
@@ -3958,7 +3958,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1236 000c 00E100E0 		.word	-536813312
  1237              		.cfi_endproc
  1238              	.LFE20:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 67
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 67
 
 
  1239              		.size	USB_EnableSofInt, .-USB_EnableSofInt
@@ -4018,7 +4018,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1271 0000 00       		.space	1
  1272              		.text
  1273              	.Letext0:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 68
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 68
 
 
  1274              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
@@ -4078,7 +4078,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1328 0060 696E7400 		.ascii	"int\000"
  1329 0064 02       		.uleb128 0x2
  1330 0065 04       		.byte	0x4
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 69
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 69
 
 
  1331 0066 07       		.byte	0x7
@@ -4138,7 +4138,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1385 00d7 8D       		.byte	0x8d
  1386 00d8 49010000 		.4byte	0x149
  1387 00dc 07       		.uleb128 0x7
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 70
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 70
 
 
  1388 00dd 38030000 		.4byte	.LASF19
@@ -4198,7 +4198,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1442 0149 08       		.uleb128 0x8
  1443 014a AE000000 		.4byte	.LASF28
  1444 014e 03       		.byte	0x3
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 71
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 71
 
 
  1445 014f 98       		.byte	0x98
@@ -4258,7 +4258,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1499 01bb 00       		.byte	0
  1500 01bc 07       		.uleb128 0x7
  1501 01bd 9B050000 		.4byte	.LASF34
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 72
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 72
 
 
  1502 01c1 03       		.byte	0x3
@@ -4318,7 +4318,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1556 022a 6B000000 		.4byte	0x6b
  1557 022e 39020000 		.4byte	0x239
  1558 0232 0B       		.uleb128 0xb
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 73
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 73
 
 
  1559 0233 CD000000 		.4byte	0xcd
@@ -4378,7 +4378,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1613 02a4 1701     		.2byte	0x117
  1614 02a6 77020000 		.4byte	0x277
  1615 02aa 0E       		.uleb128 0xe
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 74
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 74
 
 
  1616 02ab 3F030000 		.4byte	.LASF47
@@ -4438,7 +4438,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1670 0320 01       		.uleb128 0x1
  1671 0321 50       		.byte	0x50
  1672 0322 02       		.uleb128 0x2
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 75
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 75
 
 
  1673 0323 76       		.byte	0x76
@@ -4498,7 +4498,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1727 037d 11       		.uleb128 0x11
  1728 037e B8000000 		.4byte	.LVL10
  1729 0382 42090000 		.4byte	0x942
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 76
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 76
 
 
  1730 0386 90030000 		.4byte	0x390
@@ -4558,7 +4558,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1784 03e3 01       		.uleb128 0x1
  1785 03e4 34       		.byte	0x34
  1786 03e5 00       		.byte	0
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 77
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 77
 
 
  1787 03e6 11       		.uleb128 0x11
@@ -4618,7 +4618,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1841 0441 00000000 		.4byte	.LFB2
  1842 0445 B4000000 		.4byte	.LFE2-.LFB2
  1843 0449 01       		.uleb128 0x1
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 78
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 78
 
 
  1844 044a 9C       		.byte	0x9c
@@ -4678,7 +4678,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1898 04c7 02       		.uleb128 0x2
  1899 04c8 74       		.byte	0x74
  1900 04c9 00       		.sleb128 0
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 79
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 79
 
 
  1901 04ca 12       		.uleb128 0x12
@@ -4738,7 +4738,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  1955 0546 5303     		.2byte	0x353
  1956 0548 6B000000 		.4byte	0x6b
  1957 054c AA000000 		.4byte	.LLST6
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 80
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 80
 
 
  1958 0550 00       		.byte	0
@@ -4798,7 +4798,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2012 05d7 15       		.uleb128 0x15
  2013 05d8 D2000000 		.4byte	.LASF60
  2014 05dc 01       		.byte	0x1
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 81
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 81
 
 
  2015 05dd BF03     		.2byte	0x3bf
@@ -4858,7 +4858,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2069 0663 DE010000 		.4byte	.LLST13
  2070 0667 1D       		.uleb128 0x1d
  2071 0668 00000000 		.4byte	.Ldebug_ranges0+0
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 82
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 82
 
 
  2072 066c 1B       		.uleb128 0x1b
@@ -4918,7 +4918,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2126 06ee 7506     		.2byte	0x675
  2127 06f0 77000000 		.4byte	0x77
  2128 06f4 C5020000 		.4byte	.LLST18
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 83
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 83
 
 
  2129 06f8 20       		.uleb128 0x20
@@ -4978,7 +4978,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2183 0764 9C       		.byte	0x9c
  2184 0765 7A070000 		.4byte	0x77a
  2185 0769 15       		.uleb128 0x15
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 84
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 84
 
 
  2186 076a D2000000 		.4byte	.LASF60
@@ -5038,7 +5038,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2240 07eb FE070000 		.4byte	0x7fe
  2241 07ef 1C       		.uleb128 0x1c
  2242 07f0 89010000 		.4byte	.LASF73
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 85
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 85
 
 
  2243 07f4 01       		.byte	0x1
@@ -5098,7 +5098,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2297 086f 03       		.byte	0x3
  2298 0870 00000000 		.4byte	USB_initVar
  2299 0874 22       		.uleb128 0x22
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 86
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 86
 
 
  2300 0875 5B030000 		.4byte	.LASF82
@@ -5158,7 +5158,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2354 08f5 00       		.byte	0
  2355 08f6 05       		.uleb128 0x5
  2356 08f7 49010000 		.4byte	0x149
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 87
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 87
 
 
  2357 08fb 23       		.uleb128 0x23
@@ -5218,7 +5218,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2411 0004 0E       		.uleb128 0xe
  2412 0005 13       		.uleb128 0x13
  2413 0006 0B       		.uleb128 0xb
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 88
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 88
 
 
  2414 0007 03       		.uleb128 0x3
@@ -5278,7 +5278,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2468 003d 06       		.uleb128 0x6
  2469 003e 13       		.uleb128 0x13
  2470 003f 01       		.byte	0x1
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 89
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 89
 
 
  2471 0040 0B       		.uleb128 0xb
@@ -5338,7 +5338,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2525 0076 01       		.uleb128 0x1
  2526 0077 01       		.byte	0x1
  2527 0078 49       		.uleb128 0x49
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 90
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 90
 
 
  2528 0079 13       		.uleb128 0x13
@@ -5398,7 +5398,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2582 00af 19       		.uleb128 0x19
  2583 00b0 11       		.uleb128 0x11
  2584 00b1 01       		.uleb128 0x1
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 91
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 91
 
 
  2585 00b2 12       		.uleb128 0x12
@@ -5458,7 +5458,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2639 00f0 13       		.uleb128 0x13
  2640 00f1 898201   		.uleb128 0x4109
  2641 00f4 01       		.byte	0x1
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 92
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 92
 
 
  2642 00f5 11       		.uleb128 0x11
@@ -5518,7 +5518,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2696 012c 0B       		.uleb128 0xb
  2697 012d 49       		.uleb128 0x49
  2698 012e 13       		.uleb128 0x13
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 93
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 93
 
 
  2699 012f 02       		.uleb128 0x2
@@ -5578,7 +5578,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2753 0166 19       		.uleb128 0x19
  2754 0167 49       		.uleb128 0x49
  2755 0168 13       		.uleb128 0x13
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 94
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 94
 
 
  2756 0169 11       		.uleb128 0x11
@@ -5638,7 +5638,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2810 01a1 00       		.byte	0
  2811 01a2 03       		.uleb128 0x3
  2812 01a3 0E       		.uleb128 0xe
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 95
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 95
 
 
  2813 01a4 3A       		.uleb128 0x3a
@@ -5698,7 +5698,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2867 01da 13       		.uleb128 0x13
  2868 01db 3F       		.uleb128 0x3f
  2869 01dc 19       		.uleb128 0x19
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 96
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 96
 
 
  2870 01dd 02       		.uleb128 0x2
@@ -5758,7 +5758,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2924 0213 00       		.byte	0
  2925 0214 00       		.byte	0
  2926              		.section	.debug_loc,"",%progbits
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 97
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 97
 
 
  2927              	.Ldebug_loc0:
@@ -5818,7 +5818,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  2981 0080 51       		.byte	0x51
  2982 0081 0F000000 		.4byte	.LVL24-1
  2983 0085 24000000 		.4byte	.LFE0
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 98
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 98
 
 
  2984 0089 0400     		.2byte	0x4
@@ -5878,7 +5878,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3038 010c 00000000 		.4byte	0
  3039 0110 00000000 		.4byte	0
  3040              	.LLST9:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 99
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 99
 
 
  3041 0114 00000000 		.4byte	.LVL37
@@ -5938,7 +5938,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3095 0193 1E000000 		.4byte	.LVL44
  3096 0197 20000000 		.4byte	.LVL45
  3097 019b 0100     		.2byte	0x1
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 100
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 100
 
 
  3098 019d 50       		.byte	0x50
@@ -5998,7 +5998,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3152 0224 68000000 		.4byte	.LVL55
  3153 0228 0100     		.2byte	0x1
  3154 022a 53       		.byte	0x53
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 101
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 101
 
 
  3155 022b 00000000 		.4byte	0
@@ -6058,7 +6058,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3209 02af 46000000 		.4byte	.LVL69
  3210 02b3 50000000 		.4byte	.LFE12
  3211 02b7 0400     		.2byte	0x4
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 102
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 102
 
 
  3212 02b9 F3       		.byte	0xf3
@@ -6118,7 +6118,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3266 0340 18000000 		.4byte	.LFE14
  3267 0344 0400     		.2byte	0x4
  3268 0346 F3       		.byte	0xf3
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 103
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 103
 
 
  3269 0347 01       		.uleb128 0x1
@@ -6178,7 +6178,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3323 03ca 0200     		.2byte	0x2
  3324 03cc 30       		.byte	0x30
  3325 03cd 9F       		.byte	0x9f
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 104
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 104
 
 
  3326 03ce 10000000 		.4byte	.LVL81
@@ -6238,7 +6238,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3380 00b0 00000000 		.4byte	.LFB20
  3381 00b4 10000000 		.4byte	.LFE20-.LFB20
  3382 00b8 00000000 		.4byte	.LFB21
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 105
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 105
 
 
  3383 00bc 10000000 		.4byte	.LFE21-.LFB21
@@ -6298,7 +6298,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3437 00c4 10000000 		.4byte	.LFE21
  3438 00c8 00000000 		.4byte	0
  3439 00cc 00000000 		.4byte	0
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 106
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 106
 
 
  3440              		.section	.debug_line,"",%progbits
@@ -6358,7 +6358,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3460      00
  3461              	.LASF33:
  3462 0093 65704366 		.ascii	"epCfg\000"
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 107
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 107
 
 
  3462      6700
@@ -6418,7 +6418,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3486      20696E74 
  3486      00
  3487              	.LASF77:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 108
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 108
 
 
  3488 0132 5553425F 		.ascii	"USB_GetDeviceAddress\000"
@@ -6478,7 +6478,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3511      6F6E5F31 
  3512              	.LASF97:
  3513 0201 43794465 		.ascii	"CyDelayCycles\000"
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 109
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 109
 
 
  3513      6C617943 
@@ -6538,7 +6538,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3535      7369676E 
  3535      65642069 
  3535      6E7400
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 110
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 110
 
 
  3536              	.LASF96:
@@ -6598,7 +6598,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3561      696200
  3562              	.LASF47:
  3563 033f 5553425F 		.ascii	"USB_Init\000"
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 111
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 111
 
 
  3563      496E6974 
@@ -6658,7 +6658,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3589      6F6E6669 
  3589      67757261 
  3589      74696F6E 
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 112
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 112
 
 
  3590              	.LASF42:
@@ -6718,7 +6718,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3612 049e 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
  3612      20726576 
  3612      6973696F 
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 113
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 113
 
 
  3612      6E203233 
@@ -6778,7 +6778,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 1
  3637      74727563 
  3637      7400
  3638              	.LASF53:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccAHCp8W.s 			page 114
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccsFeaWw.s 			page 114
 
 
  3639 0585 656E6162 		.ascii	"enableInterrupts\000"

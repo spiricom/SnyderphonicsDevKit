@@ -42,7 +42,7 @@ const uint8 CYCODE USB_DEVICE0_DESCR[18u] = {
 /* bDeviceProtocol                         */ 0x00u,
 /* bMaxPacketSize0                         */ 0x08u,
 /* idVendor                                */ 0x24u, 0x24u,
-/* idProduct                               */ 0x27u, 0x24u,
+/* idProduct                               */ 0x29u, 0x24u,
 /* bcdDevice                               */ 0x01u, 0x00u,
 /* iManufacturer                           */ 0x01u,
 /* iProduct                                */ 0x02u,
@@ -60,7 +60,7 @@ const uint8 CYCODE USB_DEVICE0_CONFIGURATION0_DESCR[101u] = {
 /*  bConfigurationValue                    */ 0x01u,
 /*  iConfiguration                         */ 0x01u,
 /*  bmAttributes                           */ 0x80u,
-/*  bMaxPower                              */ 0x32u,
+/*  bMaxPower                              */ 0xFAu,
 /*********************************************************************
 * AudioControl Interface Descriptor
 *********************************************************************/
@@ -188,13 +188,21 @@ const uint8 CYCODE USB_DEVICE0_CONFIGURATION0_DESCR[101u] = {
 /*********************************************************************
 * String Descriptor Table
 *********************************************************************/
-const uint8 CYCODE USB_STRING_DESCRIPTORS[283u] = {
+const uint8 CYCODE USB_STRING_DESCRIPTORS[177u] = {
 /*********************************************************************
 * Language ID Descriptor
 *********************************************************************/
 /* Descriptor Length                       */ 0x04u,
 /* DescriptorType: STRING                  */ 0x03u,
 /* Language Id                             */ 0x09u, 0x04u,
+/*********************************************************************
+* String Descriptor: "Snyderphonics"
+*********************************************************************/
+/* Descriptor Length                       */ 0x1Cu,
+/* DescriptorType: STRING                  */ 0x03u,
+ (uint8)'S', 0u,(uint8)'n', 0u,(uint8)'y', 0u,(uint8)'d', 0u,(uint8)'e', 0u,
+ (uint8)'r', 0u,(uint8)'p', 0u,(uint8)'h', 0u,(uint8)'o', 0u,(uint8)'n', 0u,
+ (uint8)'i', 0u,(uint8)'c', 0u,(uint8)'s', 0u,
 /*********************************************************************
 * String Descriptor: "Snyderphonics Devkit"
 *********************************************************************/
@@ -204,18 +212,6 @@ const uint8 CYCODE USB_STRING_DESCRIPTORS[283u] = {
  (uint8)'r', 0u,(uint8)'p', 0u,(uint8)'h', 0u,(uint8)'o', 0u,(uint8)'n', 0u,
  (uint8)'i', 0u,(uint8)'c', 0u,(uint8)'s', 0u,(uint8)' ', 0u,(uint8)'D', 0u,
  (uint8)'e', 0u,(uint8)'v', 0u,(uint8)'k', 0u,(uint8)'i', 0u,(uint8)'t', 0u,
-/*********************************************************************
-* String Descriptor: "Snyderphonics Devkit Capsensors"
-*********************************************************************/
-/* Descriptor Length                       */ 0x40u,
-/* DescriptorType: STRING                  */ 0x03u,
- (uint8)'S', 0u,(uint8)'n', 0u,(uint8)'y', 0u,(uint8)'d', 0u,(uint8)'e', 0u,
- (uint8)'r', 0u,(uint8)'p', 0u,(uint8)'h', 0u,(uint8)'o', 0u,(uint8)'n', 0u,
- (uint8)'i', 0u,(uint8)'c', 0u,(uint8)'s', 0u,(uint8)' ', 0u,(uint8)'D', 0u,
- (uint8)'e', 0u,(uint8)'v', 0u,(uint8)'k', 0u,(uint8)'i', 0u,(uint8)'t', 0u,
- (uint8)' ', 0u,(uint8)'C', 0u,(uint8)'a', 0u,(uint8)'p', 0u,(uint8)'s', 0u,
- (uint8)'e', 0u,(uint8)'n', 0u,(uint8)'s', 0u,(uint8)'o', 0u,(uint8)'r', 0u,
- (uint8)'s', 0u,
 /*********************************************************************
 * String Descriptor: "MIDI Control Intf"
 *********************************************************************/
@@ -235,25 +231,18 @@ const uint8 CYCODE USB_STRING_DESCRIPTORS[283u] = {
  (uint8)'m', 0u,(uint8)'i', 0u,(uint8)'n', 0u,(uint8)'g', 0u,(uint8)' ', 0u,
  (uint8)'I', 0u,(uint8)'n', 0u,(uint8)'t', 0u,(uint8)'f', 0u,
 /*********************************************************************
-* String Descriptor: "To SnyderphonicsDevKit"
+* String Descriptor: "Input"
 *********************************************************************/
-/* Descriptor Length                       */ 0x2Eu,
+/* Descriptor Length                       */ 0x0Cu,
 /* DescriptorType: STRING                  */ 0x03u,
- (uint8)'T', 0u,(uint8)'o', 0u,(uint8)' ', 0u,(uint8)'S', 0u,(uint8)'n', 0u,
- (uint8)'y', 0u,(uint8)'d', 0u,(uint8)'e', 0u,(uint8)'r', 0u,(uint8)'p', 0u,
- (uint8)'h', 0u,(uint8)'o', 0u,(uint8)'n', 0u,(uint8)'i', 0u,(uint8)'c', 0u,
- (uint8)'s', 0u,(uint8)'D', 0u,(uint8)'e', 0u,(uint8)'v', 0u,(uint8)'K', 0u,
- (uint8)'i', 0u,(uint8)'t', 0u,
+ (uint8)'I', 0u,(uint8)'n', 0u,(uint8)'p', 0u,(uint8)'u', 0u,(uint8)'t', 0u,
 /*********************************************************************
-* String Descriptor: "From SnyderphonicsDevKit"
+* String Descriptor: "Output"
 *********************************************************************/
-/* Descriptor Length                       */ 0x32u,
+/* Descriptor Length                       */ 0x0Eu,
 /* DescriptorType: STRING                  */ 0x03u,
- (uint8)'F', 0u,(uint8)'r', 0u,(uint8)'o', 0u,(uint8)'m', 0u,(uint8)' ', 0u,
- (uint8)'S', 0u,(uint8)'n', 0u,(uint8)'y', 0u,(uint8)'d', 0u,(uint8)'e', 0u,
- (uint8)'r', 0u,(uint8)'p', 0u,(uint8)'h', 0u,(uint8)'o', 0u,(uint8)'n', 0u,
- (uint8)'i', 0u,(uint8)'c', 0u,(uint8)'s', 0u,(uint8)'D', 0u,(uint8)'e', 0u,
- (uint8)'v', 0u,(uint8)'K', 0u,(uint8)'i', 0u,(uint8)'t', 0u,
+ (uint8)'O', 0u,(uint8)'u', 0u,(uint8)'t', 0u,(uint8)'p', 0u,(uint8)'u', 0u,
+ (uint8)'t', 0u,
 /*********************************************************************/
 /* Marks the end of the list.              */ 0x00u};
 /*********************************************************************/

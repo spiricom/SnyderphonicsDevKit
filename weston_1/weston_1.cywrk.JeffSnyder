@@ -75,18 +75,6 @@
 <v>weston_1\weston_1\Generated_Source\PSoC5\CapSense_IntClock</v>
 <v>weston_1\weston_1\Generated_Source\PSoC5\cy_boot</v>
 <v>weston_1\weston_1\Generated_Source\PSoC5\Em_EEPROM</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\Em_EEPROM_Dynamic</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\LED1</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\MIDI1_UART</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\MIDI1_UART_IntClock</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\Sleep_isr</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\SleepTimer</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\USB</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB.c</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB.h</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_audio.c</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_audio.h</v>
-<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_boot.c</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
@@ -206,18 +194,6 @@
 <v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_BOOT.lst</v>
 <v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_INT.lst</v>
 <v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_IntClock.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_PM.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\Sleep_isr.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\SleepTimer.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_audio.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_boot.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_cdc.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_cls.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_descr.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_Dm.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_Dp.lst</v>
-<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_drv.lst</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>

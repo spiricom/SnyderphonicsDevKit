@@ -1,0 +1,3495 @@
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"USBMIDI_midi.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.USBMIDI_MIDI_Init,"ax",%progbits
+  20              		.align	2
+  21              		.global	USBMIDI_MIDI_Init
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	USBMIDI_MIDI_Init, %function
+  25              	USBMIDI_MIDI_Init:
+  26              	.LFB0:
+  27              		.file 1 "Generated_Source\\PSoC5\\USBMIDI_midi.c"
+   1:Generated_Source\PSoC5/USBMIDI_midi.c **** /***************************************************************************//**
+   2:Generated_Source\PSoC5/USBMIDI_midi.c **** * \file USBMIDI_midi.c
+   3:Generated_Source\PSoC5/USBMIDI_midi.c **** * \version 3.20
+   4:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+   5:Generated_Source\PSoC5/USBMIDI_midi.c **** * \brief
+   6:Generated_Source\PSoC5/USBMIDI_midi.c **** *  MIDI Streaming request handler.
+   7:Generated_Source\PSoC5/USBMIDI_midi.c **** *  This file contains routines for sending and receiving MIDI
+   8:Generated_Source\PSoC5/USBMIDI_midi.c **** *  messages, and handles running status in both directions.
+   9:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+  10:Generated_Source\PSoC5/USBMIDI_midi.c **** * Related Document:
+  11:Generated_Source\PSoC5/USBMIDI_midi.c **** *  Universal Serial Bus Device Class Definition for MIDI Devices Release 1.0
+  12:Generated_Source\PSoC5/USBMIDI_midi.c **** *  MIDI 1.0 Detailed Specification Document Version 4.2
+  13:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+  14:Generated_Source\PSoC5/USBMIDI_midi.c **** ********************************************************************************
+  15:Generated_Source\PSoC5/USBMIDI_midi.c **** * \copyright
+  16:Generated_Source\PSoC5/USBMIDI_midi.c **** * Copyright 2008-2016, Cypress Semiconductor Corporation.  All rights reserved.
+  17:Generated_Source\PSoC5/USBMIDI_midi.c **** * You may use this file only in accordance with the license, terms, conditions,
+  18:Generated_Source\PSoC5/USBMIDI_midi.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  19:Generated_Source\PSoC5/USBMIDI_midi.c **** * the software package with which this file was provided.
+  20:Generated_Source\PSoC5/USBMIDI_midi.c **** *******************************************************************************/
+  21:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  22:Generated_Source\PSoC5/USBMIDI_midi.c **** #include "USBMIDI_midi.h"
+  23:Generated_Source\PSoC5/USBMIDI_midi.c **** #include "USBMIDI_pvt.h"
+  24:Generated_Source\PSoC5/USBMIDI_midi.c **** #include "cyapicallbacks.h"
+  25:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  26:Generated_Source\PSoC5/USBMIDI_midi.c **** #if defined(USBMIDI_ENABLE_MIDI_STREAMING)
+  27:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  28:Generated_Source\PSoC5/USBMIDI_midi.c **** /***************************************
+  29:Generated_Source\PSoC5/USBMIDI_midi.c **** *    MIDI Constants
+  30:Generated_Source\PSoC5/USBMIDI_midi.c **** ***************************************/
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 2
+
+
+  31:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  32:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF)
+  33:Generated_Source\PSoC5/USBMIDI_midi.c ****     /* The Size of the MIDI messages (MIDI Table 4-1) */
+  34:Generated_Source\PSoC5/USBMIDI_midi.c ****     static const uint8 CYCODE USBMIDI_MIDI_SIZE[] = {
+  35:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Miscellaneous function codes(Reserved)  */ 0x03u,
+  36:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Cable events (Reserved)                 */ 0x03u,
+  37:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Two-byte System Common messages         */ 0x02u,
+  38:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Three-byte System Common messages       */ 0x03u,
+  39:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  SysEx starts or continues               */ 0x03u,
+  40:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Single-byte System Common Message or
+  41:Generated_Source\PSoC5/USBMIDI_midi.c ****         SysEx ends with following single byte   */ 0x01u,
+  42:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  SysEx ends with following two bytes     */ 0x02u,
+  43:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  SysEx ends with following three bytes   */ 0x03u,
+  44:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Note-off                                */ 0x03u,
+  45:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Note-on                                 */ 0x03u,
+  46:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Poly-KeyPress                           */ 0x03u,
+  47:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Control Change                          */ 0x03u,
+  48:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Program Change                          */ 0x02u,
+  49:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Channel Pressure                        */ 0x02u,
+  50:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  PitchBend Change                        */ 0x03u,
+  51:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*  Single Byte                             */ 0x01u
+  52:Generated_Source\PSoC5/USBMIDI_midi.c ****     };
+  53:Generated_Source\PSoC5/USBMIDI_midi.c **** #endif  /* USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF */
+  54:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  55:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  56:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  57:Generated_Source\PSoC5/USBMIDI_midi.c **** /***************************************
+  58:Generated_Source\PSoC5/USBMIDI_midi.c **** *  Global variables
+  59:Generated_Source\PSoC5/USBMIDI_midi.c **** ***************************************/
+  60:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  61:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  62:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_MIDI_IN_BUFF_SIZE > 0)
+  63:Generated_Source\PSoC5/USBMIDI_midi.c ****     #if (USBMIDI_MIDI_IN_BUFF_SIZE >= 256)
+  64:Generated_Source\PSoC5/USBMIDI_midi.c ****         /** Input endpoint buffer pointer. This pointer is used as an index for the
+  65:Generated_Source\PSoC5/USBMIDI_midi.c ****         * USBMIDI_midiInBuffer to write data. It is cleared to zero by the
+  66:Generated_Source\PSoC5/USBMIDI_midi.c ****         * USBMIDI_MIDI_EP_Init() function.*/
+  67:Generated_Source\PSoC5/USBMIDI_midi.c ****         volatile uint16 USBMIDI_midiInPointer;                            /* Input endpoint buffer 
+  68:Generated_Source\PSoC5/USBMIDI_midi.c ****     #else
+  69:Generated_Source\PSoC5/USBMIDI_midi.c ****         volatile uint8 USBMIDI_midiInPointer;                             /* Input endpoint buffer 
+  70:Generated_Source\PSoC5/USBMIDI_midi.c ****     #endif /* (USBMIDI_MIDI_IN_BUFF_SIZE >= 256) */
+  71:Generated_Source\PSoC5/USBMIDI_midi.c ****     /** Contains the midi IN endpoint number, It is initialized after a
+  72:Generated_Source\PSoC5/USBMIDI_midi.c ****      * SET_CONFIGURATION request based on a user descriptor. It is used in MIDI
+  73:Generated_Source\PSoC5/USBMIDI_midi.c ****      * APIs to send data to the host.*/
+  74:Generated_Source\PSoC5/USBMIDI_midi.c ****     volatile uint8 USBMIDI_midi_in_ep;
+  75:Generated_Source\PSoC5/USBMIDI_midi.c ****     /** Input endpoint buffer with a length equal to MIDI IN EP Max Packet Size.
+  76:Generated_Source\PSoC5/USBMIDI_midi.c ****      * This buffer is used to save and combine the data received from the UARTs,
+  77:Generated_Source\PSoC5/USBMIDI_midi.c ****      * generated internally by USBMIDI_PutUsbMidiIn() function messages, or both.
+  78:Generated_Source\PSoC5/USBMIDI_midi.c ****      * The USBMIDI_MIDI_IN_Service() function transfers the data from this buffer to the host.*/
+  79:Generated_Source\PSoC5/USBMIDI_midi.c ****     uint8 USBMIDI_midiInBuffer[USBMIDI_MIDI_IN_BUFF_SIZE];       /* Input endpoint buffer */
+  80:Generated_Source\PSoC5/USBMIDI_midi.c **** #endif /* (USBMIDI_MIDI_IN_BUFF_SIZE > 0) */
+  81:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  82:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_MIDI_OUT_BUFF_SIZE > 0)
+  83:Generated_Source\PSoC5/USBMIDI_midi.c ****     /** Contains the midi OUT endpoint number. It is initialized after a
+  84:Generated_Source\PSoC5/USBMIDI_midi.c ****      * SET_CONFIGURATION request based on a user descriptor. It is used in
+  85:Generated_Source\PSoC5/USBMIDI_midi.c ****      * MIDI APIs to receive data from the host.*/
+  86:Generated_Source\PSoC5/USBMIDI_midi.c ****     volatile uint8 USBMIDI_midi_out_ep;                                   /* Output endpoint number
+  87:Generated_Source\PSoC5/USBMIDI_midi.c ****     /** Output endpoint buffer with a length equal to MIDI OUT EP Max Packet Size.
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 3
+
+
+  88:Generated_Source\PSoC5/USBMIDI_midi.c ****      * This buffer is used by the USBMIDI_MIDI_OUT_EP_Service() function to save
+  89:Generated_Source\PSoC5/USBMIDI_midi.c ****      * the data received from the host. The received data is then parsed. The
+  90:Generated_Source\PSoC5/USBMIDI_midi.c ****      * parsed data is transferred to the UARTs buffer and also used for internal
+  91:Generated_Source\PSoC5/USBMIDI_midi.c ****      * processing by the USBMIDI_callbackLocalMidiEvent() function.*/
+  92:Generated_Source\PSoC5/USBMIDI_midi.c ****     uint8 USBMIDI_midiOutBuffer[USBMIDI_MIDI_OUT_BUFF_SIZE];     /* Output endpoint buffer */
+  93:Generated_Source\PSoC5/USBMIDI_midi.c **** #endif /* (USBMIDI_MIDI_OUT_BUFF_SIZE > 0) */
+  94:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  95:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF)
+  96:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+  97:Generated_Source\PSoC5/USBMIDI_midi.c ****     static USBMIDI_MIDI_RX_STATUS USBMIDI_MIDI1_Event;            /* MIDI RX status structure */
+  98:Generated_Source\PSoC5/USBMIDI_midi.c ****     static volatile uint8 USBMIDI_MIDI1_TxRunStat;                         /* MIDI Output running s
+  99:Generated_Source\PSoC5/USBMIDI_midi.c ****     /** The USBFS supports a maximum of two external Jacks. The two flag variables
+ 100:Generated_Source\PSoC5/USBMIDI_midi.c ****      * are used to represent the status of two external Jacks. These optional variables
+ 101:Generated_Source\PSoC5/USBMIDI_midi.c ****      * are allocated when External Mode is enabled. The following flags help to
+ 102:Generated_Source\PSoC5/USBMIDI_midi.c ****      * detect and generate responses for SysEx messages. The USBMIDI_MIDI2_InqFlags
+ 103:Generated_Source\PSoC5/USBMIDI_midi.c ****      * is optional and is not available when only one external Jack is configured.
+ 104:Generated_Source\PSoC5/USBMIDI_midi.c ****      * Flag                          | Description
+ 105:Generated_Source\PSoC5/USBMIDI_midi.c ****      * ------------------------------|---------------------------------------
+ 106:Generated_Source\PSoC5/USBMIDI_midi.c ****      * USBMIDI_INQ_SYSEX_FLAG        | Non-real-time SysEx message received.
+ 107:Generated_Source\PSoC5/USBMIDI_midi.c ****      * USBMIDI_INQ_IDENTITY_REQ_FLAG | Identity Request received. You should clear this bit when an
+ 108:Generated_Source\PSoC5/USBMIDI_midi.c ****      * SysEX messages are intended for local device and shouldn't go out on the
+ 109:Generated_Source\PSoC5/USBMIDI_midi.c ****      * external MIDI jack, this flag indicates when a MIDI SysEx OUT message is
+ 110:Generated_Source\PSoC5/USBMIDI_midi.c ****      * in progress for the application */
+ 111:Generated_Source\PSoC5/USBMIDI_midi.c ****     volatile uint8 USBMIDI_MIDI1_InqFlags;                                 /* Device inquiry flag *
+ 112:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 113:Generated_Source\PSoC5/USBMIDI_midi.c ****     #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_TWO_EXT_INTRF)
+ 114:Generated_Source\PSoC5/USBMIDI_midi.c ****         static USBMIDI_MIDI_RX_STATUS USBMIDI_MIDI2_Event;        /* MIDI RX status structure */
+ 115:Generated_Source\PSoC5/USBMIDI_midi.c ****         static volatile uint8 USBMIDI_MIDI2_TxRunStat;                     /* MIDI Output running s
+ 116:Generated_Source\PSoC5/USBMIDI_midi.c ****         /** See description of \ref USBMIDI_MIDI1_InqFlags*/
+ 117:Generated_Source\PSoC5/USBMIDI_midi.c ****         volatile uint8 USBMIDI_MIDI2_InqFlags;                             /* Device inquiry flag *
+ 118:Generated_Source\PSoC5/USBMIDI_midi.c ****     #endif /* (USBMIDI_MIDI_EXT_MODE >= USBMIDI_TWO_EXT_INTRF) */
+ 119:Generated_Source\PSoC5/USBMIDI_midi.c **** #endif /* (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF) */
+ 120:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 121:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 122:Generated_Source\PSoC5/USBMIDI_midi.c **** /***************************************
+ 123:Generated_Source\PSoC5/USBMIDI_midi.c **** * Custom Declarations
+ 124:Generated_Source\PSoC5/USBMIDI_midi.c **** ***************************************/
+ 125:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 126:Generated_Source\PSoC5/USBMIDI_midi.c **** /* `#START MIDI_CUSTOM_DECLARATIONS` Place your declaration here */
+ 127:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 128:Generated_Source\PSoC5/USBMIDI_midi.c **** /* `#END` */
+ 129:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 130:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 131:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_ENABLE_MIDI_API != 0u)
+ 132:Generated_Source\PSoC5/USBMIDI_midi.c **** /*******************************************************************************
+ 133:Generated_Source\PSoC5/USBMIDI_midi.c **** * Function Name: USBMIDI_MIDI_Init
+ 134:Generated_Source\PSoC5/USBMIDI_midi.c **** ****************************************************************************//**
+ 135:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 136:Generated_Source\PSoC5/USBMIDI_midi.c **** *  This function initializes the MIDI interface and UART(s) to be ready to
+ 137:Generated_Source\PSoC5/USBMIDI_midi.c **** *   receive data from the PC and MIDI ports.
+ 138:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 139:Generated_Source\PSoC5/USBMIDI_midi.c **** * \globalvars
+ 140:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 141:Generated_Source\PSoC5/USBMIDI_midi.c **** *  \ref USBMIDI_midiInBuffer: This buffer is used for saving and combining
+ 142:Generated_Source\PSoC5/USBMIDI_midi.c **** *    the received data from UART(s) and(or) generated internally by
+ 143:Generated_Source\PSoC5/USBMIDI_midi.c **** *    PutUsbMidiIn() function messages. USBMIDI_MIDI_IN_EP_Service()
+ 144:Generated_Source\PSoC5/USBMIDI_midi.c **** *    function transfers the data from this buffer to the PC.
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 4
+
+
+ 145:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 146:Generated_Source\PSoC5/USBMIDI_midi.c **** *  \ref USBMIDI_midiOutBuffer: This buffer is used by the
+ 147:Generated_Source\PSoC5/USBMIDI_midi.c **** *    USBMIDI_MIDI_OUT_Service() function for saving the received
+ 148:Generated_Source\PSoC5/USBMIDI_midi.c **** *    from the PC data, then the data are parsed and transferred to UART(s)
+ 149:Generated_Source\PSoC5/USBMIDI_midi.c **** *    buffer and to the internal processing by the
+ 150:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 151:Generated_Source\PSoC5/USBMIDI_midi.c **** *  \ref USBMIDI_callbackLocalMidiEvent function.
+ 152:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 153:Generated_Source\PSoC5/USBMIDI_midi.c **** *  \ref USBMIDI_midi_out_ep: Used as an OUT endpoint number.
+ 154:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 155:Generated_Source\PSoC5/USBMIDI_midi.c **** *  \ref USBMIDI_midi_in_ep: Used as an IN endpoint number.
+ 156:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 157:Generated_Source\PSoC5/USBMIDI_midi.c **** *   \ref USBMIDI_midiInPointer: Initialized to zero.
+ 158:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 159:Generated_Source\PSoC5/USBMIDI_midi.c **** * \sideeffect
+ 160:Generated_Source\PSoC5/USBMIDI_midi.c **** *   The priority of the UART RX ISR should be higher than UART TX ISR. To do
+ 161:Generated_Source\PSoC5/USBMIDI_midi.c **** *   that this function changes the priority of the UARTs TX and RX interrupts.
+ 162:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 163:Generated_Source\PSoC5/USBMIDI_midi.c **** * \reentrant
+ 164:Generated_Source\PSoC5/USBMIDI_midi.c **** *  No
+ 165:Generated_Source\PSoC5/USBMIDI_midi.c **** *
+ 166:Generated_Source\PSoC5/USBMIDI_midi.c **** *******************************************************************************/
+ 167:Generated_Source\PSoC5/USBMIDI_midi.c **** void USBMIDI_MIDI_Init(void) 
+ 168:Generated_Source\PSoC5/USBMIDI_midi.c **** {
+  28              		.loc 1 168 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 08B5     		push	{r3, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 3, -8
+  35              		.cfi_offset 14, -4
+ 169:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_MIDI_IN_BUFF_SIZE > 0)
+ 170:Generated_Source\PSoC5/USBMIDI_midi.c ****    USBMIDI_midiInPointer = 0u;
+  36              		.loc 1 170 0
+  37 0002 0022     		movs	r2, #0
+  38 0004 034B     		ldr	r3, .L3
+  39 0006 1A70     		strb	r2, [r3]
+ 171:Generated_Source\PSoC5/USBMIDI_midi.c **** #endif /* (USBMIDI_MIDI_IN_BUFF_SIZE > 0) */
+ 172:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 173:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_EP_MANAGEMENT_DMA_AUTO)
+ 174:Generated_Source\PSoC5/USBMIDI_midi.c ****     #if (USBMIDI_MIDI_IN_BUFF_SIZE > 0)
+ 175:Generated_Source\PSoC5/USBMIDI_midi.c ****         /* Provide buffer for IN endpoint. */
+ 176:Generated_Source\PSoC5/USBMIDI_midi.c ****         USBMIDI_LoadInEP(USBMIDI_midi_in_ep, USBMIDI_midiInBuffer,
+ 177:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                                USBMIDI_MIDI_IN_BUFF_SIZE);
+ 178:Generated_Source\PSoC5/USBMIDI_midi.c ****     #endif  /* (USBMIDI_MIDI_IN_BUFF_SIZE > 0) */
+ 179:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 180:Generated_Source\PSoC5/USBMIDI_midi.c ****     #if (USBMIDI_MIDI_OUT_BUFF_SIZE > 0)
+ 181:Generated_Source\PSoC5/USBMIDI_midi.c ****         /* Provide buffer for OUT endpoint. */
+ 182:Generated_Source\PSoC5/USBMIDI_midi.c ****         (void)USBMIDI_ReadOutEP(USBMIDI_midi_out_ep, USBMIDI_midiOutBuffer,
+ 183:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                                        USBMIDI_MIDI_OUT_BUFF_SIZE);
+ 184:Generated_Source\PSoC5/USBMIDI_midi.c ****     #endif /* (USBMIDI_MIDI_OUT_BUFF_SIZE > 0) */
+ 185:Generated_Source\PSoC5/USBMIDI_midi.c **** #endif /* (USBMIDI_EP_MANAGEMENT_DMA_AUTO) */
+ 186:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 187:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_MIDI_OUT_BUFF_SIZE > 0)
+ 188:Generated_Source\PSoC5/USBMIDI_midi.c ****     USBMIDI_EnableOutEP(USBMIDI_midi_out_ep);
+  40              		.loc 1 188 0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 5
+
+
+  41 0008 034B     		ldr	r3, .L3+4
+  42 000a 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+  43 000c FFF7FEFF 		bl	USBMIDI_EnableOutEP
+  44              	.LVL0:
+  45 0010 08BD     		pop	{r3, pc}
+  46              	.L4:
+  47 0012 00BF     		.align	2
+  48              	.L3:
+  49 0014 00000000 		.word	USBMIDI_midiInPointer
+  50 0018 00000000 		.word	USBMIDI_midi_out_ep
+  51              		.cfi_endproc
+  52              	.LFE0:
+  53              		.size	USBMIDI_MIDI_Init, .-USBMIDI_MIDI_Init
+  54              		.section	.text.USBMIDI_MIDI_OUT_Service,"ax",%progbits
+  55              		.align	2
+  56              		.global	USBMIDI_MIDI_OUT_Service
+  57              		.thumb
+  58              		.thumb_func
+  59              		.type	USBMIDI_MIDI_OUT_Service, %function
+  60              	USBMIDI_MIDI_OUT_Service:
+  61              	.LFB1:
+ 189:Generated_Source\PSoC5/USBMIDI_midi.c **** #endif /* (USBMIDI_MIDI_OUT_BUFF_SIZE > 0) */
+ 190:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 191:Generated_Source\PSoC5/USBMIDI_midi.c ****     /* Initialize the MIDI port(s) */
+ 192:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF)
+ 193:Generated_Source\PSoC5/USBMIDI_midi.c ****     USBMIDI_MIDI_InitInterface();
+ 194:Generated_Source\PSoC5/USBMIDI_midi.c **** #endif /* (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF) */
+ 195:Generated_Source\PSoC5/USBMIDI_midi.c **** }
+ 196:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 197:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 198:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_MIDI_OUT_BUFF_SIZE > 0)
+ 199:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*******************************************************************************
+ 200:Generated_Source\PSoC5/USBMIDI_midi.c ****     * Function Name: USBMIDI_MIDI_OUT_Service
+ 201:Generated_Source\PSoC5/USBMIDI_midi.c ****     ****************************************************************************//**
+ 202:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 203:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  This function services the traffic from the USBMIDI OUT endpoint and
+ 204:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  sends the data to the MIDI output ports (TX UARTs). It is blocked by the
+ 205:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  UART when not enough space is available in the UART TX buffer.
+ 206:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  This function is automatically called from OUT EP ISR in DMA with
+ 207:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  Automatic Memory Management mode. In Manual and DMA with Manual EP
+ 208:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  Management modes you must call it from the main foreground task.
+ 209:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 210:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \globalvars
+ 211:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 212:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \ref USBMIDI_midiOutBuffer: Used as temporary buffer between USB
+ 213:Generated_Source\PSoC5/USBMIDI_midi.c ****     *       internal memory and UART TX buffer.
+ 214:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 215:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \ref USBMIDI_midi_out_ep: Used as an OUT endpoint number.
+ 216:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 217:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \reentrant
+ 218:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  No
+ 219:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 220:Generated_Source\PSoC5/USBMIDI_midi.c ****     *******************************************************************************/
+ 221:Generated_Source\PSoC5/USBMIDI_midi.c ****     void USBMIDI_MIDI_OUT_Service(void) 
+ 222:Generated_Source\PSoC5/USBMIDI_midi.c ****     {
+  62              		.loc 1 222 0
+  63              		.cfi_startproc
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 6
+
+
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66 0000 38B5     		push	{r3, r4, r5, lr}
+  67              		.cfi_def_cfa_offset 16
+  68              		.cfi_offset 3, -16
+  69              		.cfi_offset 4, -12
+  70              		.cfi_offset 5, -8
+  71              		.cfi_offset 14, -4
+ 223:Generated_Source\PSoC5/USBMIDI_midi.c ****     #if (USBMIDI_MIDI_OUT_BUFF_SIZE >= 256)
+ 224:Generated_Source\PSoC5/USBMIDI_midi.c ****         uint16 outLength;
+ 225:Generated_Source\PSoC5/USBMIDI_midi.c ****         uint16 outPointer;
+ 226:Generated_Source\PSoC5/USBMIDI_midi.c ****     #else
+ 227:Generated_Source\PSoC5/USBMIDI_midi.c ****         uint8 outLength;
+ 228:Generated_Source\PSoC5/USBMIDI_midi.c ****         uint8 outPointer;
+ 229:Generated_Source\PSoC5/USBMIDI_midi.c ****     #endif /* (USBMIDI_MIDI_OUT_BUFF_SIZE >= 256) */
+ 230:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 231:Generated_Source\PSoC5/USBMIDI_midi.c ****         /* Service the USB MIDI output endpoint. */
+ 232:Generated_Source\PSoC5/USBMIDI_midi.c ****         if (USBMIDI_OUT_BUFFER_FULL == USBMIDI_GetEPState(USBMIDI_midi_out_ep))
+  72              		.loc 1 232 0
+  73 0002 124B     		ldr	r3, .L11
+  74 0004 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+  75 0006 FFF7FEFF 		bl	USBMIDI_GetEPState
+  76              	.LVL1:
+  77 000a 0128     		cmp	r0, #1
+  78 000c 1DD1     		bne	.L5
+ 233:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 234:Generated_Source\PSoC5/USBMIDI_midi.c ****         #if (USBMIDI_MIDI_OUT_BUFF_SIZE >= 256)
+ 235:Generated_Source\PSoC5/USBMIDI_midi.c ****             outLength = USBMIDI_GetEPCount(USBMIDI_midi_out_ep);
+ 236:Generated_Source\PSoC5/USBMIDI_midi.c ****         #else
+ 237:Generated_Source\PSoC5/USBMIDI_midi.c ****             outLength = (uint8)USBMIDI_GetEPCount(USBMIDI_midi_out_ep);
+  79              		.loc 1 237 0
+  80 000e 0F4C     		ldr	r4, .L11
+  81 0010 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+  82 0012 FFF7FEFF 		bl	USBMIDI_GetEPCount
+  83              	.LVL2:
+ 238:Generated_Source\PSoC5/USBMIDI_midi.c ****         #endif /* (USBMIDI_MIDI_OUT_BUFF_SIZE >= 256) */
+ 239:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 240:Generated_Source\PSoC5/USBMIDI_midi.c ****         #if (!USBMIDI_EP_MANAGEMENT_DMA_AUTO)
+ 241:Generated_Source\PSoC5/USBMIDI_midi.c ****             #if (USBMIDI_MIDI_OUT_BUFF_SIZE >= 256)
+ 242:Generated_Source\PSoC5/USBMIDI_midi.c ****                 outLength = USBMIDI_ReadOutEP(USBMIDI_midi_out_ep,
+ 243:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                        USBMIDI_midiOutBuffer, outLength);
+ 244:Generated_Source\PSoC5/USBMIDI_midi.c ****             #else
+ 245:Generated_Source\PSoC5/USBMIDI_midi.c ****                 outLength = (uint8)USBMIDI_ReadOutEP(USBMIDI_midi_out_ep,
+  84              		.loc 1 245 0
+  85 0016 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+  86 0018 C2B2     		uxtb	r2, r0
+  87 001a 0D49     		ldr	r1, .L11+4
+  88 001c 1846     		mov	r0, r3
+  89              	.LVL3:
+  90 001e FFF7FEFF 		bl	USBMIDI_ReadOutEP
+  91              	.LVL4:
+  92 0022 C5B2     		uxtb	r5, r0
+  93              	.LVL5:
+ 246:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                               USBMIDI_midiOutBuffer, (uint16) outLe
+ 247:Generated_Source\PSoC5/USBMIDI_midi.c ****             #endif /* (USBMIDI_MIDI_OUT_BUFF_SIZE >= 256) */
+ 248:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 249:Generated_Source\PSoC5/USBMIDI_midi.c ****             #if (USBMIDI_EP_MANAGEMENT_DMA_MANUAL)
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 7
+
+
+ 250:Generated_Source\PSoC5/USBMIDI_midi.c ****                 /* Wait until DMA complete transferring data from OUT endpoint buffer. */
+ 251:Generated_Source\PSoC5/USBMIDI_midi.c ****                 while (USBMIDI_OUT_BUFFER_FULL == USBMIDI_GetEPState(USBMIDI_midi_out_ep))
+ 252:Generated_Source\PSoC5/USBMIDI_midi.c ****                 {
+ 253:Generated_Source\PSoC5/USBMIDI_midi.c ****                 }
+ 254:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 255:Generated_Source\PSoC5/USBMIDI_midi.c ****                 /* Enable OUT endpoint for communication with host. */
+ 256:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_EnableOutEP(USBMIDI_midi_out_ep);
+ 257:Generated_Source\PSoC5/USBMIDI_midi.c ****             #endif /* (USBMIDI_EP_MANAGEMENT_DMA_MANUAL) */
+ 258:Generated_Source\PSoC5/USBMIDI_midi.c ****         #endif /* (!USBMIDI_EP_MANAGEMENT_DMA_AUTO) */
+ 259:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 260:Generated_Source\PSoC5/USBMIDI_midi.c ****             if (outLength >= USBMIDI_EVENT_LENGTH)
+  94              		.loc 1 260 0
+  95 0024 032D     		cmp	r5, #3
+  96 0026 0DD8     		bhi	.L9
+  97 0028 38BD     		pop	{r3, r4, r5, pc}
+  98              	.LVL6:
+  99              	.L8:
+ 261:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 262:Generated_Source\PSoC5/USBMIDI_midi.c ****                 outPointer = 0u;
+ 263:Generated_Source\PSoC5/USBMIDI_midi.c ****                 while (outPointer < outLength)
+ 264:Generated_Source\PSoC5/USBMIDI_midi.c ****                 {
+ 265:Generated_Source\PSoC5/USBMIDI_midi.c ****                     /* In some OS OUT packet could be appended by nulls which could be skipped. */
+ 266:Generated_Source\PSoC5/USBMIDI_midi.c ****                     if (USBMIDI_midiOutBuffer[outPointer] == 0u)
+ 100              		.loc 1 266 0
+ 101 002a 094B     		ldr	r3, .L11+4
+ 102 002c 185D     		ldrb	r0, [r3, r4]	@ zero_extendqisi2
+ 103 002e 60B1     		cbz	r0, .L5
+ 267:Generated_Source\PSoC5/USBMIDI_midi.c ****                     {
+ 268:Generated_Source\PSoC5/USBMIDI_midi.c ****                         break;
+ 269:Generated_Source\PSoC5/USBMIDI_midi.c ****                     }
+ 270:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 271:Generated_Source\PSoC5/USBMIDI_midi.c ****                 /* Route USB MIDI to the External connection */
+ 272:Generated_Source\PSoC5/USBMIDI_midi.c ****                 #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF)
+ 273:Generated_Source\PSoC5/USBMIDI_midi.c ****                     if ((USBMIDI_midiOutBuffer[outPointer] & USBMIDI_CABLE_MASK) ==
+ 274:Generated_Source\PSoC5/USBMIDI_midi.c ****                          USBMIDI_MIDI_CABLE_00)
+ 275:Generated_Source\PSoC5/USBMIDI_midi.c ****                     {
+ 276:Generated_Source\PSoC5/USBMIDI_midi.c ****                         USBMIDI_MIDI1_ProcessUsbOut(&USBMIDI_midiOutBuffer[outPointer]);
+ 277:Generated_Source\PSoC5/USBMIDI_midi.c ****                     }
+ 278:Generated_Source\PSoC5/USBMIDI_midi.c ****                     else if ((USBMIDI_midiOutBuffer[outPointer] & USBMIDI_CABLE_MASK) ==
+ 279:Generated_Source\PSoC5/USBMIDI_midi.c ****                              USBMIDI_MIDI_CABLE_01)
+ 280:Generated_Source\PSoC5/USBMIDI_midi.c ****                     {
+ 281:Generated_Source\PSoC5/USBMIDI_midi.c ****                     #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_TWO_EXT_INTRF)
+ 282:Generated_Source\PSoC5/USBMIDI_midi.c ****                          USBMIDI_MIDI2_ProcessUsbOut(&USBMIDI_midiOutBuffer[outPointer]);
+ 283:Generated_Source\PSoC5/USBMIDI_midi.c ****                     #endif /*  USBMIDI_MIDI_EXT_MODE >= USBMIDI_TWO_EXT_INTRF */
+ 284:Generated_Source\PSoC5/USBMIDI_midi.c ****                     }
+ 285:Generated_Source\PSoC5/USBMIDI_midi.c ****                     else
+ 286:Generated_Source\PSoC5/USBMIDI_midi.c ****                     {
+ 287:Generated_Source\PSoC5/USBMIDI_midi.c ****                         /* `#START CUSTOM_MIDI_OUT_EP_SERV` Place your code here */
+ 288:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 289:Generated_Source\PSoC5/USBMIDI_midi.c ****                         /* `#END` */
+ 290:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 291:Generated_Source\PSoC5/USBMIDI_midi.c ****                         #ifdef USBMIDI_MIDI_OUT_EP_SERVICE_CALLBACK
+ 292:Generated_Source\PSoC5/USBMIDI_midi.c ****                             USBMIDI_MIDI_OUT_EP_Service_Callback();
+ 293:Generated_Source\PSoC5/USBMIDI_midi.c ****                         #endif /* USBMIDI_MIDI_OUT_EP_SERVICE_CALLBACK */
+ 294:Generated_Source\PSoC5/USBMIDI_midi.c ****                     }
+ 295:Generated_Source\PSoC5/USBMIDI_midi.c ****                 #endif /* (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF) */
+ 296:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 8
+
+
+ 297:Generated_Source\PSoC5/USBMIDI_midi.c ****                     /* Process any local MIDI output functions */
+ 298:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_callbackLocalMidiEvent(USBMIDI_midiOutBuffer[outPointer] & USBMIDI_CABL
+ 299:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                             &USBMIDI_midiOutBuffer[outPointer + USB
+ 104              		.loc 1 299 0
+ 105 0030 631C     		adds	r3, r4, #1
+ 298:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                             &USBMIDI_midiOutBuffer[outPointer + USB
+ 106              		.loc 1 298 0
+ 107 0032 0749     		ldr	r1, .L11+4
+ 108 0034 1944     		add	r1, r1, r3
+ 109 0036 00F0F000 		and	r0, r0, #240
+ 110 003a FFF7FEFF 		bl	USBMIDI_callbackLocalMidiEvent
+ 111              	.LVL7:
+ 300:Generated_Source\PSoC5/USBMIDI_midi.c ****                     outPointer += USBMIDI_EVENT_LENGTH;
+ 112              		.loc 1 300 0
+ 113 003e 0434     		adds	r4, r4, #4
+ 114              	.LVL8:
+ 115 0040 E4B2     		uxtb	r4, r4
+ 116              	.LVL9:
+ 117 0042 00E0     		b	.L7
+ 118              	.LVL10:
+ 119              	.L9:
+ 120 0044 0024     		movs	r4, #0
+ 121              	.L7:
+ 122              	.LVL11:
+ 263:Generated_Source\PSoC5/USBMIDI_midi.c ****                 {
+ 123              		.loc 1 263 0
+ 124 0046 AC42     		cmp	r4, r5
+ 125 0048 EFD3     		bcc	.L8
+ 126              	.LVL12:
+ 127              	.L5:
+ 128 004a 38BD     		pop	{r3, r4, r5, pc}
+ 129              	.L12:
+ 130              		.align	2
+ 131              	.L11:
+ 132 004c 00000000 		.word	USBMIDI_midi_out_ep
+ 133 0050 00000000 		.word	USBMIDI_midiOutBuffer
+ 134              		.cfi_endproc
+ 135              	.LFE1:
+ 136              		.size	USBMIDI_MIDI_OUT_Service, .-USBMIDI_MIDI_OUT_Service
+ 137              		.section	.text.USBMIDI_MIDI_IN_EP_Service,"ax",%progbits
+ 138              		.align	2
+ 139              		.global	USBMIDI_MIDI_IN_EP_Service
+ 140              		.thumb
+ 141              		.thumb_func
+ 142              		.type	USBMIDI_MIDI_IN_EP_Service, %function
+ 143              	USBMIDI_MIDI_IN_EP_Service:
+ 144              	.LFB2:
+ 301:Generated_Source\PSoC5/USBMIDI_midi.c ****                 }
+ 302:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 303:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 304:Generated_Source\PSoC5/USBMIDI_midi.c ****         #if (USBMIDI_EP_MANAGEMENT_DMA_AUTO)
+ 305:Generated_Source\PSoC5/USBMIDI_midi.c ****             /* Enable OUT endpoint for communication */
+ 306:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_EnableOutEP(USBMIDI_midi_out_ep);
+ 307:Generated_Source\PSoC5/USBMIDI_midi.c ****         #endif  /* (USBMIDI_EP_MANAGEMENT_DMA_AUTO) */
+ 308:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 309:Generated_Source\PSoC5/USBMIDI_midi.c ****     }
+ 310:Generated_Source\PSoC5/USBMIDI_midi.c **** #endif /* (USBMIDI_MIDI_OUT_BUFF_SIZE > 0) */
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 9
+
+
+ 311:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 312:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 313:Generated_Source\PSoC5/USBMIDI_midi.c **** #if (USBMIDI_MIDI_IN_BUFF_SIZE > 0)
+ 314:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*******************************************************************************
+ 315:Generated_Source\PSoC5/USBMIDI_midi.c ****     * Function Name: USBMIDI_MIDI_IN_EP_Service
+ 316:Generated_Source\PSoC5/USBMIDI_midi.c ****     ****************************************************************************//**
+ 317:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 318:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  Services the USB MIDI IN endpoint. Non-blocking.
+ 319:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  Checks that previous packet was processed by HOST, otherwise service the
+ 320:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  input endpoint on the subsequent call. It is called from the
+ 321:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  USBMIDI_MIDI_IN_Service() and from the
+ 322:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  USBMIDI_PutUsbMidiIn() function.
+ 323:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 324:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \globalvars
+ 325:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  USBMIDI_midi_in_ep: Used as an IN endpoint number.
+ 326:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  USBMIDI_midiInBuffer: Function loads the data from this buffer to
+ 327:Generated_Source\PSoC5/USBMIDI_midi.c ****     *    the USB IN endpoint.
+ 328:Generated_Source\PSoC5/USBMIDI_midi.c ****     *   USBMIDI_midiInPointer: Cleared to zero when data are sent.
+ 329:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 330:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \reentrant
+ 331:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  No
+ 332:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 333:Generated_Source\PSoC5/USBMIDI_midi.c ****     *******************************************************************************/
+ 334:Generated_Source\PSoC5/USBMIDI_midi.c ****     void USBMIDI_MIDI_IN_EP_Service(void) 
+ 335:Generated_Source\PSoC5/USBMIDI_midi.c ****     {
+ 145              		.loc 1 335 0
+ 146              		.cfi_startproc
+ 147              		@ args = 0, pretend = 0, frame = 0
+ 148              		@ frame_needed = 0, uses_anonymous_args = 0
+ 336:Generated_Source\PSoC5/USBMIDI_midi.c ****         /* Service the USB MIDI input endpoint */
+ 337:Generated_Source\PSoC5/USBMIDI_midi.c ****         /* Check that previous packet was processed by HOST, otherwise service the USB later */
+ 338:Generated_Source\PSoC5/USBMIDI_midi.c ****         if (USBMIDI_midiInPointer != 0u)
+ 149              		.loc 1 338 0
+ 150 0000 0B4B     		ldr	r3, .L17
+ 151 0002 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 152 0004 13F0FF0F 		tst	r3, #255
+ 153 0008 10D0     		beq	.L16
+ 335:Generated_Source\PSoC5/USBMIDI_midi.c ****         /* Service the USB MIDI input endpoint */
+ 154              		.loc 1 335 0
+ 155 000a 10B5     		push	{r4, lr}
+ 156              		.cfi_def_cfa_offset 8
+ 157              		.cfi_offset 4, -8
+ 158              		.cfi_offset 14, -4
+ 339:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 340:Generated_Source\PSoC5/USBMIDI_midi.c ****             if(USBMIDI_GetEPState(USBMIDI_midi_in_ep) == USBMIDI_EVENT_PENDING)
+ 159              		.loc 1 340 0
+ 160 000c 094B     		ldr	r3, .L17+4
+ 161 000e 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 162 0010 FFF7FEFF 		bl	USBMIDI_GetEPState
+ 163              	.LVL13:
+ 164 0014 0128     		cmp	r0, #1
+ 165 0016 08D1     		bne	.L13
+ 341:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 342:Generated_Source\PSoC5/USBMIDI_midi.c ****             #if (USBMIDI_EP_MANAGEMENT_DMA_AUTO)
+ 343:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_LoadInEP(USBMIDI_midi_in_ep, NULL, (uint16)USBMIDI_midiInPointer);
+ 344:Generated_Source\PSoC5/USBMIDI_midi.c ****             #else
+ 345:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_LoadInEP(USBMIDI_midi_in_ep, USBMIDI_midiInBuffer,
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 10
+
+
+ 166              		.loc 1 345 0
+ 167 0018 064B     		ldr	r3, .L17+4
+ 168 001a 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 169 001c 044C     		ldr	r4, .L17
+ 170 001e 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 171 0020 0549     		ldr	r1, .L17+8
+ 172 0022 FFF7FEFF 		bl	USBMIDI_LoadInEP
+ 173              	.LVL14:
+ 346:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                               (uint16) USBMIDI_midiInPointer);
+ 347:Generated_Source\PSoC5/USBMIDI_midi.c ****             #endif /* (USBMIDI_EP_MANAGEMENT_DMA_AUTO) */
+ 348:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 349:Generated_Source\PSoC5/USBMIDI_midi.c ****             /* Clear the midiInPointer. For DMA mode, clear this pointer in the ARB ISR when data a
+ 350:Generated_Source\PSoC5/USBMIDI_midi.c ****             #if (USBMIDI_EP_MANAGEMENT_MANUAL)
+ 351:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInPointer = 0u;
+ 174              		.loc 1 351 0
+ 175 0026 0023     		movs	r3, #0
+ 176 0028 2370     		strb	r3, [r4]
+ 177              	.L13:
+ 178 002a 10BD     		pop	{r4, pc}
+ 179              	.L16:
+ 180              		.cfi_def_cfa_offset 0
+ 181              		.cfi_restore 4
+ 182              		.cfi_restore 14
+ 183 002c 7047     		bx	lr
+ 184              	.L18:
+ 185 002e 00BF     		.align	2
+ 186              	.L17:
+ 187 0030 00000000 		.word	USBMIDI_midiInPointer
+ 188 0034 00000000 		.word	USBMIDI_midi_in_ep
+ 189 0038 00000000 		.word	USBMIDI_midiInBuffer
+ 190              		.cfi_endproc
+ 191              	.LFE2:
+ 192              		.size	USBMIDI_MIDI_IN_EP_Service, .-USBMIDI_MIDI_IN_EP_Service
+ 193              		.section	.text.USBMIDI_MIDI_IN_Service,"ax",%progbits
+ 194              		.align	2
+ 195              		.global	USBMIDI_MIDI_IN_Service
+ 196              		.thumb
+ 197              		.thumb_func
+ 198              		.type	USBMIDI_MIDI_IN_Service, %function
+ 199              	USBMIDI_MIDI_IN_Service:
+ 200              	.LFB3:
+ 352:Generated_Source\PSoC5/USBMIDI_midi.c ****             #endif /* (USBMIDI_EP_MANAGEMENT_MANUAL) */
+ 353:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 354:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 355:Generated_Source\PSoC5/USBMIDI_midi.c ****     }
+ 356:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 357:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 358:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*******************************************************************************
+ 359:Generated_Source\PSoC5/USBMIDI_midi.c ****     * Function Name: USBMIDI_MIDI_IN_Service
+ 360:Generated_Source\PSoC5/USBMIDI_midi.c ****     ****************************************************************************//**
+ 361:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 362:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  This function services the traffic from the MIDI input ports (RX UART)
+ 363:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  and prepare data in USB MIDI IN endpoint buffer.
+ 364:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  Calls the USBMIDI_MIDI_IN_EP_Service() function to sent the
+ 365:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  data from buffer to PC. Non-blocking. Should be called from main foreground
+ 366:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  task.
+ 367:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  This function is not protected from the reentrant calls. When it is required
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 11
+
+
+ 368:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  to use this function in UART RX ISR to guaranty low latency, care should be
+ 369:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  taken to protect from reentrant calls.
+ 370:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  In PSoC 3, if this function is called from an ISR, you must declare this
+ 371:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  function as re-entrant so that different variable storage space is
+ 372:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  created by the compiler. This is automatically taken care for PSoC 4 and
+ 373:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  PSoC 5LP devices by the compiler.
+ 374:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 375:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \globalvars
+ 376:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 377:Generated_Source\PSoC5/USBMIDI_midi.c ****     *   USBMIDI_midiInPointer: Cleared to zero when data are sent.
+ 378:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 379:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \reentrant
+ 380:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  No
+ 381:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 382:Generated_Source\PSoC5/USBMIDI_midi.c ****     *******************************************************************************/
+ 383:Generated_Source\PSoC5/USBMIDI_midi.c ****     void USBMIDI_MIDI_IN_Service(void) 
+ 384:Generated_Source\PSoC5/USBMIDI_midi.c ****     {
+ 201              		.loc 1 384 0
+ 202              		.cfi_startproc
+ 203              		@ args = 0, pretend = 0, frame = 0
+ 204              		@ frame_needed = 0, uses_anonymous_args = 0
+ 205 0000 08B5     		push	{r3, lr}
+ 206              		.cfi_def_cfa_offset 8
+ 207              		.cfi_offset 3, -8
+ 208              		.cfi_offset 14, -4
+ 385:Generated_Source\PSoC5/USBMIDI_midi.c ****         /* Service the MIDI UART inputs until either both receivers have no more
+ 386:Generated_Source\PSoC5/USBMIDI_midi.c ****         *  events or until the input endpoint buffer fills up.
+ 387:Generated_Source\PSoC5/USBMIDI_midi.c ****         */
+ 388:Generated_Source\PSoC5/USBMIDI_midi.c ****     #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF)
+ 389:Generated_Source\PSoC5/USBMIDI_midi.c ****             uint8 m1 = 0u;
+ 390:Generated_Source\PSoC5/USBMIDI_midi.c ****             uint8 m2 = 0u;
+ 391:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 392:Generated_Source\PSoC5/USBMIDI_midi.c ****         if (0u == USBMIDI_midiInPointer)
+ 393:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 394:Generated_Source\PSoC5/USBMIDI_midi.c ****             do
+ 395:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 396:Generated_Source\PSoC5/USBMIDI_midi.c ****                 if (USBMIDI_midiInPointer <= (USBMIDI_MIDI_IN_BUFF_SIZE - USBMIDI_EVENT_LENGTH))
+ 397:Generated_Source\PSoC5/USBMIDI_midi.c ****                 {
+ 398:Generated_Source\PSoC5/USBMIDI_midi.c ****                     /* Check MIDI1 input port for a complete event */
+ 399:Generated_Source\PSoC5/USBMIDI_midi.c ****                     m1 = USBMIDI_MIDI1_GetEvent();
+ 400:Generated_Source\PSoC5/USBMIDI_midi.c ****                     if (m1 != 0u)
+ 401:Generated_Source\PSoC5/USBMIDI_midi.c ****                     {
+ 402:Generated_Source\PSoC5/USBMIDI_midi.c ****                         USBMIDI_PrepareInBuffer(m1, (uint8 *)&USBMIDI_MIDI1_Event.msgBuff[0],
+ 403:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                                        USBMIDI_MIDI1_Event.size, US
+ 404:Generated_Source\PSoC5/USBMIDI_midi.c ****                     }
+ 405:Generated_Source\PSoC5/USBMIDI_midi.c ****                 }
+ 406:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 407:Generated_Source\PSoC5/USBMIDI_midi.c ****             #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_TWO_EXT_INTRF)
+ 408:Generated_Source\PSoC5/USBMIDI_midi.c ****                 if (USBMIDI_midiInPointer <= (USBMIDI_MIDI_IN_BUFF_SIZE - USBMIDI_EVENT_LENGTH))
+ 409:Generated_Source\PSoC5/USBMIDI_midi.c ****                 {
+ 410:Generated_Source\PSoC5/USBMIDI_midi.c ****                     /* Check MIDI2 input port for a complete event */
+ 411:Generated_Source\PSoC5/USBMIDI_midi.c ****                     m2 = USBMIDI_MIDI2_GetEvent();
+ 412:Generated_Source\PSoC5/USBMIDI_midi.c ****                     if (m2 != 0u)
+ 413:Generated_Source\PSoC5/USBMIDI_midi.c ****                     {
+ 414:Generated_Source\PSoC5/USBMIDI_midi.c ****                         USBMIDI_PrepareInBuffer(m2, (uint8 *)&USBMIDI_MIDI2_Event.msgBuff[0],
+ 415:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                                        USBMIDI_MIDI2_Event.size, US
+ 416:Generated_Source\PSoC5/USBMIDI_midi.c ****                     }
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 12
+
+
+ 417:Generated_Source\PSoC5/USBMIDI_midi.c ****                 }
+ 418:Generated_Source\PSoC5/USBMIDI_midi.c ****             #endif /*  USBMIDI_MIDI_EXT_MODE >= USBMIDI_TWO_EXT_INTRF */
+ 419:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 420:Generated_Source\PSoC5/USBMIDI_midi.c ****             while((USBMIDI_midiInPointer <= (USBMIDI_MIDI_IN_BUFF_SIZE - USBMIDI_EVENT_LENGTH)) &&
+ 421:Generated_Source\PSoC5/USBMIDI_midi.c ****                   ((m1 != 0u) || (m2 != 0u)));
+ 422:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 423:Generated_Source\PSoC5/USBMIDI_midi.c ****     #endif /* (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF) */
+ 424:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 425:Generated_Source\PSoC5/USBMIDI_midi.c ****         /* Service the USB MIDI input endpoint */
+ 426:Generated_Source\PSoC5/USBMIDI_midi.c ****         USBMIDI_MIDI_IN_EP_Service();
+ 209              		.loc 1 426 0
+ 210 0002 FFF7FEFF 		bl	USBMIDI_MIDI_IN_EP_Service
+ 211              	.LVL15:
+ 212 0006 08BD     		pop	{r3, pc}
+ 213              		.cfi_endproc
+ 214              	.LFE3:
+ 215              		.size	USBMIDI_MIDI_IN_Service, .-USBMIDI_MIDI_IN_Service
+ 216              		.section	.text.USBMIDI_PrepareInBuffer,"ax",%progbits
+ 217              		.align	2
+ 218              		.global	USBMIDI_PrepareInBuffer
+ 219              		.thumb
+ 220              		.thumb_func
+ 221              		.type	USBMIDI_PrepareInBuffer, %function
+ 222              	USBMIDI_PrepareInBuffer:
+ 223              	.LFB5:
+ 427:Generated_Source\PSoC5/USBMIDI_midi.c ****     }
+ 428:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 429:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 430:Generated_Source\PSoC5/USBMIDI_midi.c ****     /***************************************************************************
+ 431:Generated_Source\PSoC5/USBMIDI_midi.c ****     * Function Name: USBMIDI_PutUsbMidiIn
+ 432:Generated_Source\PSoC5/USBMIDI_midi.c ****     ************************************************************************//**
+ 433:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 434:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  This function puts one MIDI message into the USB MIDI In endpoint buffer.
+ 435:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  This is a MIDI input message to the host. This function is used only if
+ 436:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  the device has internal MIDI input functionality.
+ 437:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  The USBMIDI_MIDI_IN_Service() function should also be called to
+ 438:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  send the message from local buffer to the IN endpoint.
+ 439:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 440:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \param ic: The length of the MIDI message or command is described on the
+ 441:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  following table.
+ 442:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  Value          | Description
+ 443:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  ---------------|---------------------------------------------------------
+ 444:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  0              | No message (should never happen)
+ 445:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  1 - 3          | Complete MIDI message in midiMsg
+ 446:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  3 IN EP LENGTH | Complete SySEx message(without EOSEX byte) in midiMsg. The length is limite
+ 447:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  MIDI_SYSEX     | Start or continuation of SysEx message (put event bytes in midiMsg buffer)
+ 448:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  MIDI_EOSEX     | End of SysEx message (put event bytes in midiMsg buffer)
+ 449:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  MIDI_TUNEREQ   | Tune Request message (single byte system common message)
+ 450:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  0xF8 - 0xFF    | Single byte real-time message
+ 451:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 452:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \param midiMsg: pointer to MIDI message.
+ 453:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \param cable:   cable number.
+ 454:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 455:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \return
+ 456:Generated_Source\PSoC5/USBMIDI_midi.c ****     *   Return Value          | Description
+ 457:Generated_Source\PSoC5/USBMIDI_midi.c ****     *   ----------------------|-----------------------------------------
+ 458:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  USBMIDI_TRUE  | Host is not ready to receive this message
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 13
+
+
+ 459:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  USBMIDI_FALSE | Success transfer
+ 460:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 461:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \globalvars
+ 462:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 463:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \ref USBMIDI_midi_in_ep: MIDI IN endpoint number used for
+ 464:Generated_Source\PSoC5/USBMIDI_midi.c ****     *        sending data.
+ 465:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 466:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \ref USBMIDI_midiInPointer: Checked this variable to see if
+ 467:Generated_Source\PSoC5/USBMIDI_midi.c ****     *        there is enough free space in the IN endpoint buffer. If buffer is
+ 468:Generated_Source\PSoC5/USBMIDI_midi.c ****     *        full, initiate sending to PC.
+ 469:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 470:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \reentrant
+ 471:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  No
+ 472:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 473:Generated_Source\PSoC5/USBMIDI_midi.c ****     ***************************************************************************/
+ 474:Generated_Source\PSoC5/USBMIDI_midi.c ****     uint8 USBMIDI_PutUsbMidiIn(uint8 ic, const uint8 midiMsg[], uint8 cable)
+ 475:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                                 
+ 476:Generated_Source\PSoC5/USBMIDI_midi.c ****     {
+ 477:Generated_Source\PSoC5/USBMIDI_midi.c ****         uint8 retError = USBMIDI_FALSE;
+ 478:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 479:Generated_Source\PSoC5/USBMIDI_midi.c ****         /* Protect PrepareInBuffer() function from concurrent calls */
+ 480:Generated_Source\PSoC5/USBMIDI_midi.c ****     #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF)
+ 481:Generated_Source\PSoC5/USBMIDI_midi.c ****         MIDI1_UART_DisableRxInt();
+ 482:Generated_Source\PSoC5/USBMIDI_midi.c ****         #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_TWO_EXT_INTRF)
+ 483:Generated_Source\PSoC5/USBMIDI_midi.c ****             MIDI2_UART_DisableRxInt();
+ 484:Generated_Source\PSoC5/USBMIDI_midi.c ****         #endif /* (USBMIDI_MIDI_EXT_MODE >= USBMIDI_TWO_EXT_INTRF) */
+ 485:Generated_Source\PSoC5/USBMIDI_midi.c ****     #endif /* (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF) */
+ 486:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 487:Generated_Source\PSoC5/USBMIDI_midi.c ****         if (USBMIDI_midiInPointer >
+ 488:Generated_Source\PSoC5/USBMIDI_midi.c ****                     (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 489:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 490:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_MIDI_IN_EP_Service();
+ 491:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 492:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 493:Generated_Source\PSoC5/USBMIDI_midi.c ****         if (USBMIDI_midiInPointer <=
+ 494:Generated_Source\PSoC5/USBMIDI_midi.c ****                     (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 495:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 496:Generated_Source\PSoC5/USBMIDI_midi.c ****             if((ic < USBMIDI_EVENT_LENGTH) || (ic >= USBMIDI_MIDI_STATUS_MASK))
+ 497:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 498:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_PrepareInBuffer(ic, midiMsg, ic, cable);
+ 499:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 500:Generated_Source\PSoC5/USBMIDI_midi.c ****             else /* Only SysEx message is greater than 4 bytes */
+ 501:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 502:Generated_Source\PSoC5/USBMIDI_midi.c ****                 /* Convert SysEx message into midi message format */
+ 503:Generated_Source\PSoC5/USBMIDI_midi.c ****                 uint8 idx = 0u;
+ 504:Generated_Source\PSoC5/USBMIDI_midi.c ****                 do
+ 505:Generated_Source\PSoC5/USBMIDI_midi.c ****                 {
+ 506:Generated_Source\PSoC5/USBMIDI_midi.c ****                     /* Process 3 bytes of message until 0-2 bytes are left. These bytes are handled
+ 507:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_PrepareInBuffer(USBMIDI_MIDI_SYSEX, &midiMsg[idx],
+ 508:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                      USBMIDI_EVENT_BYTE3, cable);
+ 509:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 510:Generated_Source\PSoC5/USBMIDI_midi.c ****                     /* Move to next 3 bytes of message */
+ 511:Generated_Source\PSoC5/USBMIDI_midi.c ****                     ic  -= USBMIDI_EVENT_BYTE3;
+ 512:Generated_Source\PSoC5/USBMIDI_midi.c ****                     idx += USBMIDI_EVENT_BYTE3;
+ 513:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 514:Generated_Source\PSoC5/USBMIDI_midi.c ****                     if (USBMIDI_midiInPointer >
+ 515:Generated_Source\PSoC5/USBMIDI_midi.c ****                         (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 14
+
+
+ 516:Generated_Source\PSoC5/USBMIDI_midi.c ****                     {
+ 517:Generated_Source\PSoC5/USBMIDI_midi.c ****                         /* Load message into endpoint */
+ 518:Generated_Source\PSoC5/USBMIDI_midi.c ****                         USBMIDI_MIDI_IN_EP_Service();
+ 519:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 520:Generated_Source\PSoC5/USBMIDI_midi.c ****                         if (USBMIDI_midiInPointer >
+ 521:Generated_Source\PSoC5/USBMIDI_midi.c ****                            (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 522:Generated_Source\PSoC5/USBMIDI_midi.c ****                         {
+ 523:Generated_Source\PSoC5/USBMIDI_midi.c ****                             /* Error condition. Host is not ready to receive this packet. */
+ 524:Generated_Source\PSoC5/USBMIDI_midi.c ****                             retError = USBMIDI_TRUE;
+ 525:Generated_Source\PSoC5/USBMIDI_midi.c ****                             break;
+ 526:Generated_Source\PSoC5/USBMIDI_midi.c ****                         }
+ 527:Generated_Source\PSoC5/USBMIDI_midi.c ****                     }
+ 528:Generated_Source\PSoC5/USBMIDI_midi.c ****                 }
+ 529:Generated_Source\PSoC5/USBMIDI_midi.c ****                 while (ic >= USBMIDI_EVENT_BYTE3);
+ 530:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 531:Generated_Source\PSoC5/USBMIDI_midi.c ****                 if (retError == USBMIDI_FALSE)
+ 532:Generated_Source\PSoC5/USBMIDI_midi.c ****                 {
+ 533:Generated_Source\PSoC5/USBMIDI_midi.c ****                     /* Handle end of message: valid size of messages is 0, 1 and 2 */
+ 534:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_PrepareInBuffer(USBMIDI_MIDI_EOSEX, &midiMsg[idx], ic, cable);
+ 535:Generated_Source\PSoC5/USBMIDI_midi.c ****                 }
+ 536:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 537:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 538:Generated_Source\PSoC5/USBMIDI_midi.c ****         else
+ 539:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 540:Generated_Source\PSoC5/USBMIDI_midi.c ****             /* Error condition. Host is not ready to receive this packet. */
+ 541:Generated_Source\PSoC5/USBMIDI_midi.c ****             retError = USBMIDI_TRUE;
+ 542:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 543:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 544:Generated_Source\PSoC5/USBMIDI_midi.c ****     #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF)
+ 545:Generated_Source\PSoC5/USBMIDI_midi.c ****         MIDI1_UART_EnableRxInt();
+ 546:Generated_Source\PSoC5/USBMIDI_midi.c ****         #if (USBMIDI_MIDI_EXT_MODE >= USBMIDI_TWO_EXT_INTRF)
+ 547:Generated_Source\PSoC5/USBMIDI_midi.c ****             MIDI2_UART_EnableRxInt();
+ 548:Generated_Source\PSoC5/USBMIDI_midi.c ****         #endif /* (USBMIDI_MIDI_EXT_MODE >= USBMIDI_TWO_EXT_INTRF) */
+ 549:Generated_Source\PSoC5/USBMIDI_midi.c ****     #endif /* (USBMIDI_MIDI_EXT_MODE >= USBMIDI_ONE_EXT_INTRF) */
+ 550:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 551:Generated_Source\PSoC5/USBMIDI_midi.c ****         return (retError);
+ 552:Generated_Source\PSoC5/USBMIDI_midi.c ****     }
+ 553:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 554:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 555:Generated_Source\PSoC5/USBMIDI_midi.c ****     /*******************************************************************************
+ 556:Generated_Source\PSoC5/USBMIDI_midi.c ****     * Function Name: USBMIDI_PrepareInBuffer
+ 557:Generated_Source\PSoC5/USBMIDI_midi.c ****     ****************************************************************************//**
+ 558:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 559:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  Builds a USB MIDI event in the input endpoint buffer at the current pointer.
+ 560:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  Puts one MIDI message into the USB MIDI In endpoint buffer.
+ 561:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 562:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \param ic:   0 = No message (should never happen)
+ 563:Generated_Source\PSoC5/USBMIDI_midi.c ****     *        1 - 3 = Complete MIDI message at pMdat[0]
+ 564:Generated_Source\PSoC5/USBMIDI_midi.c ****     *        MIDI_SYSEX = Start or continuation of SysEx message
+ 565:Generated_Source\PSoC5/USBMIDI_midi.c ****     *                     (put eventLen bytes in buffer)
+ 566:Generated_Source\PSoC5/USBMIDI_midi.c ****     *        MIDI_EOSEX = End of SysEx message
+ 567:Generated_Source\PSoC5/USBMIDI_midi.c ****     *                     (put eventLen bytes in buffer,
+ 568:Generated_Source\PSoC5/USBMIDI_midi.c ****     *                      and append MIDI_EOSEX)
+ 569:Generated_Source\PSoC5/USBMIDI_midi.c ****     *        MIDI_TUNEREQ = Tune Request message (single byte system common msg)
+ 570:Generated_Source\PSoC5/USBMIDI_midi.c ****     *        0xf8 - 0xff = Single byte real-time message
+ 571:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 572:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \param srcBuff: pointer to MIDI data
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 15
+
+
+ 573:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \param eventLen: number of bytes in MIDI event
+ 574:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  \param cable: MIDI source port number
+ 575:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 576:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \globalvars
+ 577:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  USBMIDI_midiInBuffer: This buffer is used for saving and combine the
+ 578:Generated_Source\PSoC5/USBMIDI_midi.c ****     *    received from UART(s) and(or) generated internally by
+ 579:Generated_Source\PSoC5/USBMIDI_midi.c ****     *    USBMIDI_PutUsbMidiIn() function messages.
+ 580:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  USBMIDI_midiInPointer: Used as an index for midiInBuffer to
+ 581:Generated_Source\PSoC5/USBMIDI_midi.c ****     *     write data.
+ 582:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 583:Generated_Source\PSoC5/USBMIDI_midi.c ****     * \reentrant
+ 584:Generated_Source\PSoC5/USBMIDI_midi.c ****     *  No
+ 585:Generated_Source\PSoC5/USBMIDI_midi.c ****     *
+ 586:Generated_Source\PSoC5/USBMIDI_midi.c ****     *******************************************************************************/
+ 587:Generated_Source\PSoC5/USBMIDI_midi.c ****     void USBMIDI_PrepareInBuffer(uint8 ic, const uint8 srcBuff[], uint8 eventLen, uint8 cable)
+ 588:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                                  
+ 589:Generated_Source\PSoC5/USBMIDI_midi.c ****     {
+ 224              		.loc 1 589 0
+ 225              		.cfi_startproc
+ 226              		@ args = 0, pretend = 0, frame = 0
+ 227              		@ frame_needed = 0, uses_anonymous_args = 0
+ 228              		@ link register save eliminated.
+ 229              	.LVL16:
+ 230 0000 70B4     		push	{r4, r5, r6}
+ 231              		.cfi_def_cfa_offset 12
+ 232              		.cfi_offset 4, -12
+ 233              		.cfi_offset 5, -8
+ 234              		.cfi_offset 6, -4
+ 590:Generated_Source\PSoC5/USBMIDI_midi.c ****         uint8 srcBuffZero;
+ 591:Generated_Source\PSoC5/USBMIDI_midi.c ****         uint8 srcBuffOne;
+ 592:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 593:Generated_Source\PSoC5/USBMIDI_midi.c ****         srcBuffZero = srcBuff[0u];
+ 235              		.loc 1 593 0
+ 236 0002 0D78     		ldrb	r5, [r1]	@ zero_extendqisi2
+ 237              	.LVL17:
+ 594:Generated_Source\PSoC5/USBMIDI_midi.c ****         srcBuffOne  = srcBuff[1u];
+ 238              		.loc 1 594 0
+ 239 0004 4C78     		ldrb	r4, [r1, #1]	@ zero_extendqisi2
+ 240              	.LVL18:
+ 595:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 596:Generated_Source\PSoC5/USBMIDI_midi.c ****         if (ic >= (USBMIDI_MIDI_STATUS_MASK | USBMIDI_MIDI_SINGLE_BYTE_MASK))
+ 241              		.loc 1 596 0
+ 242 0006 F728     		cmp	r0, #247
+ 243 0008 21D9     		bls	.L22
+ 597:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 598:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_SINGLE_BYTE | cable;
+ 244              		.loc 1 598 0
+ 245 000a 7B4A     		ldr	r2, .L36
+ 246              	.LVL19:
+ 247 000c 1478     		ldrb	r4, [r2]	@ zero_extendqisi2
+ 248              	.LVL20:
+ 249 000e E4B2     		uxtb	r4, r4
+ 250 0010 7A49     		ldr	r1, .L36+4
+ 251              	.LVL21:
+ 252 0012 43F00F03 		orr	r3, r3, #15
+ 253              	.LVL22:
+ 254 0016 0B55     		strb	r3, [r1, r4]
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 16
+
+
+ 255              	.LVL23:
+ 599:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInPointer++;
+ 256              		.loc 1 599 0
+ 257 0018 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 258 001a 0133     		adds	r3, r3, #1
+ 259 001c DBB2     		uxtb	r3, r3
+ 260 001e 1370     		strb	r3, [r2]
+ 600:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = ic;
+ 261              		.loc 1 600 0
+ 262 0020 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 263 0022 DBB2     		uxtb	r3, r3
+ 264 0024 C854     		strb	r0, [r1, r3]
+ 601:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInPointer++;
+ 265              		.loc 1 601 0
+ 266 0026 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 267 0028 0133     		adds	r3, r3, #1
+ 268 002a DBB2     		uxtb	r3, r3
+ 269 002c 1370     		strb	r3, [r2]
+ 602:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = 0u;
+ 270              		.loc 1 602 0
+ 271 002e 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 272 0030 DBB2     		uxtb	r3, r3
+ 273 0032 0020     		movs	r0, #0
+ 274              	.LVL24:
+ 275 0034 C854     		strb	r0, [r1, r3]
+ 603:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInPointer++;
+ 276              		.loc 1 603 0
+ 277 0036 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 278 0038 0133     		adds	r3, r3, #1
+ 279 003a DBB2     		uxtb	r3, r3
+ 280 003c 1370     		strb	r3, [r2]
+ 604:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = 0u;
+ 281              		.loc 1 604 0
+ 282 003e 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 283 0040 DBB2     		uxtb	r3, r3
+ 284 0042 C854     		strb	r0, [r1, r3]
+ 605:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInPointer++;
+ 285              		.loc 1 605 0
+ 286 0044 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 287 0046 0133     		adds	r3, r3, #1
+ 288 0048 DBB2     		uxtb	r3, r3
+ 289 004a 1370     		strb	r3, [r2]
+ 290 004c D2E0     		b	.L21
+ 291              	.LVL25:
+ 292              	.L22:
+ 606:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 607:Generated_Source\PSoC5/USBMIDI_midi.c ****         else if((ic < USBMIDI_EVENT_LENGTH) || (ic == USBMIDI_MIDI_SYSEX))
+ 293              		.loc 1 607 0
+ 294 004e 0328     		cmp	r0, #3
+ 295 0050 01D9     		bls	.L24
+ 296              		.loc 1 607 0 is_stmt 0 discriminator 1
+ 297 0052 F028     		cmp	r0, #240
+ 298 0054 5FD1     		bne	.L25
+ 299              	.L24:
+ 608:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 609:Generated_Source\PSoC5/USBMIDI_midi.c ****             if(ic == USBMIDI_MIDI_SYSEX)
+ 300              		.loc 1 609 0 is_stmt 1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 17
+
+
+ 301 0056 F028     		cmp	r0, #240
+ 302 0058 0BD1     		bne	.L26
+ 610:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 611:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_SYSEX | cable;
+ 303              		.loc 1 611 0
+ 304 005a 674A     		ldr	r2, .L36
+ 305              	.LVL26:
+ 306 005c 1078     		ldrb	r0, [r2]	@ zero_extendqisi2
+ 307              	.LVL27:
+ 308 005e C0B2     		uxtb	r0, r0
+ 309 0060 43F00403 		orr	r3, r3, #4
+ 310              	.LVL28:
+ 311 0064 654E     		ldr	r6, .L36+4
+ 312 0066 3354     		strb	r3, [r6, r0]
+ 612:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInPointer++;
+ 313              		.loc 1 612 0
+ 314 0068 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 315 006a 0133     		adds	r3, r3, #1
+ 316 006c DBB2     		uxtb	r3, r3
+ 317 006e 1370     		strb	r3, [r2]
+ 318 0070 38E0     		b	.L27
+ 319              	.LVL29:
+ 320              	.L26:
+ 613:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 614:Generated_Source\PSoC5/USBMIDI_midi.c ****             else if (srcBuffZero < USBMIDI_MIDI_SYSEX)
+ 321              		.loc 1 614 0
+ 322 0072 EF2D     		cmp	r5, #239
+ 323 0074 0BD8     		bhi	.L28
+ 615:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 616:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = (srcBuffZero >> 4u) | cable;
+ 324              		.loc 1 616 0
+ 325 0076 604A     		ldr	r2, .L36
+ 326              	.LVL30:
+ 327 0078 1078     		ldrb	r0, [r2]	@ zero_extendqisi2
+ 328              	.LVL31:
+ 329 007a C0B2     		uxtb	r0, r0
+ 330 007c 43EA1513 		orr	r3, r3, r5, lsr #4
+ 331              	.LVL32:
+ 332 0080 5E4E     		ldr	r6, .L36+4
+ 333 0082 3354     		strb	r3, [r6, r0]
+ 617:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInPointer++;
+ 334              		.loc 1 617 0
+ 335 0084 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 336 0086 0133     		adds	r3, r3, #1
+ 337 0088 DBB2     		uxtb	r3, r3
+ 338 008a 1370     		strb	r3, [r2]
+ 339 008c 2AE0     		b	.L27
+ 340              	.LVL33:
+ 341              	.L28:
+ 618:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 619:Generated_Source\PSoC5/USBMIDI_midi.c ****             else if (srcBuffZero == USBMIDI_MIDI_TUNEREQ)
+ 342              		.loc 1 619 0
+ 343 008e F62D     		cmp	r5, #246
+ 344 0090 0BD1     		bne	.L29
+ 620:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 621:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_1BYTE_COMMON | cable;
+ 345              		.loc 1 621 0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 18
+
+
+ 346 0092 594A     		ldr	r2, .L36
+ 347              	.LVL34:
+ 348 0094 1078     		ldrb	r0, [r2]	@ zero_extendqisi2
+ 349              	.LVL35:
+ 350 0096 C0B2     		uxtb	r0, r0
+ 351 0098 43F00503 		orr	r3, r3, #5
+ 352              	.LVL36:
+ 353 009c 574E     		ldr	r6, .L36+4
+ 354 009e 3354     		strb	r3, [r6, r0]
+ 622:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInPointer++;
+ 355              		.loc 1 622 0
+ 356 00a0 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 357 00a2 0133     		adds	r3, r3, #1
+ 358 00a4 DBB2     		uxtb	r3, r3
+ 359 00a6 1370     		strb	r3, [r2]
+ 360 00a8 1CE0     		b	.L27
+ 361              	.LVL37:
+ 362              	.L29:
+ 623:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 624:Generated_Source\PSoC5/USBMIDI_midi.c ****             else if ((srcBuffZero == USBMIDI_MIDI_QFM) || (srcBuffZero == USBMIDI_MIDI_SONGSEL))
+ 363              		.loc 1 624 0
+ 364 00aa F12D     		cmp	r5, #241
+ 365 00ac 01D0     		beq	.L30
+ 366              		.loc 1 624 0 is_stmt 0 discriminator 1
+ 367 00ae F32D     		cmp	r5, #243
+ 368 00b0 0BD1     		bne	.L31
+ 369              	.L30:
+ 625:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 626:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_2BYTE_COMMON | cable;
+ 370              		.loc 1 626 0 is_stmt 1
+ 371 00b2 514A     		ldr	r2, .L36
+ 372              	.LVL38:
+ 373 00b4 1078     		ldrb	r0, [r2]	@ zero_extendqisi2
+ 374              	.LVL39:
+ 375 00b6 C0B2     		uxtb	r0, r0
+ 376 00b8 43F00203 		orr	r3, r3, #2
+ 377              	.LVL40:
+ 378 00bc 4F4E     		ldr	r6, .L36+4
+ 379 00be 3354     		strb	r3, [r6, r0]
+ 627:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInPointer++;
+ 380              		.loc 1 627 0
+ 381 00c0 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 382 00c2 0133     		adds	r3, r3, #1
+ 383 00c4 DBB2     		uxtb	r3, r3
+ 384 00c6 1370     		strb	r3, [r2]
+ 385 00c8 0CE0     		b	.L27
+ 386              	.LVL41:
+ 387              	.L31:
+ 628:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 629:Generated_Source\PSoC5/USBMIDI_midi.c ****             else if (srcBuffZero == USBMIDI_MIDI_SPP)
+ 388              		.loc 1 629 0
+ 389 00ca F22D     		cmp	r5, #242
+ 390 00cc 0AD1     		bne	.L27
+ 630:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 631:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_3BYTE_COMMON | cable;
+ 391              		.loc 1 631 0
+ 392 00ce 4A4A     		ldr	r2, .L36
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 19
+
+
+ 393              	.LVL42:
+ 394 00d0 1078     		ldrb	r0, [r2]	@ zero_extendqisi2
+ 395              	.LVL43:
+ 396 00d2 C0B2     		uxtb	r0, r0
+ 397 00d4 43F00303 		orr	r3, r3, #3
+ 398              	.LVL44:
+ 399 00d8 484E     		ldr	r6, .L36+4
+ 400 00da 3354     		strb	r3, [r6, r0]
+ 632:Generated_Source\PSoC5/USBMIDI_midi.c ****                 USBMIDI_midiInPointer++;
+ 401              		.loc 1 632 0
+ 402 00dc 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 403 00de 0133     		adds	r3, r3, #1
+ 404 00e0 DBB2     		uxtb	r3, r3
+ 405 00e2 1370     		strb	r3, [r2]
+ 406              	.L27:
+ 633:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 634:Generated_Source\PSoC5/USBMIDI_midi.c ****             else
+ 635:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 636:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 637:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 638:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = srcBuffZero;
+ 407              		.loc 1 638 0
+ 408 00e4 444B     		ldr	r3, .L36
+ 409 00e6 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 410 00e8 D2B2     		uxtb	r2, r2
+ 411 00ea 4448     		ldr	r0, .L36+4
+ 412 00ec 8554     		strb	r5, [r0, r2]
+ 639:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInPointer++;
+ 413              		.loc 1 639 0
+ 414 00ee 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 415 00f0 0132     		adds	r2, r2, #1
+ 416 00f2 D2B2     		uxtb	r2, r2
+ 417 00f4 1A70     		strb	r2, [r3]
+ 640:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = srcBuffOne;
+ 418              		.loc 1 640 0
+ 419 00f6 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 420 00f8 D2B2     		uxtb	r2, r2
+ 421 00fa 8454     		strb	r4, [r0, r2]
+ 641:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInPointer++;
+ 422              		.loc 1 641 0
+ 423 00fc 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 424 00fe 0132     		adds	r2, r2, #1
+ 425 0100 D2B2     		uxtb	r2, r2
+ 426 0102 1A70     		strb	r2, [r3]
+ 642:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = srcBuff[2u];
+ 427              		.loc 1 642 0
+ 428 0104 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 429 0106 D2B2     		uxtb	r2, r2
+ 430 0108 8978     		ldrb	r1, [r1, #2]	@ zero_extendqisi2
+ 431              	.LVL45:
+ 432 010a 8154     		strb	r1, [r0, r2]
+ 643:Generated_Source\PSoC5/USBMIDI_midi.c ****             USBMIDI_midiInPointer++;
+ 433              		.loc 1 643 0
+ 434 010c 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 435 010e 0132     		adds	r2, r2, #1
+ 436 0110 D2B2     		uxtb	r2, r2
+ 437 0112 1A70     		strb	r2, [r3]
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 20
+
+
+ 438 0114 6EE0     		b	.L21
+ 439              	.LVL46:
+ 440              	.L25:
+ 644:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 645:Generated_Source\PSoC5/USBMIDI_midi.c ****         else if (ic == USBMIDI_MIDI_EOSEX)
+ 441              		.loc 1 645 0
+ 442 0116 F728     		cmp	r0, #247
+ 443 0118 6CD1     		bne	.L21
+ 646:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 647:Generated_Source\PSoC5/USBMIDI_midi.c ****             switch (eventLen)
+ 444              		.loc 1 647 0
+ 445 011a 012A     		cmp	r2, #1
+ 446 011c 26D0     		beq	.L32
+ 447 011e 12B1     		cbz	r2, .L33
+ 448 0120 022A     		cmp	r2, #2
+ 449 0122 46D0     		beq	.L34
+ 450 0124 66E0     		b	.L21
+ 451              	.L33:
+ 648:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 649:Generated_Source\PSoC5/USBMIDI_midi.c ****                 case 0u:
+ 650:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_SYSEX_ENDS_WITH1 | cable;
+ 452              		.loc 1 650 0
+ 453 0126 344A     		ldr	r2, .L36
+ 454              	.LVL47:
+ 455 0128 1078     		ldrb	r0, [r2]	@ zero_extendqisi2
+ 456              	.LVL48:
+ 457 012a C0B2     		uxtb	r0, r0
+ 458 012c 3349     		ldr	r1, .L36+4
+ 459              	.LVL49:
+ 460 012e 43F00503 		orr	r3, r3, #5
+ 461              	.LVL50:
+ 462 0132 0B54     		strb	r3, [r1, r0]
+ 651:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 463              		.loc 1 651 0
+ 464 0134 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 465 0136 0133     		adds	r3, r3, #1
+ 466 0138 DBB2     		uxtb	r3, r3
+ 467 013a 1370     		strb	r3, [r2]
+ 652:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_MIDI_EOSEX;
+ 468              		.loc 1 652 0
+ 469 013c 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 470 013e DBB2     		uxtb	r3, r3
+ 471 0140 F720     		movs	r0, #247
+ 472 0142 C854     		strb	r0, [r1, r3]
+ 653:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 473              		.loc 1 653 0
+ 474 0144 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 475 0146 0133     		adds	r3, r3, #1
+ 476 0148 DBB2     		uxtb	r3, r3
+ 477 014a 1370     		strb	r3, [r2]
+ 654:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = 0u;
+ 478              		.loc 1 654 0
+ 479 014c 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 480 014e DBB2     		uxtb	r3, r3
+ 481 0150 0020     		movs	r0, #0
+ 482 0152 C854     		strb	r0, [r1, r3]
+ 655:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 21
+
+
+ 483              		.loc 1 655 0
+ 484 0154 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 485 0156 0133     		adds	r3, r3, #1
+ 486 0158 DBB2     		uxtb	r3, r3
+ 487 015a 1370     		strb	r3, [r2]
+ 656:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = 0u;
+ 488              		.loc 1 656 0
+ 489 015c 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 490 015e DBB2     		uxtb	r3, r3
+ 491 0160 C854     		strb	r0, [r1, r3]
+ 657:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 492              		.loc 1 657 0
+ 493 0162 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 494 0164 0133     		adds	r3, r3, #1
+ 495 0166 DBB2     		uxtb	r3, r3
+ 496 0168 1370     		strb	r3, [r2]
+ 658:Generated_Source\PSoC5/USBMIDI_midi.c ****                     break;
+ 497              		.loc 1 658 0
+ 498 016a 43E0     		b	.L21
+ 499              	.LVL51:
+ 500              	.L32:
+ 659:Generated_Source\PSoC5/USBMIDI_midi.c ****                 case 1u:
+ 660:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_SYSEX_ENDS_WITH2 | cable;
+ 501              		.loc 1 660 0
+ 502 016c 224A     		ldr	r2, .L36
+ 503              	.LVL52:
+ 504 016e 1078     		ldrb	r0, [r2]	@ zero_extendqisi2
+ 505              	.LVL53:
+ 506 0170 C0B2     		uxtb	r0, r0
+ 507 0172 2249     		ldr	r1, .L36+4
+ 508              	.LVL54:
+ 509 0174 43F00603 		orr	r3, r3, #6
+ 510              	.LVL55:
+ 511 0178 0B54     		strb	r3, [r1, r0]
+ 661:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 512              		.loc 1 661 0
+ 513 017a 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 514 017c 0133     		adds	r3, r3, #1
+ 515 017e DBB2     		uxtb	r3, r3
+ 516 0180 1370     		strb	r3, [r2]
+ 662:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = srcBuffZero;
+ 517              		.loc 1 662 0
+ 518 0182 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 519 0184 DBB2     		uxtb	r3, r3
+ 520 0186 CD54     		strb	r5, [r1, r3]
+ 663:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 521              		.loc 1 663 0
+ 522 0188 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 523 018a 0133     		adds	r3, r3, #1
+ 524 018c DBB2     		uxtb	r3, r3
+ 525 018e 1370     		strb	r3, [r2]
+ 664:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_MIDI_EOSEX;
+ 526              		.loc 1 664 0
+ 527 0190 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 528 0192 DBB2     		uxtb	r3, r3
+ 529 0194 F720     		movs	r0, #247
+ 530 0196 C854     		strb	r0, [r1, r3]
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 22
+
+
+ 665:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 531              		.loc 1 665 0
+ 532 0198 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 533 019a 0133     		adds	r3, r3, #1
+ 534 019c DBB2     		uxtb	r3, r3
+ 535 019e 1370     		strb	r3, [r2]
+ 666:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = 0u;
+ 536              		.loc 1 666 0
+ 537 01a0 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 538 01a2 DBB2     		uxtb	r3, r3
+ 539 01a4 0020     		movs	r0, #0
+ 540 01a6 C854     		strb	r0, [r1, r3]
+ 667:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 541              		.loc 1 667 0
+ 542 01a8 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 543 01aa 0133     		adds	r3, r3, #1
+ 544 01ac DBB2     		uxtb	r3, r3
+ 545 01ae 1370     		strb	r3, [r2]
+ 668:Generated_Source\PSoC5/USBMIDI_midi.c ****                     break;
+ 546              		.loc 1 668 0
+ 547 01b0 20E0     		b	.L21
+ 548              	.LVL56:
+ 549              	.L34:
+ 669:Generated_Source\PSoC5/USBMIDI_midi.c ****                 case 2u:
+ 670:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_SYSEX_ENDS_WITH3 | cable;
+ 550              		.loc 1 670 0
+ 551 01b2 114A     		ldr	r2, .L36
+ 552              	.LVL57:
+ 553 01b4 1078     		ldrb	r0, [r2]	@ zero_extendqisi2
+ 554              	.LVL58:
+ 555 01b6 C0B2     		uxtb	r0, r0
+ 556 01b8 1049     		ldr	r1, .L36+4
+ 557              	.LVL59:
+ 558 01ba 43F00703 		orr	r3, r3, #7
+ 559              	.LVL60:
+ 560 01be 0B54     		strb	r3, [r1, r0]
+ 671:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 561              		.loc 1 671 0
+ 562 01c0 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 563 01c2 0133     		adds	r3, r3, #1
+ 564 01c4 DBB2     		uxtb	r3, r3
+ 565 01c6 1370     		strb	r3, [r2]
+ 672:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = srcBuffZero;
+ 566              		.loc 1 672 0
+ 567 01c8 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 568 01ca DBB2     		uxtb	r3, r3
+ 569 01cc CD54     		strb	r5, [r1, r3]
+ 673:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 570              		.loc 1 673 0
+ 571 01ce 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 572 01d0 0133     		adds	r3, r3, #1
+ 573 01d2 DBB2     		uxtb	r3, r3
+ 574 01d4 1370     		strb	r3, [r2]
+ 674:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = srcBuffOne;
+ 575              		.loc 1 674 0
+ 576 01d6 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 577 01d8 DBB2     		uxtb	r3, r3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 23
+
+
+ 578 01da CC54     		strb	r4, [r1, r3]
+ 675:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 579              		.loc 1 675 0
+ 580 01dc 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 581 01de 0133     		adds	r3, r3, #1
+ 582 01e0 DBB2     		uxtb	r3, r3
+ 583 01e2 1370     		strb	r3, [r2]
+ 676:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInBuffer[USBMIDI_midiInPointer] = USBMIDI_MIDI_EOSEX;
+ 584              		.loc 1 676 0
+ 585 01e4 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 586 01e6 DBB2     		uxtb	r3, r3
+ 587 01e8 F720     		movs	r0, #247
+ 588 01ea C854     		strb	r0, [r1, r3]
+ 677:Generated_Source\PSoC5/USBMIDI_midi.c ****                     USBMIDI_midiInPointer++;
+ 589              		.loc 1 677 0
+ 590 01ec 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 591 01ee 0133     		adds	r3, r3, #1
+ 592 01f0 DBB2     		uxtb	r3, r3
+ 593 01f2 1370     		strb	r3, [r2]
+ 594              	.LVL61:
+ 595              	.L21:
+ 678:Generated_Source\PSoC5/USBMIDI_midi.c ****                     break;
+ 679:Generated_Source\PSoC5/USBMIDI_midi.c ****                 default:
+ 680:Generated_Source\PSoC5/USBMIDI_midi.c ****                     break;
+ 681:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 682:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 683:Generated_Source\PSoC5/USBMIDI_midi.c ****         else
+ 684:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 685:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 686:Generated_Source\PSoC5/USBMIDI_midi.c ****     }
+ 596              		.loc 1 686 0
+ 597 01f4 70BC     		pop	{r4, r5, r6}
+ 598              		.cfi_restore 6
+ 599              		.cfi_restore 5
+ 600              		.cfi_restore 4
+ 601              		.cfi_def_cfa_offset 0
+ 602              	.LVL62:
+ 603 01f6 7047     		bx	lr
+ 604              	.L37:
+ 605              		.align	2
+ 606              	.L36:
+ 607 01f8 00000000 		.word	USBMIDI_midiInPointer
+ 608 01fc 00000000 		.word	USBMIDI_midiInBuffer
+ 609              		.cfi_endproc
+ 610              	.LFE5:
+ 611              		.size	USBMIDI_PrepareInBuffer, .-USBMIDI_PrepareInBuffer
+ 612              		.section	.text.USBMIDI_PutUsbMidiIn,"ax",%progbits
+ 613              		.align	2
+ 614              		.global	USBMIDI_PutUsbMidiIn
+ 615              		.thumb
+ 616              		.thumb_func
+ 617              		.type	USBMIDI_PutUsbMidiIn, %function
+ 618              	USBMIDI_PutUsbMidiIn:
+ 619              	.LFB4:
+ 476:Generated_Source\PSoC5/USBMIDI_midi.c ****         uint8 retError = USBMIDI_FALSE;
+ 620              		.loc 1 476 0
+ 621              		.cfi_startproc
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 24
+
+
+ 622              		@ args = 0, pretend = 0, frame = 0
+ 623              		@ frame_needed = 0, uses_anonymous_args = 0
+ 624              	.LVL63:
+ 625 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 626              		.cfi_def_cfa_offset 24
+ 627              		.cfi_offset 4, -24
+ 628              		.cfi_offset 5, -20
+ 629              		.cfi_offset 6, -16
+ 630              		.cfi_offset 7, -12
+ 631              		.cfi_offset 8, -8
+ 632              		.cfi_offset 14, -4
+ 633 0004 0446     		mov	r4, r0
+ 634 0006 0E46     		mov	r6, r1
+ 635 0008 1746     		mov	r7, r2
+ 636              	.LVL64:
+ 487:Generated_Source\PSoC5/USBMIDI_midi.c ****                     (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 637              		.loc 1 487 0
+ 638 000a 374B     		ldr	r3, .L48
+ 639 000c 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 640              	.LVL65:
+ 641 000e C9B2     		uxtb	r1, r1
+ 488:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 642              		.loc 1 488 0
+ 643 0010 364B     		ldr	r3, .L48+4
+ 644 0012 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 645 0014 03EB4303 		add	r3, r3, r3, lsl #1
+ 646 0018 9A00     		lsls	r2, r3, #2
+ 647              	.LVL66:
+ 648 001a 354B     		ldr	r3, .L48+8
+ 649 001c 1A44     		add	r2, r2, r3
+ 650 001e 1389     		ldrh	r3, [r2, #8]
+ 651 0020 9BB2     		uxth	r3, r3
+ 652 0022 043B     		subs	r3, r3, #4
+ 487:Generated_Source\PSoC5/USBMIDI_midi.c ****                     (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 653              		.loc 1 487 0
+ 654 0024 9942     		cmp	r1, r3
+ 655 0026 01D9     		bls	.L39
+ 490:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 656              		.loc 1 490 0
+ 657 0028 FFF7FEFF 		bl	USBMIDI_MIDI_IN_EP_Service
+ 658              	.LVL67:
+ 659              	.L39:
+ 493:Generated_Source\PSoC5/USBMIDI_midi.c ****                     (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 660              		.loc 1 493 0
+ 661 002c 2E4B     		ldr	r3, .L48
+ 662 002e 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 663 0030 C9B2     		uxtb	r1, r1
+ 494:Generated_Source\PSoC5/USBMIDI_midi.c ****         {
+ 664              		.loc 1 494 0
+ 665 0032 2E4B     		ldr	r3, .L48+4
+ 666 0034 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 667 0036 03EB4303 		add	r3, r3, r3, lsl #1
+ 668 003a 9A00     		lsls	r2, r3, #2
+ 669 003c 2C4B     		ldr	r3, .L48+8
+ 670 003e 1A44     		add	r2, r2, r3
+ 671 0040 1389     		ldrh	r3, [r2, #8]
+ 672 0042 9BB2     		uxth	r3, r3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 25
+
+
+ 673 0044 043B     		subs	r3, r3, #4
+ 493:Generated_Source\PSoC5/USBMIDI_midi.c ****                     (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 674              		.loc 1 493 0
+ 675 0046 9942     		cmp	r1, r3
+ 676 0048 48D8     		bhi	.L44
+ 496:Generated_Source\PSoC5/USBMIDI_midi.c ****             {
+ 677              		.loc 1 496 0
+ 678 004a 231F     		subs	r3, r4, #4
+ 679 004c DBB2     		uxtb	r3, r3
+ 680 004e EB2B     		cmp	r3, #235
+ 681 0050 08D9     		bls	.L45
+ 498:Generated_Source\PSoC5/USBMIDI_midi.c ****             }
+ 682              		.loc 1 498 0
+ 683 0052 3B46     		mov	r3, r7
+ 684 0054 2246     		mov	r2, r4
+ 685 0056 3146     		mov	r1, r6
+ 686 0058 2046     		mov	r0, r4
+ 687 005a FFF7FEFF 		bl	USBMIDI_PrepareInBuffer
+ 688              	.LVL68:
+ 477:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 689              		.loc 1 477 0
+ 690 005e 4FF00008 		mov	r8, #0
+ 691 0062 3DE0     		b	.L40
+ 692              	.L45:
+ 693 0064 0025     		movs	r5, #0
+ 694              	.LVL69:
+ 695              	.L41:
+ 696              	.LBB2:
+ 507:Generated_Source\PSoC5/USBMIDI_midi.c ****                                                      USBMIDI_EVENT_BYTE3, cable);
+ 697              		.loc 1 507 0
+ 698 0066 3B46     		mov	r3, r7
+ 699 0068 0322     		movs	r2, #3
+ 700 006a 7119     		adds	r1, r6, r5
+ 701 006c F020     		movs	r0, #240
+ 702 006e FFF7FEFF 		bl	USBMIDI_PrepareInBuffer
+ 703              	.LVL70:
+ 511:Generated_Source\PSoC5/USBMIDI_midi.c ****                     idx += USBMIDI_EVENT_BYTE3;
+ 704              		.loc 1 511 0
+ 705 0072 033C     		subs	r4, r4, #3
+ 706              	.LVL71:
+ 707 0074 E4B2     		uxtb	r4, r4
+ 708              	.LVL72:
+ 512:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 709              		.loc 1 512 0
+ 710 0076 0335     		adds	r5, r5, #3
+ 711              	.LVL73:
+ 712 0078 EDB2     		uxtb	r5, r5
+ 713              	.LVL74:
+ 514:Generated_Source\PSoC5/USBMIDI_midi.c ****                         (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 714              		.loc 1 514 0
+ 715 007a 1B4B     		ldr	r3, .L48
+ 716 007c 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 717 007e C9B2     		uxtb	r1, r1
+ 515:Generated_Source\PSoC5/USBMIDI_midi.c ****                     {
+ 718              		.loc 1 515 0
+ 719 0080 1A4B     		ldr	r3, .L48+4
+ 720 0082 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 26
+
+
+ 721 0084 03EB4303 		add	r3, r3, r3, lsl #1
+ 722 0088 9A00     		lsls	r2, r3, #2
+ 723 008a 194B     		ldr	r3, .L48+8
+ 724 008c 1A44     		add	r2, r2, r3
+ 725 008e 1389     		ldrh	r3, [r2, #8]
+ 726 0090 9BB2     		uxth	r3, r3
+ 727 0092 043B     		subs	r3, r3, #4
+ 514:Generated_Source\PSoC5/USBMIDI_midi.c ****                         (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 728              		.loc 1 514 0
+ 729 0094 9942     		cmp	r1, r3
+ 730 0096 10D9     		bls	.L42
+ 518:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 731              		.loc 1 518 0
+ 732 0098 FFF7FEFF 		bl	USBMIDI_MIDI_IN_EP_Service
+ 733              	.LVL75:
+ 520:Generated_Source\PSoC5/USBMIDI_midi.c ****                            (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 734              		.loc 1 520 0
+ 735 009c 124B     		ldr	r3, .L48
+ 736 009e 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 737 00a0 C9B2     		uxtb	r1, r1
+ 521:Generated_Source\PSoC5/USBMIDI_midi.c ****                         {
+ 738              		.loc 1 521 0
+ 739 00a2 124B     		ldr	r3, .L48+4
+ 740 00a4 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 741 00a6 03EB4303 		add	r3, r3, r3, lsl #1
+ 742 00aa 9A00     		lsls	r2, r3, #2
+ 743 00ac 104B     		ldr	r3, .L48+8
+ 744 00ae 1A44     		add	r2, r2, r3
+ 745 00b0 1389     		ldrh	r3, [r2, #8]
+ 746 00b2 9BB2     		uxth	r3, r3
+ 747 00b4 043B     		subs	r3, r3, #4
+ 520:Generated_Source\PSoC5/USBMIDI_midi.c ****                            (USBMIDI_EP[USBMIDI_midi_in_ep].bufferSize - USBMIDI_EVENT_LENGTH))
+ 748              		.loc 1 520 0
+ 749 00b6 9942     		cmp	r1, r3
+ 750 00b8 04D8     		bhi	.L46
+ 751              	.L42:
+ 529:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 752              		.loc 1 529 0
+ 753 00ba 022C     		cmp	r4, #2
+ 754 00bc D3D8     		bhi	.L41
+ 755              	.LBE2:
+ 477:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 756              		.loc 1 477 0
+ 757 00be 4FF00008 		mov	r8, #0
+ 758              	.LBB3:
+ 759 00c2 01E0     		b	.L43
+ 760              	.L46:
+ 524:Generated_Source\PSoC5/USBMIDI_midi.c ****                             break;
+ 761              		.loc 1 524 0
+ 762 00c4 4FF00108 		mov	r8, #1
+ 763              	.L43:
+ 764              	.LVL76:
+ 531:Generated_Source\PSoC5/USBMIDI_midi.c ****                 {
+ 765              		.loc 1 531 0
+ 766 00c8 B8F1000F 		cmp	r8, #0
+ 767 00cc 08D1     		bne	.L40
+ 534:Generated_Source\PSoC5/USBMIDI_midi.c ****                 }
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 27
+
+
+ 768              		.loc 1 534 0
+ 769 00ce 3B46     		mov	r3, r7
+ 770 00d0 2246     		mov	r2, r4
+ 771 00d2 7119     		adds	r1, r6, r5
+ 772 00d4 F720     		movs	r0, #247
+ 773 00d6 FFF7FEFF 		bl	USBMIDI_PrepareInBuffer
+ 774              	.LVL77:
+ 775 00da 01E0     		b	.L40
+ 776              	.LVL78:
+ 777              	.L44:
+ 778              	.LBE3:
+ 541:Generated_Source\PSoC5/USBMIDI_midi.c ****         }
+ 779              		.loc 1 541 0
+ 780 00dc 4FF00108 		mov	r8, #1
+ 781              	.LVL79:
+ 782              	.L40:
+ 552:Generated_Source\PSoC5/USBMIDI_midi.c **** 
+ 783              		.loc 1 552 0
+ 784 00e0 4046     		mov	r0, r8
+ 785 00e2 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 786              	.LVL80:
+ 787              	.L49:
+ 788 00e6 00BF     		.align	2
+ 789              	.L48:
+ 790 00e8 00000000 		.word	USBMIDI_midiInPointer
+ 791 00ec 00000000 		.word	USBMIDI_midi_in_ep
+ 792 00f0 00000000 		.word	USBMIDI_EP
+ 793              		.cfi_endproc
+ 794              	.LFE4:
+ 795              		.size	USBMIDI_PutUsbMidiIn, .-USBMIDI_PutUsbMidiIn
+ 796              		.comm	USBMIDI_midiOutBuffer,32,4
+ 797              		.comm	USBMIDI_midi_out_ep,1,1
+ 798              		.comm	USBMIDI_midiInBuffer,32,4
+ 799              		.comm	USBMIDI_midi_in_ep,1,1
+ 800              		.comm	USBMIDI_midiInPointer,1,1
+ 801              		.text
+ 802              	.Letext0:
+ 803              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
+ 804              		.file 3 "Generated_Source\\PSoC5\\USBMIDI.h"
+ 805              		.file 4 "Generated_Source\\PSoC5\\USBMIDI_pvt.h"
+ 806              		.file 5 "Generated_Source\\PSoC5\\USBMIDI_midi.h"
+ 807              		.section	.debug_info,"",%progbits
+ 808              	.Ldebug_info0:
+ 809 0000 54040000 		.4byte	0x454
+ 810 0004 0400     		.2byte	0x4
+ 811 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 812 000a 04       		.byte	0x4
+ 813 000b 01       		.uleb128 0x1
+ 814 000c B0000000 		.4byte	.LASF52
+ 815 0010 0C       		.byte	0xc
+ 816 0011 1C020000 		.4byte	.LASF53
+ 817 0015 66010000 		.4byte	.LASF54
+ 818 0019 18000000 		.4byte	.Ldebug_ranges0+0x18
+ 819 001d 00000000 		.4byte	0
+ 820 0021 00000000 		.4byte	.Ldebug_line0
+ 821 0025 02       		.uleb128 0x2
+ 822 0026 01       		.byte	0x1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 28
+
+
+ 823 0027 06       		.byte	0x6
+ 824 0028 C8030000 		.4byte	.LASF0
+ 825 002c 02       		.uleb128 0x2
+ 826 002d 01       		.byte	0x1
+ 827 002e 08       		.byte	0x8
+ 828 002f F8020000 		.4byte	.LASF1
+ 829 0033 02       		.uleb128 0x2
+ 830 0034 02       		.byte	0x2
+ 831 0035 05       		.byte	0x5
+ 832 0036 6B030000 		.4byte	.LASF2
+ 833 003a 02       		.uleb128 0x2
+ 834 003b 02       		.byte	0x2
+ 835 003c 07       		.byte	0x7
+ 836 003d 41000000 		.4byte	.LASF3
+ 837 0041 02       		.uleb128 0x2
+ 838 0042 04       		.byte	0x4
+ 839 0043 05       		.byte	0x5
+ 840 0044 AE030000 		.4byte	.LASF4
+ 841 0048 02       		.uleb128 0x2
+ 842 0049 04       		.byte	0x4
+ 843 004a 07       		.byte	0x7
+ 844 004b 49010000 		.4byte	.LASF5
+ 845 004f 02       		.uleb128 0x2
+ 846 0050 08       		.byte	0x8
+ 847 0051 05       		.byte	0x5
+ 848 0052 2F030000 		.4byte	.LASF6
+ 849 0056 02       		.uleb128 0x2
+ 850 0057 08       		.byte	0x8
+ 851 0058 07       		.byte	0x7
+ 852 0059 8D020000 		.4byte	.LASF7
+ 853 005d 03       		.uleb128 0x3
+ 854 005e 04       		.byte	0x4
+ 855 005f 05       		.byte	0x5
+ 856 0060 696E7400 		.ascii	"int\000"
+ 857 0064 02       		.uleb128 0x2
+ 858 0065 04       		.byte	0x4
+ 859 0066 07       		.byte	0x7
+ 860 0067 4D020000 		.4byte	.LASF8
+ 861 006b 04       		.uleb128 0x4
+ 862 006c 75030000 		.4byte	.LASF9
+ 863 0070 02       		.byte	0x2
+ 864 0071 E401     		.2byte	0x1e4
+ 865 0073 2C000000 		.4byte	0x2c
+ 866 0077 04       		.uleb128 0x4
+ 867 0078 EB010000 		.4byte	.LASF10
+ 868 007c 02       		.byte	0x2
+ 869 007d E501     		.2byte	0x1e5
+ 870 007f 3A000000 		.4byte	0x3a
+ 871 0083 02       		.uleb128 0x2
+ 872 0084 04       		.byte	0x4
+ 873 0085 04       		.byte	0x4
+ 874 0086 79000000 		.4byte	.LASF11
+ 875 008a 02       		.uleb128 0x2
+ 876 008b 08       		.byte	0x8
+ 877 008c 04       		.byte	0x4
+ 878 008d C8010000 		.4byte	.LASF12
+ 879 0091 02       		.uleb128 0x2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 29
+
+
+ 880 0092 01       		.byte	0x1
+ 881 0093 08       		.byte	0x8
+ 882 0094 B7030000 		.4byte	.LASF13
+ 883 0098 05       		.uleb128 0x5
+ 884 0099 6B000000 		.4byte	0x6b
+ 885 009d 02       		.uleb128 0x2
+ 886 009e 08       		.byte	0x8
+ 887 009f 04       		.byte	0x4
+ 888 00a0 BC030000 		.4byte	.LASF14
+ 889 00a4 02       		.uleb128 0x2
+ 890 00a5 04       		.byte	0x4
+ 891 00a6 07       		.byte	0x7
+ 892 00a7 4F030000 		.4byte	.LASF15
+ 893 00ab 06       		.uleb128 0x6
+ 894 00ac 0C       		.byte	0xc
+ 895 00ad 03       		.byte	0x3
+ 896 00ae 8D       		.byte	0x8d
+ 897 00af 20010000 		.4byte	0x120
+ 898 00b3 07       		.uleb128 0x7
+ 899 00b4 CF010000 		.4byte	.LASF16
+ 900 00b8 03       		.byte	0x3
+ 901 00b9 8F       		.byte	0x8f
+ 902 00ba 6B000000 		.4byte	0x6b
+ 903 00be 00       		.byte	0
+ 904 00bf 07       		.uleb128 0x7
+ 905 00c0 3E010000 		.4byte	.LASF17
+ 906 00c4 03       		.byte	0x3
+ 907 00c5 90       		.byte	0x90
+ 908 00c6 6B000000 		.4byte	0x6b
+ 909 00ca 01       		.byte	0x1
+ 910 00cb 07       		.uleb128 0x7
+ 911 00cc E1010000 		.4byte	.LASF18
+ 912 00d0 03       		.byte	0x3
+ 913 00d1 91       		.byte	0x91
+ 914 00d2 6B000000 		.4byte	0x6b
+ 915 00d6 02       		.byte	0x2
+ 916 00d7 07       		.uleb128 0x7
+ 917 00d8 8A000000 		.4byte	.LASF19
+ 918 00dc 03       		.byte	0x3
+ 919 00dd 92       		.byte	0x92
+ 920 00de 6B000000 		.4byte	0x6b
+ 921 00e2 03       		.byte	0x3
+ 922 00e3 07       		.uleb128 0x7
+ 923 00e4 5B010000 		.4byte	.LASF20
+ 924 00e8 03       		.byte	0x3
+ 925 00e9 93       		.byte	0x93
+ 926 00ea 6B000000 		.4byte	0x6b
+ 927 00ee 04       		.byte	0x4
+ 928 00ef 07       		.uleb128 0x7
+ 929 00f0 28030000 		.4byte	.LASF21
+ 930 00f4 03       		.byte	0x3
+ 931 00f5 94       		.byte	0x94
+ 932 00f6 6B000000 		.4byte	0x6b
+ 933 00fa 05       		.byte	0x5
+ 934 00fb 07       		.uleb128 0x7
+ 935 00fc D6010000 		.4byte	.LASF22
+ 936 0100 03       		.byte	0x3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 30
+
+
+ 937 0101 95       		.byte	0x95
+ 938 0102 77000000 		.4byte	0x77
+ 939 0106 06       		.byte	0x6
+ 940 0107 07       		.uleb128 0x7
+ 941 0108 58030000 		.4byte	.LASF23
+ 942 010c 03       		.byte	0x3
+ 943 010d 96       		.byte	0x96
+ 944 010e 77000000 		.4byte	0x77
+ 945 0112 08       		.byte	0x8
+ 946 0113 07       		.uleb128 0x7
+ 947 0114 0B000000 		.4byte	.LASF24
+ 948 0118 03       		.byte	0x3
+ 949 0119 97       		.byte	0x97
+ 950 011a 6B000000 		.4byte	0x6b
+ 951 011e 0A       		.byte	0xa
+ 952 011f 00       		.byte	0
+ 953 0120 08       		.uleb128 0x8
+ 954 0121 05020000 		.4byte	.LASF25
+ 955 0125 03       		.byte	0x3
+ 956 0126 98       		.byte	0x98
+ 957 0127 AB000000 		.4byte	0xab
+ 958 012b 09       		.uleb128 0x9
+ 959 012c 3D030000 		.4byte	.LASF26
+ 960 0130 01       		.byte	0x1
+ 961 0131 A7       		.byte	0xa7
+ 962 0132 00000000 		.4byte	.LFB0
+ 963 0136 1C000000 		.4byte	.LFE0-.LFB0
+ 964 013a 01       		.uleb128 0x1
+ 965 013b 9C       		.byte	0x9c
+ 966 013c 4A010000 		.4byte	0x14a
+ 967 0140 0A       		.uleb128 0xa
+ 968 0141 10000000 		.4byte	.LVL0
+ 969 0145 10040000 		.4byte	0x410
+ 970 0149 00       		.byte	0
+ 971 014a 09       		.uleb128 0x9
+ 972 014b D6020000 		.4byte	.LASF27
+ 973 014f 01       		.byte	0x1
+ 974 0150 DD       		.byte	0xdd
+ 975 0151 00000000 		.4byte	.LFB1
+ 976 0155 54000000 		.4byte	.LFE1-.LFB1
+ 977 0159 01       		.uleb128 0x1
+ 978 015a 9C       		.byte	0x9c
+ 979 015b BD010000 		.4byte	0x1bd
+ 980 015f 0B       		.uleb128 0xb
+ 981 0160 1E030000 		.4byte	.LASF28
+ 982 0164 01       		.byte	0x1
+ 983 0165 E3       		.byte	0xe3
+ 984 0166 6B000000 		.4byte	0x6b
+ 985 016a 00000000 		.4byte	.LLST0
+ 986 016e 0B       		.uleb128 0xb
+ 987 016f 00000000 		.4byte	.LASF29
+ 988 0173 01       		.byte	0x1
+ 989 0174 E4       		.byte	0xe4
+ 990 0175 6B000000 		.4byte	0x6b
+ 991 0179 29000000 		.4byte	.LLST1
+ 992 017d 0A       		.uleb128 0xa
+ 993 017e 0A000000 		.4byte	.LVL1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 31
+
+
+ 994 0182 1C040000 		.4byte	0x41c
+ 995 0186 0A       		.uleb128 0xa
+ 996 0187 16000000 		.4byte	.LVL2
+ 997 018b 28040000 		.4byte	0x428
+ 998 018f 0C       		.uleb128 0xc
+ 999 0190 22000000 		.4byte	.LVL4
+ 1000 0194 34040000 		.4byte	0x434
+ 1001 0198 A6010000 		.4byte	0x1a6
+ 1002 019c 0D       		.uleb128 0xd
+ 1003 019d 01       		.uleb128 0x1
+ 1004 019e 51       		.byte	0x51
+ 1005 019f 05       		.uleb128 0x5
+ 1006 01a0 03       		.byte	0x3
+ 1007 01a1 00000000 		.4byte	USBMIDI_midiOutBuffer
+ 1008 01a5 00       		.byte	0
+ 1009 01a6 0E       		.uleb128 0xe
+ 1010 01a7 3E000000 		.4byte	.LVL7
+ 1011 01ab 40040000 		.4byte	0x440
+ 1012 01af 0D       		.uleb128 0xd
+ 1013 01b0 01       		.uleb128 0x1
+ 1014 01b1 51       		.byte	0x51
+ 1015 01b2 08       		.uleb128 0x8
+ 1016 01b3 74       		.byte	0x74
+ 1017 01b4 00       		.sleb128 0
+ 1018 01b5 03       		.byte	0x3
+ 1019 01b6 01000000 		.4byte	USBMIDI_midiOutBuffer+1
+ 1020 01ba 22       		.byte	0x22
+ 1021 01bb 00       		.byte	0
+ 1022 01bc 00       		.byte	0
+ 1023 01bd 0F       		.uleb128 0xf
+ 1024 01be 7B030000 		.4byte	.LASF30
+ 1025 01c2 01       		.byte	0x1
+ 1026 01c3 4E01     		.2byte	0x14e
+ 1027 01c5 00000000 		.4byte	.LFB2
+ 1028 01c9 3C000000 		.4byte	.LFE2-.LFB2
+ 1029 01cd 01       		.uleb128 0x1
+ 1030 01ce 9C       		.byte	0x9c
+ 1031 01cf F0010000 		.4byte	0x1f0
+ 1032 01d3 0A       		.uleb128 0xa
+ 1033 01d4 14000000 		.4byte	.LVL13
+ 1034 01d8 1C040000 		.4byte	0x41c
+ 1035 01dc 0E       		.uleb128 0xe
+ 1036 01dd 26000000 		.4byte	.LVL14
+ 1037 01e1 4B040000 		.4byte	0x44b
+ 1038 01e5 0D       		.uleb128 0xd
+ 1039 01e6 01       		.uleb128 0x1
+ 1040 01e7 51       		.byte	0x51
+ 1041 01e8 05       		.uleb128 0x5
+ 1042 01e9 03       		.byte	0x3
+ 1043 01ea 00000000 		.4byte	USBMIDI_midiInBuffer
+ 1044 01ee 00       		.byte	0
+ 1045 01ef 00       		.byte	0
+ 1046 01f0 0F       		.uleb128 0xf
+ 1047 01f1 96030000 		.4byte	.LASF31
+ 1048 01f5 01       		.byte	0x1
+ 1049 01f6 7F01     		.2byte	0x17f
+ 1050 01f8 00000000 		.4byte	.LFB3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 32
+
+
+ 1051 01fc 08000000 		.4byte	.LFE3-.LFB3
+ 1052 0200 01       		.uleb128 0x1
+ 1053 0201 9C       		.byte	0x9c
+ 1054 0202 10020000 		.4byte	0x210
+ 1055 0206 0A       		.uleb128 0xa
+ 1056 0207 06000000 		.4byte	.LVL15
+ 1057 020b BD010000 		.4byte	0x1bd
+ 1058 020f 00       		.byte	0
+ 1059 0210 0F       		.uleb128 0xf
+ 1060 0211 06030000 		.4byte	.LASF32
+ 1061 0215 01       		.byte	0x1
+ 1062 0216 4B02     		.2byte	0x24b
+ 1063 0218 00000000 		.4byte	.LFB5
+ 1064 021c 00020000 		.4byte	.LFE5-.LFB5
+ 1065 0220 01       		.uleb128 0x1
+ 1066 0221 9C       		.byte	0x9c
+ 1067 0222 86020000 		.4byte	0x286
+ 1068 0226 10       		.uleb128 0x10
+ 1069 0227 696300   		.ascii	"ic\000"
+ 1070 022a 01       		.byte	0x1
+ 1071 022b 4B02     		.2byte	0x24b
+ 1072 022d 6B000000 		.4byte	0x6b
+ 1073 0231 52000000 		.4byte	.LLST2
+ 1074 0235 11       		.uleb128 0x11
+ 1075 0236 CE020000 		.4byte	.LASF33
+ 1076 023a 01       		.byte	0x1
+ 1077 023b 4B02     		.2byte	0x24b
+ 1078 023d 86020000 		.4byte	0x286
+ 1079 0241 3B010000 		.4byte	.LLST3
+ 1080 0245 11       		.uleb128 0x11
+ 1081 0246 EF020000 		.4byte	.LASF34
+ 1082 024a 01       		.byte	0x1
+ 1083 024b 4B02     		.2byte	0x24b
+ 1084 024d 6B000000 		.4byte	0x6b
+ 1085 0251 C0010000 		.4byte	.LLST4
+ 1086 0255 11       		.uleb128 0x11
+ 1087 0256 60010000 		.4byte	.LASF35
+ 1088 025a 01       		.byte	0x1
+ 1089 025b 4B02     		.2byte	0x24b
+ 1090 025d 6B000000 		.4byte	0x6b
+ 1091 0261 A9020000 		.4byte	.LLST5
+ 1092 0265 12       		.uleb128 0x12
+ 1093 0266 BC010000 		.4byte	.LASF36
+ 1094 026a 01       		.byte	0x1
+ 1095 026b 4E02     		.2byte	0x24e
+ 1096 026d 6B000000 		.4byte	0x6b
+ 1097 0271 92030000 		.4byte	.LLST6
+ 1098 0275 12       		.uleb128 0x12
+ 1099 0276 42020000 		.4byte	.LASF37
+ 1100 027a 01       		.byte	0x1
+ 1101 027b 4F02     		.2byte	0x24f
+ 1102 027d 6B000000 		.4byte	0x6b
+ 1103 0281 A5030000 		.4byte	.LLST7
+ 1104 0285 00       		.byte	0
+ 1105 0286 13       		.uleb128 0x13
+ 1106 0287 04       		.byte	0x4
+ 1107 0288 8C020000 		.4byte	0x28c
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 33
+
+
+ 1108 028c 14       		.uleb128 0x14
+ 1109 028d 6B000000 		.4byte	0x6b
+ 1110 0291 15       		.uleb128 0x15
+ 1111 0292 A4020000 		.4byte	.LASF55
+ 1112 0296 01       		.byte	0x1
+ 1113 0297 DA01     		.2byte	0x1da
+ 1114 0299 6B000000 		.4byte	0x6b
+ 1115 029d 00000000 		.4byte	.LFB4
+ 1116 02a1 F4000000 		.4byte	.LFE4-.LFB4
+ 1117 02a5 01       		.uleb128 0x1
+ 1118 02a6 9C       		.byte	0x9c
+ 1119 02a7 86030000 		.4byte	0x386
+ 1120 02ab 10       		.uleb128 0x10
+ 1121 02ac 696300   		.ascii	"ic\000"
+ 1122 02af 01       		.byte	0x1
+ 1123 02b0 DA01     		.2byte	0x1da
+ 1124 02b2 6B000000 		.4byte	0x6b
+ 1125 02b6 DE030000 		.4byte	.LLST8
+ 1126 02ba 11       		.uleb128 0x11
+ 1127 02bb 63030000 		.4byte	.LASF38
+ 1128 02bf 01       		.byte	0x1
+ 1129 02c0 DA01     		.2byte	0x1da
+ 1130 02c2 86020000 		.4byte	0x286
+ 1131 02c6 23040000 		.4byte	.LLST9
+ 1132 02ca 11       		.uleb128 0x11
+ 1133 02cb 60010000 		.4byte	.LASF35
+ 1134 02cf 01       		.byte	0x1
+ 1135 02d0 DA01     		.2byte	0x1da
+ 1136 02d2 6B000000 		.4byte	0x6b
+ 1137 02d6 4F040000 		.4byte	.LLST10
+ 1138 02da 12       		.uleb128 0x12
+ 1139 02db 93000000 		.4byte	.LASF39
+ 1140 02df 01       		.byte	0x1
+ 1141 02e0 DD01     		.2byte	0x1dd
+ 1142 02e2 6B000000 		.4byte	0x6b
+ 1143 02e6 70040000 		.4byte	.LLST11
+ 1144 02ea 16       		.uleb128 0x16
+ 1145 02eb 00000000 		.4byte	.Ldebug_ranges0+0
+ 1146 02ef 5A030000 		.4byte	0x35a
+ 1147 02f3 17       		.uleb128 0x17
+ 1148 02f4 69647800 		.ascii	"idx\000"
+ 1149 02f8 01       		.byte	0x1
+ 1150 02f9 F701     		.2byte	0x1f7
+ 1151 02fb 6B000000 		.4byte	0x6b
+ 1152 02ff A6040000 		.4byte	.LLST12
+ 1153 0303 0C       		.uleb128 0xc
+ 1154 0304 72000000 		.4byte	.LVL70
+ 1155 0308 10020000 		.4byte	0x210
+ 1156 030c 2B030000 		.4byte	0x32b
+ 1157 0310 0D       		.uleb128 0xd
+ 1158 0311 01       		.uleb128 0x1
+ 1159 0312 50       		.byte	0x50
+ 1160 0313 02       		.uleb128 0x2
+ 1161 0314 09       		.byte	0x9
+ 1162 0315 F0       		.byte	0xf0
+ 1163 0316 0D       		.uleb128 0xd
+ 1164 0317 01       		.uleb128 0x1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 34
+
+
+ 1165 0318 51       		.byte	0x51
+ 1166 0319 05       		.uleb128 0x5
+ 1167 031a 76       		.byte	0x76
+ 1168 031b 00       		.sleb128 0
+ 1169 031c 75       		.byte	0x75
+ 1170 031d 00       		.sleb128 0
+ 1171 031e 22       		.byte	0x22
+ 1172 031f 0D       		.uleb128 0xd
+ 1173 0320 01       		.uleb128 0x1
+ 1174 0321 52       		.byte	0x52
+ 1175 0322 01       		.uleb128 0x1
+ 1176 0323 33       		.byte	0x33
+ 1177 0324 0D       		.uleb128 0xd
+ 1178 0325 01       		.uleb128 0x1
+ 1179 0326 53       		.byte	0x53
+ 1180 0327 02       		.uleb128 0x2
+ 1181 0328 77       		.byte	0x77
+ 1182 0329 00       		.sleb128 0
+ 1183 032a 00       		.byte	0
+ 1184 032b 0A       		.uleb128 0xa
+ 1185 032c 9C000000 		.4byte	.LVL75
+ 1186 0330 BD010000 		.4byte	0x1bd
+ 1187 0334 0E       		.uleb128 0xe
+ 1188 0335 DA000000 		.4byte	.LVL77
+ 1189 0339 10020000 		.4byte	0x210
+ 1190 033d 0D       		.uleb128 0xd
+ 1191 033e 01       		.uleb128 0x1
+ 1192 033f 50       		.byte	0x50
+ 1193 0340 02       		.uleb128 0x2
+ 1194 0341 09       		.byte	0x9
+ 1195 0342 F7       		.byte	0xf7
+ 1196 0343 0D       		.uleb128 0xd
+ 1197 0344 01       		.uleb128 0x1
+ 1198 0345 51       		.byte	0x51
+ 1199 0346 05       		.uleb128 0x5
+ 1200 0347 76       		.byte	0x76
+ 1201 0348 00       		.sleb128 0
+ 1202 0349 75       		.byte	0x75
+ 1203 034a 00       		.sleb128 0
+ 1204 034b 22       		.byte	0x22
+ 1205 034c 0D       		.uleb128 0xd
+ 1206 034d 01       		.uleb128 0x1
+ 1207 034e 52       		.byte	0x52
+ 1208 034f 02       		.uleb128 0x2
+ 1209 0350 74       		.byte	0x74
+ 1210 0351 00       		.sleb128 0
+ 1211 0352 0D       		.uleb128 0xd
+ 1212 0353 01       		.uleb128 0x1
+ 1213 0354 53       		.byte	0x53
+ 1214 0355 02       		.uleb128 0x2
+ 1215 0356 77       		.byte	0x77
+ 1216 0357 00       		.sleb128 0
+ 1217 0358 00       		.byte	0
+ 1218 0359 00       		.byte	0
+ 1219 035a 0A       		.uleb128 0xa
+ 1220 035b 2C000000 		.4byte	.LVL67
+ 1221 035f BD010000 		.4byte	0x1bd
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 35
+
+
+ 1222 0363 0E       		.uleb128 0xe
+ 1223 0364 5E000000 		.4byte	.LVL68
+ 1224 0368 10020000 		.4byte	0x210
+ 1225 036c 0D       		.uleb128 0xd
+ 1226 036d 01       		.uleb128 0x1
+ 1227 036e 50       		.byte	0x50
+ 1228 036f 02       		.uleb128 0x2
+ 1229 0370 74       		.byte	0x74
+ 1230 0371 00       		.sleb128 0
+ 1231 0372 0D       		.uleb128 0xd
+ 1232 0373 01       		.uleb128 0x1
+ 1233 0374 51       		.byte	0x51
+ 1234 0375 02       		.uleb128 0x2
+ 1235 0376 76       		.byte	0x76
+ 1236 0377 00       		.sleb128 0
+ 1237 0378 0D       		.uleb128 0xd
+ 1238 0379 01       		.uleb128 0x1
+ 1239 037a 52       		.byte	0x52
+ 1240 037b 02       		.uleb128 0x2
+ 1241 037c 74       		.byte	0x74
+ 1242 037d 00       		.sleb128 0
+ 1243 037e 0D       		.uleb128 0xd
+ 1244 037f 01       		.uleb128 0x1
+ 1245 0380 53       		.byte	0x53
+ 1246 0381 02       		.uleb128 0x2
+ 1247 0382 77       		.byte	0x77
+ 1248 0383 00       		.sleb128 0
+ 1249 0384 00       		.byte	0
+ 1250 0385 00       		.byte	0
+ 1251 0386 18       		.uleb128 0x18
+ 1252 0387 15000000 		.4byte	.LASF40
+ 1253 038b 01       		.byte	0x1
+ 1254 038c 45       		.byte	0x45
+ 1255 038d 98000000 		.4byte	0x98
+ 1256 0391 05       		.uleb128 0x5
+ 1257 0392 03       		.byte	0x3
+ 1258 0393 00000000 		.4byte	USBMIDI_midiInPointer
+ 1259 0397 18       		.uleb128 0x18
+ 1260 0398 66000000 		.4byte	.LASF41
+ 1261 039c 01       		.byte	0x1
+ 1262 039d 4A       		.byte	0x4a
+ 1263 039e 98000000 		.4byte	0x98
+ 1264 03a2 05       		.uleb128 0x5
+ 1265 03a3 03       		.byte	0x3
+ 1266 03a4 00000000 		.4byte	USBMIDI_midi_in_ep
+ 1267 03a8 19       		.uleb128 0x19
+ 1268 03a9 6B000000 		.4byte	0x6b
+ 1269 03ad B8030000 		.4byte	0x3b8
+ 1270 03b1 1A       		.uleb128 0x1a
+ 1271 03b2 A4000000 		.4byte	0xa4
+ 1272 03b6 1F       		.byte	0x1f
+ 1273 03b7 00       		.byte	0
+ 1274 03b8 18       		.uleb128 0x18
+ 1275 03b9 B9020000 		.4byte	.LASF42
+ 1276 03bd 01       		.byte	0x1
+ 1277 03be 4F       		.byte	0x4f
+ 1278 03bf A8030000 		.4byte	0x3a8
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 36
+
+
+ 1279 03c3 05       		.uleb128 0x5
+ 1280 03c4 03       		.byte	0x3
+ 1281 03c5 00000000 		.4byte	USBMIDI_midiInBuffer
+ 1282 03c9 18       		.uleb128 0x18
+ 1283 03ca 79020000 		.4byte	.LASF43
+ 1284 03ce 01       		.byte	0x1
+ 1285 03cf 56       		.byte	0x56
+ 1286 03d0 98000000 		.4byte	0x98
+ 1287 03d4 05       		.uleb128 0x5
+ 1288 03d5 03       		.byte	0x3
+ 1289 03d6 00000000 		.4byte	USBMIDI_midi_out_ep
+ 1290 03da 18       		.uleb128 0x18
+ 1291 03db 2B000000 		.4byte	.LASF44
+ 1292 03df 01       		.byte	0x1
+ 1293 03e0 5C       		.byte	0x5c
+ 1294 03e1 A8030000 		.4byte	0x3a8
+ 1295 03e5 05       		.uleb128 0x5
+ 1296 03e6 03       		.byte	0x3
+ 1297 03e7 00000000 		.4byte	USBMIDI_midiOutBuffer
+ 1298 03eb 19       		.uleb128 0x19
+ 1299 03ec FB030000 		.4byte	0x3fb
+ 1300 03f0 FB030000 		.4byte	0x3fb
+ 1301 03f4 1A       		.uleb128 0x1a
+ 1302 03f5 A4000000 		.4byte	0xa4
+ 1303 03f9 08       		.byte	0x8
+ 1304 03fa 00       		.byte	0
+ 1305 03fb 05       		.uleb128 0x5
+ 1306 03fc 20010000 		.4byte	0x120
+ 1307 0400 1B       		.uleb128 0x1b
+ 1308 0401 7F000000 		.4byte	.LASF45
+ 1309 0405 04       		.byte	0x4
+ 1310 0406 79       		.byte	0x79
+ 1311 0407 0B040000 		.4byte	0x40b
+ 1312 040b 05       		.uleb128 0x5
+ 1313 040c EB030000 		.4byte	0x3eb
+ 1314 0410 1C       		.uleb128 0x1c
+ 1315 0411 9C000000 		.4byte	.LASF46
+ 1316 0415 9C000000 		.4byte	.LASF46
+ 1317 0419 03       		.byte	0x3
+ 1318 041a 3601     		.2byte	0x136
+ 1319 041c 1C       		.uleb128 0x1c
+ 1320 041d F2010000 		.4byte	.LASF47
+ 1321 0421 F2010000 		.4byte	.LASF47
+ 1322 0425 03       		.byte	0x3
+ 1323 0426 3001     		.2byte	0x130
+ 1324 0428 1C       		.uleb128 0x1c
+ 1325 0429 A9010000 		.4byte	.LASF48
+ 1326 042d A9010000 		.4byte	.LASF48
+ 1327 0431 03       		.byte	0x3
+ 1328 0432 3101     		.2byte	0x131
+ 1329 0434 1C       		.uleb128 0x1c
+ 1330 0435 54000000 		.4byte	.LASF49
+ 1331 0439 54000000 		.4byte	.LASF49
+ 1332 043d 03       		.byte	0x3
+ 1333 043e 3401     		.2byte	0x134
+ 1334 0440 1D       		.uleb128 0x1d
+ 1335 0441 5A020000 		.4byte	.LASF50
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 37
+
+
+ 1336 0445 5A020000 		.4byte	.LASF50
+ 1337 0449 05       		.byte	0x5
+ 1338 044a 77       		.byte	0x77
+ 1339 044b 1C       		.uleb128 0x1c
+ 1340 044c D4030000 		.4byte	.LASF51
+ 1341 0450 D4030000 		.4byte	.LASF51
+ 1342 0454 03       		.byte	0x3
+ 1343 0455 3201     		.2byte	0x132
+ 1344 0457 00       		.byte	0
+ 1345              		.section	.debug_abbrev,"",%progbits
+ 1346              	.Ldebug_abbrev0:
+ 1347 0000 01       		.uleb128 0x1
+ 1348 0001 11       		.uleb128 0x11
+ 1349 0002 01       		.byte	0x1
+ 1350 0003 25       		.uleb128 0x25
+ 1351 0004 0E       		.uleb128 0xe
+ 1352 0005 13       		.uleb128 0x13
+ 1353 0006 0B       		.uleb128 0xb
+ 1354 0007 03       		.uleb128 0x3
+ 1355 0008 0E       		.uleb128 0xe
+ 1356 0009 1B       		.uleb128 0x1b
+ 1357 000a 0E       		.uleb128 0xe
+ 1358 000b 55       		.uleb128 0x55
+ 1359 000c 17       		.uleb128 0x17
+ 1360 000d 11       		.uleb128 0x11
+ 1361 000e 01       		.uleb128 0x1
+ 1362 000f 10       		.uleb128 0x10
+ 1363 0010 17       		.uleb128 0x17
+ 1364 0011 00       		.byte	0
+ 1365 0012 00       		.byte	0
+ 1366 0013 02       		.uleb128 0x2
+ 1367 0014 24       		.uleb128 0x24
+ 1368 0015 00       		.byte	0
+ 1369 0016 0B       		.uleb128 0xb
+ 1370 0017 0B       		.uleb128 0xb
+ 1371 0018 3E       		.uleb128 0x3e
+ 1372 0019 0B       		.uleb128 0xb
+ 1373 001a 03       		.uleb128 0x3
+ 1374 001b 0E       		.uleb128 0xe
+ 1375 001c 00       		.byte	0
+ 1376 001d 00       		.byte	0
+ 1377 001e 03       		.uleb128 0x3
+ 1378 001f 24       		.uleb128 0x24
+ 1379 0020 00       		.byte	0
+ 1380 0021 0B       		.uleb128 0xb
+ 1381 0022 0B       		.uleb128 0xb
+ 1382 0023 3E       		.uleb128 0x3e
+ 1383 0024 0B       		.uleb128 0xb
+ 1384 0025 03       		.uleb128 0x3
+ 1385 0026 08       		.uleb128 0x8
+ 1386 0027 00       		.byte	0
+ 1387 0028 00       		.byte	0
+ 1388 0029 04       		.uleb128 0x4
+ 1389 002a 16       		.uleb128 0x16
+ 1390 002b 00       		.byte	0
+ 1391 002c 03       		.uleb128 0x3
+ 1392 002d 0E       		.uleb128 0xe
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 38
+
+
+ 1393 002e 3A       		.uleb128 0x3a
+ 1394 002f 0B       		.uleb128 0xb
+ 1395 0030 3B       		.uleb128 0x3b
+ 1396 0031 05       		.uleb128 0x5
+ 1397 0032 49       		.uleb128 0x49
+ 1398 0033 13       		.uleb128 0x13
+ 1399 0034 00       		.byte	0
+ 1400 0035 00       		.byte	0
+ 1401 0036 05       		.uleb128 0x5
+ 1402 0037 35       		.uleb128 0x35
+ 1403 0038 00       		.byte	0
+ 1404 0039 49       		.uleb128 0x49
+ 1405 003a 13       		.uleb128 0x13
+ 1406 003b 00       		.byte	0
+ 1407 003c 00       		.byte	0
+ 1408 003d 06       		.uleb128 0x6
+ 1409 003e 13       		.uleb128 0x13
+ 1410 003f 01       		.byte	0x1
+ 1411 0040 0B       		.uleb128 0xb
+ 1412 0041 0B       		.uleb128 0xb
+ 1413 0042 3A       		.uleb128 0x3a
+ 1414 0043 0B       		.uleb128 0xb
+ 1415 0044 3B       		.uleb128 0x3b
+ 1416 0045 0B       		.uleb128 0xb
+ 1417 0046 01       		.uleb128 0x1
+ 1418 0047 13       		.uleb128 0x13
+ 1419 0048 00       		.byte	0
+ 1420 0049 00       		.byte	0
+ 1421 004a 07       		.uleb128 0x7
+ 1422 004b 0D       		.uleb128 0xd
+ 1423 004c 00       		.byte	0
+ 1424 004d 03       		.uleb128 0x3
+ 1425 004e 0E       		.uleb128 0xe
+ 1426 004f 3A       		.uleb128 0x3a
+ 1427 0050 0B       		.uleb128 0xb
+ 1428 0051 3B       		.uleb128 0x3b
+ 1429 0052 0B       		.uleb128 0xb
+ 1430 0053 49       		.uleb128 0x49
+ 1431 0054 13       		.uleb128 0x13
+ 1432 0055 38       		.uleb128 0x38
+ 1433 0056 0B       		.uleb128 0xb
+ 1434 0057 00       		.byte	0
+ 1435 0058 00       		.byte	0
+ 1436 0059 08       		.uleb128 0x8
+ 1437 005a 16       		.uleb128 0x16
+ 1438 005b 00       		.byte	0
+ 1439 005c 03       		.uleb128 0x3
+ 1440 005d 0E       		.uleb128 0xe
+ 1441 005e 3A       		.uleb128 0x3a
+ 1442 005f 0B       		.uleb128 0xb
+ 1443 0060 3B       		.uleb128 0x3b
+ 1444 0061 0B       		.uleb128 0xb
+ 1445 0062 49       		.uleb128 0x49
+ 1446 0063 13       		.uleb128 0x13
+ 1447 0064 00       		.byte	0
+ 1448 0065 00       		.byte	0
+ 1449 0066 09       		.uleb128 0x9
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 39
+
+
+ 1450 0067 2E       		.uleb128 0x2e
+ 1451 0068 01       		.byte	0x1
+ 1452 0069 3F       		.uleb128 0x3f
+ 1453 006a 19       		.uleb128 0x19
+ 1454 006b 03       		.uleb128 0x3
+ 1455 006c 0E       		.uleb128 0xe
+ 1456 006d 3A       		.uleb128 0x3a
+ 1457 006e 0B       		.uleb128 0xb
+ 1458 006f 3B       		.uleb128 0x3b
+ 1459 0070 0B       		.uleb128 0xb
+ 1460 0071 27       		.uleb128 0x27
+ 1461 0072 19       		.uleb128 0x19
+ 1462 0073 11       		.uleb128 0x11
+ 1463 0074 01       		.uleb128 0x1
+ 1464 0075 12       		.uleb128 0x12
+ 1465 0076 06       		.uleb128 0x6
+ 1466 0077 40       		.uleb128 0x40
+ 1467 0078 18       		.uleb128 0x18
+ 1468 0079 9742     		.uleb128 0x2117
+ 1469 007b 19       		.uleb128 0x19
+ 1470 007c 01       		.uleb128 0x1
+ 1471 007d 13       		.uleb128 0x13
+ 1472 007e 00       		.byte	0
+ 1473 007f 00       		.byte	0
+ 1474 0080 0A       		.uleb128 0xa
+ 1475 0081 898201   		.uleb128 0x4109
+ 1476 0084 00       		.byte	0
+ 1477 0085 11       		.uleb128 0x11
+ 1478 0086 01       		.uleb128 0x1
+ 1479 0087 31       		.uleb128 0x31
+ 1480 0088 13       		.uleb128 0x13
+ 1481 0089 00       		.byte	0
+ 1482 008a 00       		.byte	0
+ 1483 008b 0B       		.uleb128 0xb
+ 1484 008c 34       		.uleb128 0x34
+ 1485 008d 00       		.byte	0
+ 1486 008e 03       		.uleb128 0x3
+ 1487 008f 0E       		.uleb128 0xe
+ 1488 0090 3A       		.uleb128 0x3a
+ 1489 0091 0B       		.uleb128 0xb
+ 1490 0092 3B       		.uleb128 0x3b
+ 1491 0093 0B       		.uleb128 0xb
+ 1492 0094 49       		.uleb128 0x49
+ 1493 0095 13       		.uleb128 0x13
+ 1494 0096 02       		.uleb128 0x2
+ 1495 0097 17       		.uleb128 0x17
+ 1496 0098 00       		.byte	0
+ 1497 0099 00       		.byte	0
+ 1498 009a 0C       		.uleb128 0xc
+ 1499 009b 898201   		.uleb128 0x4109
+ 1500 009e 01       		.byte	0x1
+ 1501 009f 11       		.uleb128 0x11
+ 1502 00a0 01       		.uleb128 0x1
+ 1503 00a1 31       		.uleb128 0x31
+ 1504 00a2 13       		.uleb128 0x13
+ 1505 00a3 01       		.uleb128 0x1
+ 1506 00a4 13       		.uleb128 0x13
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 40
+
+
+ 1507 00a5 00       		.byte	0
+ 1508 00a6 00       		.byte	0
+ 1509 00a7 0D       		.uleb128 0xd
+ 1510 00a8 8A8201   		.uleb128 0x410a
+ 1511 00ab 00       		.byte	0
+ 1512 00ac 02       		.uleb128 0x2
+ 1513 00ad 18       		.uleb128 0x18
+ 1514 00ae 9142     		.uleb128 0x2111
+ 1515 00b0 18       		.uleb128 0x18
+ 1516 00b1 00       		.byte	0
+ 1517 00b2 00       		.byte	0
+ 1518 00b3 0E       		.uleb128 0xe
+ 1519 00b4 898201   		.uleb128 0x4109
+ 1520 00b7 01       		.byte	0x1
+ 1521 00b8 11       		.uleb128 0x11
+ 1522 00b9 01       		.uleb128 0x1
+ 1523 00ba 31       		.uleb128 0x31
+ 1524 00bb 13       		.uleb128 0x13
+ 1525 00bc 00       		.byte	0
+ 1526 00bd 00       		.byte	0
+ 1527 00be 0F       		.uleb128 0xf
+ 1528 00bf 2E       		.uleb128 0x2e
+ 1529 00c0 01       		.byte	0x1
+ 1530 00c1 3F       		.uleb128 0x3f
+ 1531 00c2 19       		.uleb128 0x19
+ 1532 00c3 03       		.uleb128 0x3
+ 1533 00c4 0E       		.uleb128 0xe
+ 1534 00c5 3A       		.uleb128 0x3a
+ 1535 00c6 0B       		.uleb128 0xb
+ 1536 00c7 3B       		.uleb128 0x3b
+ 1537 00c8 05       		.uleb128 0x5
+ 1538 00c9 27       		.uleb128 0x27
+ 1539 00ca 19       		.uleb128 0x19
+ 1540 00cb 11       		.uleb128 0x11
+ 1541 00cc 01       		.uleb128 0x1
+ 1542 00cd 12       		.uleb128 0x12
+ 1543 00ce 06       		.uleb128 0x6
+ 1544 00cf 40       		.uleb128 0x40
+ 1545 00d0 18       		.uleb128 0x18
+ 1546 00d1 9742     		.uleb128 0x2117
+ 1547 00d3 19       		.uleb128 0x19
+ 1548 00d4 01       		.uleb128 0x1
+ 1549 00d5 13       		.uleb128 0x13
+ 1550 00d6 00       		.byte	0
+ 1551 00d7 00       		.byte	0
+ 1552 00d8 10       		.uleb128 0x10
+ 1553 00d9 05       		.uleb128 0x5
+ 1554 00da 00       		.byte	0
+ 1555 00db 03       		.uleb128 0x3
+ 1556 00dc 08       		.uleb128 0x8
+ 1557 00dd 3A       		.uleb128 0x3a
+ 1558 00de 0B       		.uleb128 0xb
+ 1559 00df 3B       		.uleb128 0x3b
+ 1560 00e0 05       		.uleb128 0x5
+ 1561 00e1 49       		.uleb128 0x49
+ 1562 00e2 13       		.uleb128 0x13
+ 1563 00e3 02       		.uleb128 0x2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 41
+
+
+ 1564 00e4 17       		.uleb128 0x17
+ 1565 00e5 00       		.byte	0
+ 1566 00e6 00       		.byte	0
+ 1567 00e7 11       		.uleb128 0x11
+ 1568 00e8 05       		.uleb128 0x5
+ 1569 00e9 00       		.byte	0
+ 1570 00ea 03       		.uleb128 0x3
+ 1571 00eb 0E       		.uleb128 0xe
+ 1572 00ec 3A       		.uleb128 0x3a
+ 1573 00ed 0B       		.uleb128 0xb
+ 1574 00ee 3B       		.uleb128 0x3b
+ 1575 00ef 05       		.uleb128 0x5
+ 1576 00f0 49       		.uleb128 0x49
+ 1577 00f1 13       		.uleb128 0x13
+ 1578 00f2 02       		.uleb128 0x2
+ 1579 00f3 17       		.uleb128 0x17
+ 1580 00f4 00       		.byte	0
+ 1581 00f5 00       		.byte	0
+ 1582 00f6 12       		.uleb128 0x12
+ 1583 00f7 34       		.uleb128 0x34
+ 1584 00f8 00       		.byte	0
+ 1585 00f9 03       		.uleb128 0x3
+ 1586 00fa 0E       		.uleb128 0xe
+ 1587 00fb 3A       		.uleb128 0x3a
+ 1588 00fc 0B       		.uleb128 0xb
+ 1589 00fd 3B       		.uleb128 0x3b
+ 1590 00fe 05       		.uleb128 0x5
+ 1591 00ff 49       		.uleb128 0x49
+ 1592 0100 13       		.uleb128 0x13
+ 1593 0101 02       		.uleb128 0x2
+ 1594 0102 17       		.uleb128 0x17
+ 1595 0103 00       		.byte	0
+ 1596 0104 00       		.byte	0
+ 1597 0105 13       		.uleb128 0x13
+ 1598 0106 0F       		.uleb128 0xf
+ 1599 0107 00       		.byte	0
+ 1600 0108 0B       		.uleb128 0xb
+ 1601 0109 0B       		.uleb128 0xb
+ 1602 010a 49       		.uleb128 0x49
+ 1603 010b 13       		.uleb128 0x13
+ 1604 010c 00       		.byte	0
+ 1605 010d 00       		.byte	0
+ 1606 010e 14       		.uleb128 0x14
+ 1607 010f 26       		.uleb128 0x26
+ 1608 0110 00       		.byte	0
+ 1609 0111 49       		.uleb128 0x49
+ 1610 0112 13       		.uleb128 0x13
+ 1611 0113 00       		.byte	0
+ 1612 0114 00       		.byte	0
+ 1613 0115 15       		.uleb128 0x15
+ 1614 0116 2E       		.uleb128 0x2e
+ 1615 0117 01       		.byte	0x1
+ 1616 0118 3F       		.uleb128 0x3f
+ 1617 0119 19       		.uleb128 0x19
+ 1618 011a 03       		.uleb128 0x3
+ 1619 011b 0E       		.uleb128 0xe
+ 1620 011c 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 42
+
+
+ 1621 011d 0B       		.uleb128 0xb
+ 1622 011e 3B       		.uleb128 0x3b
+ 1623 011f 05       		.uleb128 0x5
+ 1624 0120 27       		.uleb128 0x27
+ 1625 0121 19       		.uleb128 0x19
+ 1626 0122 49       		.uleb128 0x49
+ 1627 0123 13       		.uleb128 0x13
+ 1628 0124 11       		.uleb128 0x11
+ 1629 0125 01       		.uleb128 0x1
+ 1630 0126 12       		.uleb128 0x12
+ 1631 0127 06       		.uleb128 0x6
+ 1632 0128 40       		.uleb128 0x40
+ 1633 0129 18       		.uleb128 0x18
+ 1634 012a 9742     		.uleb128 0x2117
+ 1635 012c 19       		.uleb128 0x19
+ 1636 012d 01       		.uleb128 0x1
+ 1637 012e 13       		.uleb128 0x13
+ 1638 012f 00       		.byte	0
+ 1639 0130 00       		.byte	0
+ 1640 0131 16       		.uleb128 0x16
+ 1641 0132 0B       		.uleb128 0xb
+ 1642 0133 01       		.byte	0x1
+ 1643 0134 55       		.uleb128 0x55
+ 1644 0135 17       		.uleb128 0x17
+ 1645 0136 01       		.uleb128 0x1
+ 1646 0137 13       		.uleb128 0x13
+ 1647 0138 00       		.byte	0
+ 1648 0139 00       		.byte	0
+ 1649 013a 17       		.uleb128 0x17
+ 1650 013b 34       		.uleb128 0x34
+ 1651 013c 00       		.byte	0
+ 1652 013d 03       		.uleb128 0x3
+ 1653 013e 08       		.uleb128 0x8
+ 1654 013f 3A       		.uleb128 0x3a
+ 1655 0140 0B       		.uleb128 0xb
+ 1656 0141 3B       		.uleb128 0x3b
+ 1657 0142 05       		.uleb128 0x5
+ 1658 0143 49       		.uleb128 0x49
+ 1659 0144 13       		.uleb128 0x13
+ 1660 0145 02       		.uleb128 0x2
+ 1661 0146 17       		.uleb128 0x17
+ 1662 0147 00       		.byte	0
+ 1663 0148 00       		.byte	0
+ 1664 0149 18       		.uleb128 0x18
+ 1665 014a 34       		.uleb128 0x34
+ 1666 014b 00       		.byte	0
+ 1667 014c 03       		.uleb128 0x3
+ 1668 014d 0E       		.uleb128 0xe
+ 1669 014e 3A       		.uleb128 0x3a
+ 1670 014f 0B       		.uleb128 0xb
+ 1671 0150 3B       		.uleb128 0x3b
+ 1672 0151 0B       		.uleb128 0xb
+ 1673 0152 49       		.uleb128 0x49
+ 1674 0153 13       		.uleb128 0x13
+ 1675 0154 3F       		.uleb128 0x3f
+ 1676 0155 19       		.uleb128 0x19
+ 1677 0156 02       		.uleb128 0x2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 43
+
+
+ 1678 0157 18       		.uleb128 0x18
+ 1679 0158 00       		.byte	0
+ 1680 0159 00       		.byte	0
+ 1681 015a 19       		.uleb128 0x19
+ 1682 015b 01       		.uleb128 0x1
+ 1683 015c 01       		.byte	0x1
+ 1684 015d 49       		.uleb128 0x49
+ 1685 015e 13       		.uleb128 0x13
+ 1686 015f 01       		.uleb128 0x1
+ 1687 0160 13       		.uleb128 0x13
+ 1688 0161 00       		.byte	0
+ 1689 0162 00       		.byte	0
+ 1690 0163 1A       		.uleb128 0x1a
+ 1691 0164 21       		.uleb128 0x21
+ 1692 0165 00       		.byte	0
+ 1693 0166 49       		.uleb128 0x49
+ 1694 0167 13       		.uleb128 0x13
+ 1695 0168 2F       		.uleb128 0x2f
+ 1696 0169 0B       		.uleb128 0xb
+ 1697 016a 00       		.byte	0
+ 1698 016b 00       		.byte	0
+ 1699 016c 1B       		.uleb128 0x1b
+ 1700 016d 34       		.uleb128 0x34
+ 1701 016e 00       		.byte	0
+ 1702 016f 03       		.uleb128 0x3
+ 1703 0170 0E       		.uleb128 0xe
+ 1704 0171 3A       		.uleb128 0x3a
+ 1705 0172 0B       		.uleb128 0xb
+ 1706 0173 3B       		.uleb128 0x3b
+ 1707 0174 0B       		.uleb128 0xb
+ 1708 0175 49       		.uleb128 0x49
+ 1709 0176 13       		.uleb128 0x13
+ 1710 0177 3F       		.uleb128 0x3f
+ 1711 0178 19       		.uleb128 0x19
+ 1712 0179 3C       		.uleb128 0x3c
+ 1713 017a 19       		.uleb128 0x19
+ 1714 017b 00       		.byte	0
+ 1715 017c 00       		.byte	0
+ 1716 017d 1C       		.uleb128 0x1c
+ 1717 017e 2E       		.uleb128 0x2e
+ 1718 017f 00       		.byte	0
+ 1719 0180 3F       		.uleb128 0x3f
+ 1720 0181 19       		.uleb128 0x19
+ 1721 0182 3C       		.uleb128 0x3c
+ 1722 0183 19       		.uleb128 0x19
+ 1723 0184 6E       		.uleb128 0x6e
+ 1724 0185 0E       		.uleb128 0xe
+ 1725 0186 03       		.uleb128 0x3
+ 1726 0187 0E       		.uleb128 0xe
+ 1727 0188 3A       		.uleb128 0x3a
+ 1728 0189 0B       		.uleb128 0xb
+ 1729 018a 3B       		.uleb128 0x3b
+ 1730 018b 05       		.uleb128 0x5
+ 1731 018c 00       		.byte	0
+ 1732 018d 00       		.byte	0
+ 1733 018e 1D       		.uleb128 0x1d
+ 1734 018f 2E       		.uleb128 0x2e
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 44
+
+
+ 1735 0190 00       		.byte	0
+ 1736 0191 3F       		.uleb128 0x3f
+ 1737 0192 19       		.uleb128 0x19
+ 1738 0193 3C       		.uleb128 0x3c
+ 1739 0194 19       		.uleb128 0x19
+ 1740 0195 6E       		.uleb128 0x6e
+ 1741 0196 0E       		.uleb128 0xe
+ 1742 0197 03       		.uleb128 0x3
+ 1743 0198 0E       		.uleb128 0xe
+ 1744 0199 3A       		.uleb128 0x3a
+ 1745 019a 0B       		.uleb128 0xb
+ 1746 019b 3B       		.uleb128 0x3b
+ 1747 019c 0B       		.uleb128 0xb
+ 1748 019d 00       		.byte	0
+ 1749 019e 00       		.byte	0
+ 1750 019f 00       		.byte	0
+ 1751              		.section	.debug_loc,"",%progbits
+ 1752              	.Ldebug_loc0:
+ 1753              	.LLST0:
+ 1754 0000 16000000 		.4byte	.LVL2
+ 1755 0004 1E000000 		.4byte	.LVL3
+ 1756 0008 0100     		.2byte	0x1
+ 1757 000a 50       		.byte	0x50
+ 1758 000b 1E000000 		.4byte	.LVL3
+ 1759 000f 21000000 		.4byte	.LVL4-1
+ 1760 0013 0100     		.2byte	0x1
+ 1761 0015 52       		.byte	0x52
+ 1762 0016 24000000 		.4byte	.LVL5
+ 1763 001a 4A000000 		.4byte	.LVL12
+ 1764 001e 0100     		.2byte	0x1
+ 1765 0020 55       		.byte	0x55
+ 1766 0021 00000000 		.4byte	0
+ 1767 0025 00000000 		.4byte	0
+ 1768              	.LLST1:
+ 1769 0029 2A000000 		.4byte	.LVL6
+ 1770 002d 40000000 		.4byte	.LVL8
+ 1771 0031 0100     		.2byte	0x1
+ 1772 0033 54       		.byte	0x54
+ 1773 0034 42000000 		.4byte	.LVL9
+ 1774 0038 44000000 		.4byte	.LVL10
+ 1775 003c 0100     		.2byte	0x1
+ 1776 003e 54       		.byte	0x54
+ 1777 003f 46000000 		.4byte	.LVL11
+ 1778 0043 4A000000 		.4byte	.LVL12
+ 1779 0047 0100     		.2byte	0x1
+ 1780 0049 54       		.byte	0x54
+ 1781 004a 00000000 		.4byte	0
+ 1782 004e 00000000 		.4byte	0
+ 1783              	.LLST2:
+ 1784 0052 00000000 		.4byte	.LVL16
+ 1785 0056 34000000 		.4byte	.LVL24
+ 1786 005a 0100     		.2byte	0x1
+ 1787 005c 50       		.byte	0x50
+ 1788 005d 34000000 		.4byte	.LVL24
+ 1789 0061 4E000000 		.4byte	.LVL25
+ 1790 0065 0400     		.2byte	0x4
+ 1791 0067 F3       		.byte	0xf3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 45
+
+
+ 1792 0068 01       		.uleb128 0x1
+ 1793 0069 50       		.byte	0x50
+ 1794 006a 9F       		.byte	0x9f
+ 1795 006b 4E000000 		.4byte	.LVL25
+ 1796 006f 5E000000 		.4byte	.LVL27
+ 1797 0073 0100     		.2byte	0x1
+ 1798 0075 50       		.byte	0x50
+ 1799 0076 5E000000 		.4byte	.LVL27
+ 1800 007a 72000000 		.4byte	.LVL29
+ 1801 007e 0400     		.2byte	0x4
+ 1802 0080 F3       		.byte	0xf3
+ 1803 0081 01       		.uleb128 0x1
+ 1804 0082 50       		.byte	0x50
+ 1805 0083 9F       		.byte	0x9f
+ 1806 0084 72000000 		.4byte	.LVL29
+ 1807 0088 7A000000 		.4byte	.LVL31
+ 1808 008c 0100     		.2byte	0x1
+ 1809 008e 50       		.byte	0x50
+ 1810 008f 7A000000 		.4byte	.LVL31
+ 1811 0093 8E000000 		.4byte	.LVL33
+ 1812 0097 0400     		.2byte	0x4
+ 1813 0099 F3       		.byte	0xf3
+ 1814 009a 01       		.uleb128 0x1
+ 1815 009b 50       		.byte	0x50
+ 1816 009c 9F       		.byte	0x9f
+ 1817 009d 8E000000 		.4byte	.LVL33
+ 1818 00a1 96000000 		.4byte	.LVL35
+ 1819 00a5 0100     		.2byte	0x1
+ 1820 00a7 50       		.byte	0x50
+ 1821 00a8 96000000 		.4byte	.LVL35
+ 1822 00ac AA000000 		.4byte	.LVL37
+ 1823 00b0 0400     		.2byte	0x4
+ 1824 00b2 F3       		.byte	0xf3
+ 1825 00b3 01       		.uleb128 0x1
+ 1826 00b4 50       		.byte	0x50
+ 1827 00b5 9F       		.byte	0x9f
+ 1828 00b6 AA000000 		.4byte	.LVL37
+ 1829 00ba B6000000 		.4byte	.LVL39
+ 1830 00be 0100     		.2byte	0x1
+ 1831 00c0 50       		.byte	0x50
+ 1832 00c1 B6000000 		.4byte	.LVL39
+ 1833 00c5 CA000000 		.4byte	.LVL41
+ 1834 00c9 0400     		.2byte	0x4
+ 1835 00cb F3       		.byte	0xf3
+ 1836 00cc 01       		.uleb128 0x1
+ 1837 00cd 50       		.byte	0x50
+ 1838 00ce 9F       		.byte	0x9f
+ 1839 00cf CA000000 		.4byte	.LVL41
+ 1840 00d3 D2000000 		.4byte	.LVL43
+ 1841 00d7 0100     		.2byte	0x1
+ 1842 00d9 50       		.byte	0x50
+ 1843 00da D2000000 		.4byte	.LVL43
+ 1844 00de 16010000 		.4byte	.LVL46
+ 1845 00e2 0400     		.2byte	0x4
+ 1846 00e4 F3       		.byte	0xf3
+ 1847 00e5 01       		.uleb128 0x1
+ 1848 00e6 50       		.byte	0x50
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 46
+
+
+ 1849 00e7 9F       		.byte	0x9f
+ 1850 00e8 16010000 		.4byte	.LVL46
+ 1851 00ec 2A010000 		.4byte	.LVL48
+ 1852 00f0 0100     		.2byte	0x1
+ 1853 00f2 50       		.byte	0x50
+ 1854 00f3 2A010000 		.4byte	.LVL48
+ 1855 00f7 6C010000 		.4byte	.LVL51
+ 1856 00fb 0400     		.2byte	0x4
+ 1857 00fd F3       		.byte	0xf3
+ 1858 00fe 01       		.uleb128 0x1
+ 1859 00ff 50       		.byte	0x50
+ 1860 0100 9F       		.byte	0x9f
+ 1861 0101 6C010000 		.4byte	.LVL51
+ 1862 0105 70010000 		.4byte	.LVL53
+ 1863 0109 0100     		.2byte	0x1
+ 1864 010b 50       		.byte	0x50
+ 1865 010c 70010000 		.4byte	.LVL53
+ 1866 0110 B2010000 		.4byte	.LVL56
+ 1867 0114 0400     		.2byte	0x4
+ 1868 0116 F3       		.byte	0xf3
+ 1869 0117 01       		.uleb128 0x1
+ 1870 0118 50       		.byte	0x50
+ 1871 0119 9F       		.byte	0x9f
+ 1872 011a B2010000 		.4byte	.LVL56
+ 1873 011e B6010000 		.4byte	.LVL58
+ 1874 0122 0100     		.2byte	0x1
+ 1875 0124 50       		.byte	0x50
+ 1876 0125 B6010000 		.4byte	.LVL58
+ 1877 0129 00020000 		.4byte	.LFE5
+ 1878 012d 0400     		.2byte	0x4
+ 1879 012f F3       		.byte	0xf3
+ 1880 0130 01       		.uleb128 0x1
+ 1881 0131 50       		.byte	0x50
+ 1882 0132 9F       		.byte	0x9f
+ 1883 0133 00000000 		.4byte	0
+ 1884 0137 00000000 		.4byte	0
+ 1885              	.LLST3:
+ 1886 013b 00000000 		.4byte	.LVL16
+ 1887 013f 12000000 		.4byte	.LVL21
+ 1888 0143 0100     		.2byte	0x1
+ 1889 0145 51       		.byte	0x51
+ 1890 0146 12000000 		.4byte	.LVL21
+ 1891 014a 4E000000 		.4byte	.LVL25
+ 1892 014e 0400     		.2byte	0x4
+ 1893 0150 F3       		.byte	0xf3
+ 1894 0151 01       		.uleb128 0x1
+ 1895 0152 51       		.byte	0x51
+ 1896 0153 9F       		.byte	0x9f
+ 1897 0154 4E000000 		.4byte	.LVL25
+ 1898 0158 0A010000 		.4byte	.LVL45
+ 1899 015c 0100     		.2byte	0x1
+ 1900 015e 51       		.byte	0x51
+ 1901 015f 0A010000 		.4byte	.LVL45
+ 1902 0163 16010000 		.4byte	.LVL46
+ 1903 0167 0400     		.2byte	0x4
+ 1904 0169 F3       		.byte	0xf3
+ 1905 016a 01       		.uleb128 0x1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 47
+
+
+ 1906 016b 51       		.byte	0x51
+ 1907 016c 9F       		.byte	0x9f
+ 1908 016d 16010000 		.4byte	.LVL46
+ 1909 0171 2E010000 		.4byte	.LVL49
+ 1910 0175 0100     		.2byte	0x1
+ 1911 0177 51       		.byte	0x51
+ 1912 0178 2E010000 		.4byte	.LVL49
+ 1913 017c 6C010000 		.4byte	.LVL51
+ 1914 0180 0400     		.2byte	0x4
+ 1915 0182 F3       		.byte	0xf3
+ 1916 0183 01       		.uleb128 0x1
+ 1917 0184 51       		.byte	0x51
+ 1918 0185 9F       		.byte	0x9f
+ 1919 0186 6C010000 		.4byte	.LVL51
+ 1920 018a 74010000 		.4byte	.LVL54
+ 1921 018e 0100     		.2byte	0x1
+ 1922 0190 51       		.byte	0x51
+ 1923 0191 74010000 		.4byte	.LVL54
+ 1924 0195 B2010000 		.4byte	.LVL56
+ 1925 0199 0400     		.2byte	0x4
+ 1926 019b F3       		.byte	0xf3
+ 1927 019c 01       		.uleb128 0x1
+ 1928 019d 51       		.byte	0x51
+ 1929 019e 9F       		.byte	0x9f
+ 1930 019f B2010000 		.4byte	.LVL56
+ 1931 01a3 BA010000 		.4byte	.LVL59
+ 1932 01a7 0100     		.2byte	0x1
+ 1933 01a9 51       		.byte	0x51
+ 1934 01aa BA010000 		.4byte	.LVL59
+ 1935 01ae 00020000 		.4byte	.LFE5
+ 1936 01b2 0400     		.2byte	0x4
+ 1937 01b4 F3       		.byte	0xf3
+ 1938 01b5 01       		.uleb128 0x1
+ 1939 01b6 51       		.byte	0x51
+ 1940 01b7 9F       		.byte	0x9f
+ 1941 01b8 00000000 		.4byte	0
+ 1942 01bc 00000000 		.4byte	0
+ 1943              	.LLST4:
+ 1944 01c0 00000000 		.4byte	.LVL16
+ 1945 01c4 0C000000 		.4byte	.LVL19
+ 1946 01c8 0100     		.2byte	0x1
+ 1947 01ca 52       		.byte	0x52
+ 1948 01cb 0C000000 		.4byte	.LVL19
+ 1949 01cf 4E000000 		.4byte	.LVL25
+ 1950 01d3 0400     		.2byte	0x4
+ 1951 01d5 F3       		.byte	0xf3
+ 1952 01d6 01       		.uleb128 0x1
+ 1953 01d7 52       		.byte	0x52
+ 1954 01d8 9F       		.byte	0x9f
+ 1955 01d9 4E000000 		.4byte	.LVL25
+ 1956 01dd 5C000000 		.4byte	.LVL26
+ 1957 01e1 0100     		.2byte	0x1
+ 1958 01e3 52       		.byte	0x52
+ 1959 01e4 5C000000 		.4byte	.LVL26
+ 1960 01e8 72000000 		.4byte	.LVL29
+ 1961 01ec 0400     		.2byte	0x4
+ 1962 01ee F3       		.byte	0xf3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 48
+
+
+ 1963 01ef 01       		.uleb128 0x1
+ 1964 01f0 52       		.byte	0x52
+ 1965 01f1 9F       		.byte	0x9f
+ 1966 01f2 72000000 		.4byte	.LVL29
+ 1967 01f6 78000000 		.4byte	.LVL30
+ 1968 01fa 0100     		.2byte	0x1
+ 1969 01fc 52       		.byte	0x52
+ 1970 01fd 78000000 		.4byte	.LVL30
+ 1971 0201 8E000000 		.4byte	.LVL33
+ 1972 0205 0400     		.2byte	0x4
+ 1973 0207 F3       		.byte	0xf3
+ 1974 0208 01       		.uleb128 0x1
+ 1975 0209 52       		.byte	0x52
+ 1976 020a 9F       		.byte	0x9f
+ 1977 020b 8E000000 		.4byte	.LVL33
+ 1978 020f 94000000 		.4byte	.LVL34
+ 1979 0213 0100     		.2byte	0x1
+ 1980 0215 52       		.byte	0x52
+ 1981 0216 94000000 		.4byte	.LVL34
+ 1982 021a AA000000 		.4byte	.LVL37
+ 1983 021e 0400     		.2byte	0x4
+ 1984 0220 F3       		.byte	0xf3
+ 1985 0221 01       		.uleb128 0x1
+ 1986 0222 52       		.byte	0x52
+ 1987 0223 9F       		.byte	0x9f
+ 1988 0224 AA000000 		.4byte	.LVL37
+ 1989 0228 B4000000 		.4byte	.LVL38
+ 1990 022c 0100     		.2byte	0x1
+ 1991 022e 52       		.byte	0x52
+ 1992 022f B4000000 		.4byte	.LVL38
+ 1993 0233 CA000000 		.4byte	.LVL41
+ 1994 0237 0400     		.2byte	0x4
+ 1995 0239 F3       		.byte	0xf3
+ 1996 023a 01       		.uleb128 0x1
+ 1997 023b 52       		.byte	0x52
+ 1998 023c 9F       		.byte	0x9f
+ 1999 023d CA000000 		.4byte	.LVL41
+ 2000 0241 D0000000 		.4byte	.LVL42
+ 2001 0245 0100     		.2byte	0x1
+ 2002 0247 52       		.byte	0x52
+ 2003 0248 D0000000 		.4byte	.LVL42
+ 2004 024c 16010000 		.4byte	.LVL46
+ 2005 0250 0400     		.2byte	0x4
+ 2006 0252 F3       		.byte	0xf3
+ 2007 0253 01       		.uleb128 0x1
+ 2008 0254 52       		.byte	0x52
+ 2009 0255 9F       		.byte	0x9f
+ 2010 0256 16010000 		.4byte	.LVL46
+ 2011 025a 28010000 		.4byte	.LVL47
+ 2012 025e 0100     		.2byte	0x1
+ 2013 0260 52       		.byte	0x52
+ 2014 0261 28010000 		.4byte	.LVL47
+ 2015 0265 6C010000 		.4byte	.LVL51
+ 2016 0269 0400     		.2byte	0x4
+ 2017 026b F3       		.byte	0xf3
+ 2018 026c 01       		.uleb128 0x1
+ 2019 026d 52       		.byte	0x52
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 49
+
+
+ 2020 026e 9F       		.byte	0x9f
+ 2021 026f 6C010000 		.4byte	.LVL51
+ 2022 0273 6E010000 		.4byte	.LVL52
+ 2023 0277 0100     		.2byte	0x1
+ 2024 0279 52       		.byte	0x52
+ 2025 027a 6E010000 		.4byte	.LVL52
+ 2026 027e B2010000 		.4byte	.LVL56
+ 2027 0282 0400     		.2byte	0x4
+ 2028 0284 F3       		.byte	0xf3
+ 2029 0285 01       		.uleb128 0x1
+ 2030 0286 52       		.byte	0x52
+ 2031 0287 9F       		.byte	0x9f
+ 2032 0288 B2010000 		.4byte	.LVL56
+ 2033 028c B4010000 		.4byte	.LVL57
+ 2034 0290 0100     		.2byte	0x1
+ 2035 0292 52       		.byte	0x52
+ 2036 0293 B4010000 		.4byte	.LVL57
+ 2037 0297 00020000 		.4byte	.LFE5
+ 2038 029b 0400     		.2byte	0x4
+ 2039 029d F3       		.byte	0xf3
+ 2040 029e 01       		.uleb128 0x1
+ 2041 029f 52       		.byte	0x52
+ 2042 02a0 9F       		.byte	0x9f
+ 2043 02a1 00000000 		.4byte	0
+ 2044 02a5 00000000 		.4byte	0
+ 2045              	.LLST5:
+ 2046 02a9 00000000 		.4byte	.LVL16
+ 2047 02ad 16000000 		.4byte	.LVL22
+ 2048 02b1 0100     		.2byte	0x1
+ 2049 02b3 53       		.byte	0x53
+ 2050 02b4 16000000 		.4byte	.LVL22
+ 2051 02b8 4E000000 		.4byte	.LVL25
+ 2052 02bc 0400     		.2byte	0x4
+ 2053 02be F3       		.byte	0xf3
+ 2054 02bf 01       		.uleb128 0x1
+ 2055 02c0 53       		.byte	0x53
+ 2056 02c1 9F       		.byte	0x9f
+ 2057 02c2 4E000000 		.4byte	.LVL25
+ 2058 02c6 64000000 		.4byte	.LVL28
+ 2059 02ca 0100     		.2byte	0x1
+ 2060 02cc 53       		.byte	0x53
+ 2061 02cd 64000000 		.4byte	.LVL28
+ 2062 02d1 72000000 		.4byte	.LVL29
+ 2063 02d5 0400     		.2byte	0x4
+ 2064 02d7 F3       		.byte	0xf3
+ 2065 02d8 01       		.uleb128 0x1
+ 2066 02d9 53       		.byte	0x53
+ 2067 02da 9F       		.byte	0x9f
+ 2068 02db 72000000 		.4byte	.LVL29
+ 2069 02df 80000000 		.4byte	.LVL32
+ 2070 02e3 0100     		.2byte	0x1
+ 2071 02e5 53       		.byte	0x53
+ 2072 02e6 80000000 		.4byte	.LVL32
+ 2073 02ea 8E000000 		.4byte	.LVL33
+ 2074 02ee 0400     		.2byte	0x4
+ 2075 02f0 F3       		.byte	0xf3
+ 2076 02f1 01       		.uleb128 0x1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 50
+
+
+ 2077 02f2 53       		.byte	0x53
+ 2078 02f3 9F       		.byte	0x9f
+ 2079 02f4 8E000000 		.4byte	.LVL33
+ 2080 02f8 9C000000 		.4byte	.LVL36
+ 2081 02fc 0100     		.2byte	0x1
+ 2082 02fe 53       		.byte	0x53
+ 2083 02ff 9C000000 		.4byte	.LVL36
+ 2084 0303 AA000000 		.4byte	.LVL37
+ 2085 0307 0400     		.2byte	0x4
+ 2086 0309 F3       		.byte	0xf3
+ 2087 030a 01       		.uleb128 0x1
+ 2088 030b 53       		.byte	0x53
+ 2089 030c 9F       		.byte	0x9f
+ 2090 030d AA000000 		.4byte	.LVL37
+ 2091 0311 BC000000 		.4byte	.LVL40
+ 2092 0315 0100     		.2byte	0x1
+ 2093 0317 53       		.byte	0x53
+ 2094 0318 BC000000 		.4byte	.LVL40
+ 2095 031c CA000000 		.4byte	.LVL41
+ 2096 0320 0400     		.2byte	0x4
+ 2097 0322 F3       		.byte	0xf3
+ 2098 0323 01       		.uleb128 0x1
+ 2099 0324 53       		.byte	0x53
+ 2100 0325 9F       		.byte	0x9f
+ 2101 0326 CA000000 		.4byte	.LVL41
+ 2102 032a D8000000 		.4byte	.LVL44
+ 2103 032e 0100     		.2byte	0x1
+ 2104 0330 53       		.byte	0x53
+ 2105 0331 D8000000 		.4byte	.LVL44
+ 2106 0335 16010000 		.4byte	.LVL46
+ 2107 0339 0400     		.2byte	0x4
+ 2108 033b F3       		.byte	0xf3
+ 2109 033c 01       		.uleb128 0x1
+ 2110 033d 53       		.byte	0x53
+ 2111 033e 9F       		.byte	0x9f
+ 2112 033f 16010000 		.4byte	.LVL46
+ 2113 0343 32010000 		.4byte	.LVL50
+ 2114 0347 0100     		.2byte	0x1
+ 2115 0349 53       		.byte	0x53
+ 2116 034a 32010000 		.4byte	.LVL50
+ 2117 034e 6C010000 		.4byte	.LVL51
+ 2118 0352 0400     		.2byte	0x4
+ 2119 0354 F3       		.byte	0xf3
+ 2120 0355 01       		.uleb128 0x1
+ 2121 0356 53       		.byte	0x53
+ 2122 0357 9F       		.byte	0x9f
+ 2123 0358 6C010000 		.4byte	.LVL51
+ 2124 035c 78010000 		.4byte	.LVL55
+ 2125 0360 0100     		.2byte	0x1
+ 2126 0362 53       		.byte	0x53
+ 2127 0363 78010000 		.4byte	.LVL55
+ 2128 0367 B2010000 		.4byte	.LVL56
+ 2129 036b 0400     		.2byte	0x4
+ 2130 036d F3       		.byte	0xf3
+ 2131 036e 01       		.uleb128 0x1
+ 2132 036f 53       		.byte	0x53
+ 2133 0370 9F       		.byte	0x9f
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 51
+
+
+ 2134 0371 B2010000 		.4byte	.LVL56
+ 2135 0375 BE010000 		.4byte	.LVL60
+ 2136 0379 0100     		.2byte	0x1
+ 2137 037b 53       		.byte	0x53
+ 2138 037c BE010000 		.4byte	.LVL60
+ 2139 0380 00020000 		.4byte	.LFE5
+ 2140 0384 0400     		.2byte	0x4
+ 2141 0386 F3       		.byte	0xf3
+ 2142 0387 01       		.uleb128 0x1
+ 2143 0388 53       		.byte	0x53
+ 2144 0389 9F       		.byte	0x9f
+ 2145 038a 00000000 		.4byte	0
+ 2146 038e 00000000 		.4byte	0
+ 2147              	.LLST6:
+ 2148 0392 04000000 		.4byte	.LVL17
+ 2149 0396 F6010000 		.4byte	.LVL62
+ 2150 039a 0100     		.2byte	0x1
+ 2151 039c 55       		.byte	0x55
+ 2152 039d 00000000 		.4byte	0
+ 2153 03a1 00000000 		.4byte	0
+ 2154              	.LLST7:
+ 2155 03a5 06000000 		.4byte	.LVL18
+ 2156 03a9 0E000000 		.4byte	.LVL20
+ 2157 03ad 0100     		.2byte	0x1
+ 2158 03af 54       		.byte	0x54
+ 2159 03b0 0E000000 		.4byte	.LVL20
+ 2160 03b4 12000000 		.4byte	.LVL21
+ 2161 03b8 0200     		.2byte	0x2
+ 2162 03ba 71       		.byte	0x71
+ 2163 03bb 01       		.sleb128 1
+ 2164 03bc 12000000 		.4byte	.LVL21
+ 2165 03c0 18000000 		.4byte	.LVL23
+ 2166 03c4 0500     		.2byte	0x5
+ 2167 03c6 F3       		.byte	0xf3
+ 2168 03c7 01       		.uleb128 0x1
+ 2169 03c8 51       		.byte	0x51
+ 2170 03c9 23       		.byte	0x23
+ 2171 03ca 01       		.uleb128 0x1
+ 2172 03cb 4E000000 		.4byte	.LVL25
+ 2173 03cf F4010000 		.4byte	.LVL61
+ 2174 03d3 0100     		.2byte	0x1
+ 2175 03d5 54       		.byte	0x54
+ 2176 03d6 00000000 		.4byte	0
+ 2177 03da 00000000 		.4byte	0
+ 2178              	.LLST8:
+ 2179 03de 00000000 		.4byte	.LVL63
+ 2180 03e2 2B000000 		.4byte	.LVL67-1
+ 2181 03e6 0100     		.2byte	0x1
+ 2182 03e8 50       		.byte	0x50
+ 2183 03e9 2B000000 		.4byte	.LVL67-1
+ 2184 03ed 66000000 		.4byte	.LVL69
+ 2185 03f1 0400     		.2byte	0x4
+ 2186 03f3 F3       		.byte	0xf3
+ 2187 03f4 01       		.uleb128 0x1
+ 2188 03f5 50       		.byte	0x50
+ 2189 03f6 9F       		.byte	0x9f
+ 2190 03f7 66000000 		.4byte	.LVL69
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 52
+
+
+ 2191 03fb 74000000 		.4byte	.LVL71
+ 2192 03ff 0100     		.2byte	0x1
+ 2193 0401 54       		.byte	0x54
+ 2194 0402 76000000 		.4byte	.LVL72
+ 2195 0406 DC000000 		.4byte	.LVL78
+ 2196 040a 0100     		.2byte	0x1
+ 2197 040c 54       		.byte	0x54
+ 2198 040d DC000000 		.4byte	.LVL78
+ 2199 0411 E0000000 		.4byte	.LVL79
+ 2200 0415 0400     		.2byte	0x4
+ 2201 0417 F3       		.byte	0xf3
+ 2202 0418 01       		.uleb128 0x1
+ 2203 0419 50       		.byte	0x50
+ 2204 041a 9F       		.byte	0x9f
+ 2205 041b 00000000 		.4byte	0
+ 2206 041f 00000000 		.4byte	0
+ 2207              	.LLST9:
+ 2208 0423 00000000 		.4byte	.LVL63
+ 2209 0427 0E000000 		.4byte	.LVL65
+ 2210 042b 0100     		.2byte	0x1
+ 2211 042d 51       		.byte	0x51
+ 2212 042e 0E000000 		.4byte	.LVL65
+ 2213 0432 E6000000 		.4byte	.LVL80
+ 2214 0436 0100     		.2byte	0x1
+ 2215 0438 56       		.byte	0x56
+ 2216 0439 E6000000 		.4byte	.LVL80
+ 2217 043d F4000000 		.4byte	.LFE4
+ 2218 0441 0400     		.2byte	0x4
+ 2219 0443 F3       		.byte	0xf3
+ 2220 0444 01       		.uleb128 0x1
+ 2221 0445 51       		.byte	0x51
+ 2222 0446 9F       		.byte	0x9f
+ 2223 0447 00000000 		.4byte	0
+ 2224 044b 00000000 		.4byte	0
+ 2225              	.LLST10:
+ 2226 044f 00000000 		.4byte	.LVL63
+ 2227 0453 1A000000 		.4byte	.LVL66
+ 2228 0457 0100     		.2byte	0x1
+ 2229 0459 52       		.byte	0x52
+ 2230 045a 1A000000 		.4byte	.LVL66
+ 2231 045e F4000000 		.4byte	.LFE4
+ 2232 0462 0400     		.2byte	0x4
+ 2233 0464 F3       		.byte	0xf3
+ 2234 0465 01       		.uleb128 0x1
+ 2235 0466 52       		.byte	0x52
+ 2236 0467 9F       		.byte	0x9f
+ 2237 0468 00000000 		.4byte	0
+ 2238 046c 00000000 		.4byte	0
+ 2239              	.LLST11:
+ 2240 0470 0A000000 		.4byte	.LVL64
+ 2241 0474 C8000000 		.4byte	.LVL76
+ 2242 0478 0200     		.2byte	0x2
+ 2243 047a 30       		.byte	0x30
+ 2244 047b 9F       		.byte	0x9f
+ 2245 047c C8000000 		.4byte	.LVL76
+ 2246 0480 DC000000 		.4byte	.LVL78
+ 2247 0484 0100     		.2byte	0x1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 53
+
+
+ 2248 0486 58       		.byte	0x58
+ 2249 0487 DC000000 		.4byte	.LVL78
+ 2250 048b E0000000 		.4byte	.LVL79
+ 2251 048f 0200     		.2byte	0x2
+ 2252 0491 30       		.byte	0x30
+ 2253 0492 9F       		.byte	0x9f
+ 2254 0493 E0000000 		.4byte	.LVL79
+ 2255 0497 E6000000 		.4byte	.LVL80
+ 2256 049b 0100     		.2byte	0x1
+ 2257 049d 58       		.byte	0x58
+ 2258 049e 00000000 		.4byte	0
+ 2259 04a2 00000000 		.4byte	0
+ 2260              	.LLST12:
+ 2261 04a6 66000000 		.4byte	.LVL69
+ 2262 04aa 78000000 		.4byte	.LVL73
+ 2263 04ae 0100     		.2byte	0x1
+ 2264 04b0 55       		.byte	0x55
+ 2265 04b1 7A000000 		.4byte	.LVL74
+ 2266 04b5 DC000000 		.4byte	.LVL78
+ 2267 04b9 0100     		.2byte	0x1
+ 2268 04bb 55       		.byte	0x55
+ 2269 04bc 00000000 		.4byte	0
+ 2270 04c0 00000000 		.4byte	0
+ 2271              		.section	.debug_aranges,"",%progbits
+ 2272 0000 44000000 		.4byte	0x44
+ 2273 0004 0200     		.2byte	0x2
+ 2274 0006 00000000 		.4byte	.Ldebug_info0
+ 2275 000a 04       		.byte	0x4
+ 2276 000b 00       		.byte	0
+ 2277 000c 0000     		.2byte	0
+ 2278 000e 0000     		.2byte	0
+ 2279 0010 00000000 		.4byte	.LFB0
+ 2280 0014 1C000000 		.4byte	.LFE0-.LFB0
+ 2281 0018 00000000 		.4byte	.LFB1
+ 2282 001c 54000000 		.4byte	.LFE1-.LFB1
+ 2283 0020 00000000 		.4byte	.LFB2
+ 2284 0024 3C000000 		.4byte	.LFE2-.LFB2
+ 2285 0028 00000000 		.4byte	.LFB3
+ 2286 002c 08000000 		.4byte	.LFE3-.LFB3
+ 2287 0030 00000000 		.4byte	.LFB5
+ 2288 0034 00020000 		.4byte	.LFE5-.LFB5
+ 2289 0038 00000000 		.4byte	.LFB4
+ 2290 003c F4000000 		.4byte	.LFE4-.LFB4
+ 2291 0040 00000000 		.4byte	0
+ 2292 0044 00000000 		.4byte	0
+ 2293              		.section	.debug_ranges,"",%progbits
+ 2294              	.Ldebug_ranges0:
+ 2295 0000 66000000 		.4byte	.LBB2
+ 2296 0004 BE000000 		.4byte	.LBE2
+ 2297 0008 C2000000 		.4byte	.LBB3
+ 2298 000c DC000000 		.4byte	.LBE3
+ 2299 0010 00000000 		.4byte	0
+ 2300 0014 00000000 		.4byte	0
+ 2301 0018 00000000 		.4byte	.LFB0
+ 2302 001c 1C000000 		.4byte	.LFE0
+ 2303 0020 00000000 		.4byte	.LFB1
+ 2304 0024 54000000 		.4byte	.LFE1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 54
+
+
+ 2305 0028 00000000 		.4byte	.LFB2
+ 2306 002c 3C000000 		.4byte	.LFE2
+ 2307 0030 00000000 		.4byte	.LFB3
+ 2308 0034 08000000 		.4byte	.LFE3
+ 2309 0038 00000000 		.4byte	.LFB5
+ 2310 003c 00020000 		.4byte	.LFE5
+ 2311 0040 00000000 		.4byte	.LFB4
+ 2312 0044 F4000000 		.4byte	.LFE4
+ 2313 0048 00000000 		.4byte	0
+ 2314 004c 00000000 		.4byte	0
+ 2315              		.section	.debug_line,"",%progbits
+ 2316              	.Ldebug_line0:
+ 2317 0000 73010000 		.section	.debug_str,"MS",%progbits,1
+ 2317      02007900 
+ 2317      00000201 
+ 2317      FB0E0D00 
+ 2317      01010101 
+ 2318              	.LASF29:
+ 2319 0000 6F757450 		.ascii	"outPointer\000"
+ 2319      6F696E74 
+ 2319      657200
+ 2320              	.LASF24:
+ 2321 000b 696E7465 		.ascii	"interface\000"
+ 2321      72666163 
+ 2321      6500
+ 2322              	.LASF40:
+ 2323 0015 5553424D 		.ascii	"USBMIDI_midiInPointer\000"
+ 2323      4944495F 
+ 2323      6D696469 
+ 2323      496E506F 
+ 2323      696E7465 
+ 2324              	.LASF44:
+ 2325 002b 5553424D 		.ascii	"USBMIDI_midiOutBuffer\000"
+ 2325      4944495F 
+ 2325      6D696469 
+ 2325      4F757442 
+ 2325      75666665 
+ 2326              	.LASF3:
+ 2327 0041 73686F72 		.ascii	"short unsigned int\000"
+ 2327      7420756E 
+ 2327      7369676E 
+ 2327      65642069 
+ 2327      6E7400
+ 2328              	.LASF49:
+ 2329 0054 5553424D 		.ascii	"USBMIDI_ReadOutEP\000"
+ 2329      4944495F 
+ 2329      52656164 
+ 2329      4F757445 
+ 2329      5000
+ 2330              	.LASF41:
+ 2331 0066 5553424D 		.ascii	"USBMIDI_midi_in_ep\000"
+ 2331      4944495F 
+ 2331      6D696469 
+ 2331      5F696E5F 
+ 2331      657000
+ 2332              	.LASF11:
+ 2333 0079 666C6F61 		.ascii	"float\000"
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 55
+
+
+ 2333      7400
+ 2334              	.LASF45:
+ 2335 007f 5553424D 		.ascii	"USBMIDI_EP\000"
+ 2335      4944495F 
+ 2335      455000
+ 2336              	.LASF19:
+ 2337 008a 6570546F 		.ascii	"epToggle\000"
+ 2337      67676C65 
+ 2337      00
+ 2338              	.LASF39:
+ 2339 0093 72657445 		.ascii	"retError\000"
+ 2339      72726F72 
+ 2339      00
+ 2340              	.LASF46:
+ 2341 009c 5553424D 		.ascii	"USBMIDI_EnableOutEP\000"
+ 2341      4944495F 
+ 2341      456E6162 
+ 2341      6C654F75 
+ 2341      74455000 
+ 2342              	.LASF52:
+ 2343 00b0 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2343      43313120 
+ 2343      352E342E 
+ 2343      31203230 
+ 2343      31363036 
+ 2344 00e3 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 2344      20726576 
+ 2344      6973696F 
+ 2344      6E203233 
+ 2344      37373135 
+ 2345 0116 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2345      66756E63 
+ 2345      74696F6E 
+ 2345      2D736563 
+ 2345      74696F6E 
+ 2346              	.LASF17:
+ 2347 013e 61706945 		.ascii	"apiEpState\000"
+ 2347      70537461 
+ 2347      746500
+ 2348              	.LASF5:
+ 2349 0149 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2349      20756E73 
+ 2349      69676E65 
+ 2349      6420696E 
+ 2349      7400
+ 2350              	.LASF20:
+ 2351 015b 61646472 		.ascii	"addr\000"
+ 2351      00
+ 2352              	.LASF35:
+ 2353 0160 6361626C 		.ascii	"cable\000"
+ 2353      6500
+ 2354              	.LASF54:
+ 2355 0166 433A5C55 		.ascii	"C:\\Users\\JeffSnyder\\Documents\\PSoC Creator\\wes"
+ 2355      73657273 
+ 2355      5C4A6566 
+ 2355      66536E79 
+ 2355      6465725C 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 56
+
+
+ 2356 0194 746F6E5F 		.ascii	"ton_1\\weston_1.cydsn\000"
+ 2356      315C7765 
+ 2356      73746F6E 
+ 2356      5F312E63 
+ 2356      7964736E 
+ 2357              	.LASF48:
+ 2358 01a9 5553424D 		.ascii	"USBMIDI_GetEPCount\000"
+ 2358      4944495F 
+ 2358      47657445 
+ 2358      50436F75 
+ 2358      6E7400
+ 2359              	.LASF36:
+ 2360 01bc 73726342 		.ascii	"srcBuffZero\000"
+ 2360      7566665A 
+ 2360      65726F00 
+ 2361              	.LASF12:
+ 2362 01c8 646F7562 		.ascii	"double\000"
+ 2362      6C6500
+ 2363              	.LASF16:
+ 2364 01cf 61747472 		.ascii	"attrib\000"
+ 2364      696200
+ 2365              	.LASF22:
+ 2366 01d6 62756666 		.ascii	"buffOffset\000"
+ 2366      4F666673 
+ 2366      657400
+ 2367              	.LASF18:
+ 2368 01e1 68774570 		.ascii	"hwEpState\000"
+ 2368      53746174 
+ 2368      6500
+ 2369              	.LASF10:
+ 2370 01eb 75696E74 		.ascii	"uint16\000"
+ 2370      313600
+ 2371              	.LASF47:
+ 2372 01f2 5553424D 		.ascii	"USBMIDI_GetEPState\000"
+ 2372      4944495F 
+ 2372      47657445 
+ 2372      50537461 
+ 2372      746500
+ 2373              	.LASF25:
+ 2374 0205 545F5553 		.ascii	"T_USBMIDI_EP_CTL_BLOCK\000"
+ 2374      424D4944 
+ 2374      495F4550 
+ 2374      5F43544C 
+ 2374      5F424C4F 
+ 2375              	.LASF53:
+ 2376 021c 47656E65 		.ascii	"Generated_Source\\PSoC5\\USBMIDI_midi.c\000"
+ 2376      72617465 
+ 2376      645F536F 
+ 2376      75726365 
+ 2376      5C50536F 
+ 2377              	.LASF37:
+ 2378 0242 73726342 		.ascii	"srcBuffOne\000"
+ 2378      7566664F 
+ 2378      6E6500
+ 2379              	.LASF8:
+ 2380 024d 756E7369 		.ascii	"unsigned int\000"
+ 2380      676E6564 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 57
+
+
+ 2380      20696E74 
+ 2380      00
+ 2381              	.LASF50:
+ 2382 025a 5553424D 		.ascii	"USBMIDI_callbackLocalMidiEvent\000"
+ 2382      4944495F 
+ 2382      63616C6C 
+ 2382      6261636B 
+ 2382      4C6F6361 
+ 2383              	.LASF43:
+ 2384 0279 5553424D 		.ascii	"USBMIDI_midi_out_ep\000"
+ 2384      4944495F 
+ 2384      6D696469 
+ 2384      5F6F7574 
+ 2384      5F657000 
+ 2385              	.LASF7:
+ 2386 028d 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2386      206C6F6E 
+ 2386      6720756E 
+ 2386      7369676E 
+ 2386      65642069 
+ 2387              	.LASF55:
+ 2388 02a4 5553424D 		.ascii	"USBMIDI_PutUsbMidiIn\000"
+ 2388      4944495F 
+ 2388      50757455 
+ 2388      73624D69 
+ 2388      6469496E 
+ 2389              	.LASF42:
+ 2390 02b9 5553424D 		.ascii	"USBMIDI_midiInBuffer\000"
+ 2390      4944495F 
+ 2390      6D696469 
+ 2390      496E4275 
+ 2390      66666572 
+ 2391              	.LASF33:
+ 2392 02ce 73726342 		.ascii	"srcBuff\000"
+ 2392      75666600 
+ 2393              	.LASF27:
+ 2394 02d6 5553424D 		.ascii	"USBMIDI_MIDI_OUT_Service\000"
+ 2394      4944495F 
+ 2394      4D494449 
+ 2394      5F4F5554 
+ 2394      5F536572 
+ 2395              	.LASF34:
+ 2396 02ef 6576656E 		.ascii	"eventLen\000"
+ 2396      744C656E 
+ 2396      00
+ 2397              	.LASF1:
+ 2398 02f8 756E7369 		.ascii	"unsigned char\000"
+ 2398      676E6564 
+ 2398      20636861 
+ 2398      7200
+ 2399              	.LASF32:
+ 2400 0306 5553424D 		.ascii	"USBMIDI_PrepareInBuffer\000"
+ 2400      4944495F 
+ 2400      50726570 
+ 2400      61726549 
+ 2400      6E427566 
+ 2401              	.LASF28:
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 58
+
+
+ 2402 031e 6F75744C 		.ascii	"outLength\000"
+ 2402      656E6774 
+ 2402      6800
+ 2403              	.LASF21:
+ 2404 0328 65704D6F 		.ascii	"epMode\000"
+ 2404      646500
+ 2405              	.LASF6:
+ 2406 032f 6C6F6E67 		.ascii	"long long int\000"
+ 2406      206C6F6E 
+ 2406      6720696E 
+ 2406      7400
+ 2407              	.LASF26:
+ 2408 033d 5553424D 		.ascii	"USBMIDI_MIDI_Init\000"
+ 2408      4944495F 
+ 2408      4D494449 
+ 2408      5F496E69 
+ 2408      7400
+ 2409              	.LASF15:
+ 2410 034f 73697A65 		.ascii	"sizetype\000"
+ 2410      74797065 
+ 2410      00
+ 2411              	.LASF23:
+ 2412 0358 62756666 		.ascii	"bufferSize\000"
+ 2412      65725369 
+ 2412      7A6500
+ 2413              	.LASF38:
+ 2414 0363 6D696469 		.ascii	"midiMsg\000"
+ 2414      4D736700 
+ 2415              	.LASF2:
+ 2416 036b 73686F72 		.ascii	"short int\000"
+ 2416      7420696E 
+ 2416      7400
+ 2417              	.LASF9:
+ 2418 0375 75696E74 		.ascii	"uint8\000"
+ 2418      3800
+ 2419              	.LASF30:
+ 2420 037b 5553424D 		.ascii	"USBMIDI_MIDI_IN_EP_Service\000"
+ 2420      4944495F 
+ 2420      4D494449 
+ 2420      5F494E5F 
+ 2420      45505F53 
+ 2421              	.LASF31:
+ 2422 0396 5553424D 		.ascii	"USBMIDI_MIDI_IN_Service\000"
+ 2422      4944495F 
+ 2422      4D494449 
+ 2422      5F494E5F 
+ 2422      53657276 
+ 2423              	.LASF4:
+ 2424 03ae 6C6F6E67 		.ascii	"long int\000"
+ 2424      20696E74 
+ 2424      00
+ 2425              	.LASF13:
+ 2426 03b7 63686172 		.ascii	"char\000"
+ 2426      00
+ 2427              	.LASF14:
+ 2428 03bc 6C6F6E67 		.ascii	"long double\000"
+ 2428      20646F75 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccCLplwz.s 			page 59
+
+
+ 2428      626C6500 
+ 2429              	.LASF0:
+ 2430 03c8 7369676E 		.ascii	"signed char\000"
+ 2430      65642063 
+ 2430      68617200 
+ 2431              	.LASF51:
+ 2432 03d4 5553424D 		.ascii	"USBMIDI_LoadInEP\000"
+ 2432      4944495F 
+ 2432      4C6F6164 
+ 2432      496E4550 
+ 2432      00
+ 2433              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

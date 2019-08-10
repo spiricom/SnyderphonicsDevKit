@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CyXmlSerializer>
+<!--This file is machine generated and read. It is not intended to be edited by hand.-->
+<!--Due to this, there is no schema for this file.-->
+<CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWrkspcCustomData" version="4">
+<CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997 type_name="CyDesigner.Common.Base.CyCustomData" version="2">
+<userData>
+<dataGuid v="1b906a0f-a7b6-4e4d-a428-82f98b53cb35">
+<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Source">
+<TreeKeys>
+<v>Source</v>
+<v>Components</v>
+<v>Output</v>
+</TreeKeys>
+<TreeStates>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="weston_1\weston_1\Source Files\main.c">
+<ExpandedNodeIds>
+<v>weston_1</v>
+<v>weston_1\weston_1</v>
+<v>weston_1\weston_1\TopDesign</v>
+<v>weston_1\weston_1\weston_1.cydwr</v>
+<v>weston_1\weston_1\weston_1.cydwr\Pins</v>
+<v>weston_1\weston_1\weston_1.cydwr\Analog</v>
+<v>weston_1\weston_1\weston_1.cydwr\Clocks</v>
+<v>weston_1\weston_1\weston_1.cydwr\Interrupts</v>
+<v>weston_1\weston_1\weston_1.cydwr\DMA</v>
+<v>weston_1\weston_1\weston_1.cydwr\System</v>
+<v>weston_1\weston_1\weston_1.cydwr\Directives</v>
+<v>weston_1\weston_1\weston_1.cydwr\Flash Security</v>
+<v>weston_1\weston_1\weston_1.cydwr\EEPROM</v>
+<v>weston_1\weston_1\Header Files</v>
+<v>weston_1\weston_1\Header Files\cyapicallbacks.h</v>
+<v>weston_1\weston_1\Source Files</v>
+<v>weston_1\weston_1\Source Files\main.c</v>
+<v>weston_1\weston_1\Generated_Source</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>weston_1\weston_1\weston_1.cydwr\DMA</v>
+<v>weston_1\weston_1\weston_1.cydwr\System</v>
+<v>weston_1\weston_1\weston_1.cydwr\Directives</v>
+<v>weston_1\weston_1\weston_1.cydwr\Flash Security</v>
+<v>weston_1\weston_1\weston_1.cydwr\EEPROM</v>
+<v>weston_1\weston_1\Header Files</v>
+<v>weston_1\weston_1\Header Files\cyapicallbacks.h</v>
+<v>weston_1\weston_1\Source Files</v>
+<v>weston_1\weston_1\Source Files\main.c</v>
+<v>weston_1\weston_1\Generated_Source</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense.h</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense_CSHL.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense_CSHL.h</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense_INT.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense_Pins.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense_Pins.h</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense_PM.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense_SMS_Wrapper.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense_TunerHelper.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense\CapSense_TunerHelper.h</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense_AMuxCH0</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense_CompCH0</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense_IdacCH0</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\CapSense_IntClock</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\cy_boot</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\Em_EEPROM</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\Em_EEPROM_Dynamic</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\LED1</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\MIDI1_UART</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\MIDI1_UART_IntClock</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB.h</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_audio.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_audio.h</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_boot.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_cdc.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_cdc.h</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_cdc.inf</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_cls.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_cydmac.h</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_descr.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_drv.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_episr.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_hid.c</v>
+<v>weston_1\weston_1\Generated_Source\PSoC5\USB\USB_hid.h</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>weston_1</v>
+<v>weston_1\weston_1</v>
+<v>weston_1\weston_1\TopDesign</v>
+<v>weston_1\weston_1\TopDesign\TopDesign.cysch</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>weston_1</v>
+<v>weston_1\weston_1</v>
+<v>weston_1\weston_1\TopDesign</v>
+<v>weston_1\weston_1\TopDesign\TopDesign.cysch</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>weston_1</v>
+<v>weston_1\weston_1</v>
+<v>weston_1\weston_1\CortexM3</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_AMuxCH0.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_CompCH0.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_CompCH0_PM.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_CSHL.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_IdacCH0.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_IdacCH0_PM.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_INT.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_IntClock.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_Pins.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_PM.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_SMS_Wrapper.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CapSense_TunerHelper.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\cy_em_eeprom.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CyDmac.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\CySpc.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\Em_EEPROM.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\LED1.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_BOOT.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_INT.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_IntClock.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\MIDI1_UART_PM.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_audio.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_boot.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_cdc.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_cls.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_descr.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_Dm.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_Dp.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_drv.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_episr.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_hid.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_midi.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_msc.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_pm.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_std.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\Listing Files\USB_vnd.lst</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\weston_1.elf</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\weston_1.hex</v>
+<v>weston_1\weston_1\CortexM3\ARM_GCC_541\Debug\weston_1.map</v>
+<v>weston_1\weston_1\weston_1.gpdsc</v>
+<v>weston_1\weston_1\weston_1.rpt</v>
+<v>weston_1\weston_1\weston_1_timing.html</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>weston_1</v>
+<v>weston_1\weston_1</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStates>
+<TreeKeysV2>
+<v>Datasheet</v>
+</TreeKeysV2>
+<TreeStatesV2>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>weston_1</v>
+<v>weston_1\weston_1</v>
+<v>weston_1\weston_1\PSoC 5LP Architecture TRM</v>
+<v>weston_1\weston_1\CY8C58LP Family Datasheet</v>
+<v>weston_1\weston_1\System Reference Guides</v>
+<v>weston_1\weston_1\System Reference Guides\cy_boot_v5_70</v>
+<v>weston_1\weston_1\CapSense_CSD_v3_50.pdf</v>
+<v>weston_1\weston_1\cy_pins_v2_20</v>
+<v>weston_1\weston_1\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>weston_1\weston_1\Em_EEPROM_v2_0.pdf</v>
+<v>weston_1\weston_1\not_v1_0.pdf</v>
+<v>weston_1\weston_1\UART_v2_50.pdf</v>
+<v>weston_1\weston_1\USBFS_v3_20.pdf</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>weston_1</v>
+<v>weston_1\weston_1</v>
+<v>weston_1\weston_1\PSoC 5LP Architecture TRM</v>
+<v>weston_1\weston_1\CY8C58LP Family Datasheet</v>
+<v>weston_1\weston_1\System Reference Guides</v>
+<v>weston_1\weston_1\System Reference Guides\cy_boot_v5_70</v>
+<v>weston_1\weston_1\CapSense_CSD_v3_50.pdf</v>
+<v>weston_1\weston_1\cy_pins_v2_20</v>
+<v>weston_1\weston_1\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
+<v>weston_1\weston_1\Em_EEPROM_v2_0.pdf</v>
+<v>weston_1\weston_1\not_v1_0.pdf</v>
+<v>weston_1\weston_1\UART_v2_50.pdf</v>
+<v>weston_1\weston_1\USBFS_v3_20.pdf</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStatesV2>
+</CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35>
+</dataGuid>
+</userData>
+</CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
+<Unloaded />
+<OpenDocs>
+<name v=".\weston_1.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\weston_1.cydsn\weston_1.cydwr" />
+<name v=".\weston_1.cydsn\main.c" />
+</OpenDocs>
+<OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
+
+  Actipro Docking/MDI for WinForms
+  Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
+  http://www.actiprosoftware.com
+
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1329, 655" SelectedTabbedMdiWindow="f2613991-6d0b-479e-9cc0-1d21af1edb08"><DocumentWindow Key="C:\Users\JeffSnyder\Documents\PSoC Creator\weston_1\weston_1.cydsn\TopDesign\TopDesign.cysch" Guid="cd13aae2-52d1-4fc6-b9bf-ceccf5ec13bf" /><DocumentWindow Key="C:\Users\JeffSnyder\Documents\PSoC Creator\weston_1\weston_1.cydsn\weston_1.cydwr" Guid="b43dec2d-90d9-4065-8959-1da071d11d6d" /><DocumentWindow Key="C:\Users\JeffSnyder\Documents\PSoC Creator\weston_1\weston_1.cydsn\main.c" Guid="f2613991-6d0b-479e-9cc0-1d21af1edb08" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="5379d114-cbc9-443d-8183-0a33d6ffe75c" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+<config v="" />
+<AutoUpdate v="true" />
+</CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
+</CyXmlSerializer>

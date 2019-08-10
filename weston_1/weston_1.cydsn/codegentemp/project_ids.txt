@@ -1,0 +1,7 @@
+C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\weston_1.cyprj|7062f661-269a-46d5-8aae-f5de76468f91
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|5a8d4419-c146-4263-9977-ea2f6d9dc4f3
+C:\Users\JeffSnyder\Documents\PSoC Creator\4.2\Downloads ( 4.2).cylib\Downloads ( 4.2).cyprj|9b898fe5-bf63-4dbb-897e-9a3cb61d1366
+C:\Users\JeffSnyder\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|c84fdc97-728d-419d-9bd2-86ad618a228d
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|efbfd863-7225-4376-8b30-48a8d345f025
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|97fd68ca-01b5-4922-b263-ce9c806d5749
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|ef821e97-fdef-4186-9e90-2730cecc19b4

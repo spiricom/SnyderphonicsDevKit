@@ -1,0 +1,4316 @@
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.CapSense_DisplayState,"ax",%progbits
+  20              		.align	2
+  21              		.global	CapSense_DisplayState
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	CapSense_DisplayState, %function
+  25              	CapSense_DisplayState:
+  26              	.LFB64:
+  27              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * Copyright SNYDERPHONICS, 2019
+   4:main.c        ****  * All Rights Reserved
+   5:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:main.c        ****  *
+   7:main.c        ****     SNYDERPHONICS CAPACITIVE SENSING DEV KIT
+   8:main.c        ****  *
+   9:main.c        ****  * ========================================
+  10:main.c        **** */
+  11:main.c        **** #include "project.h"
+  12:main.c        **** 
+  13:main.c        **** 
+  14:main.c        **** // create Max patch with documentation
+  15:main.c        **** // program two boards!
+  16:main.c        **** // ship those boards
+  17:main.c        **** 
+  18:main.c        **** 
+  19:main.c        **** //input params:  num sensors, capsense clock divider, sensor resolution, loop wait, 
+  20:main.c        **** 
+  21:main.c        **** 
+  22:main.c        **** #define DEVICE                  (0u)
+  23:main.c        **** #define MIDI_MSG_SIZE           (4u)
+  24:main.c        **** 
+  25:main.c        **** /*MIDI Message Fields */
+  26:main.c        **** #define MIDI_MSG_TYPE           (0u)
+  27:main.c        **** #define MIDI_CC_NUMBER        (1u)
+  28:main.c        **** #define MIDI_CC_VALUE      (2u)
+  29:main.c        **** 
+  30:main.c        **** 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 2
+
+
+  31:main.c        **** 
+  32:main.c        **** /*Logical Size of Em_EEPROM*/
+  33:main.c        **** #define LOGICAL_EEPROM_SIZE     15u
+  34:main.c        **** #define LOGICAL_EEPROM_START    0u
+  35:main.c        **** 
+  36:main.c        **** /*location of reset counter in Em_EEPROM*/
+  37:main.c        **** #define RESET_COUNT_LOCATION    13u
+  38:main.c        **** #define RESET_COUNT_SIZE        2u
+  39:main.c        **** /* EEPROM storage in work flash, this is defined in Em_EEPROM.c*/
+  40:main.c        **** const uint8_t Em_EEPROM_em_EepromStorage[Em_EEPROM_PHYSICAL_SIZE]
+  41:main.c        **** __ALIGNED(CY_FLASH_SIZEOF_ROW) = {0u};
+  42:main.c        **** 
+  43:main.c        **** 
+  44:main.c        **** cy_en_em_eeprom_status_t eepromReturnValue;
+  45:main.c        **** 
+  46:main.c        **** 
+  47:main.c        **** uint8_t EEPROMarray[15];
+  48:main.c        **** 
+  49:main.c        **** uint16_t capSensorsPrev[26];
+  50:main.c        **** 
+  51:main.c        **** void CapSense_DisplayState(void);
+  52:main.c        **** void setResolution(uint8_t newResolution);
+  53:main.c        **** void setIDAC(uint8_t newIDAC);
+  54:main.c        **** void  setActiveSensors(void);
+  55:main.c        **** void setClockDivider(uint8_t newClockDivider);
+  56:main.c        **** void setScanSpeed(uint8 newSpeed);
+  57:main.c        **** 
+  58:main.c        **** uint8_t numActiveSensors = 2;
+  59:main.c        **** uint8_t rawVsCooked = 0;
+  60:main.c        **** uint8_t maxActiveSensors = 26;
+  61:main.c        **** uint8_t clockDivider = 11;
+  62:main.c        **** uint8_t maxClockDivider = 255;
+  63:main.c        **** uint8_t minClockDivider = 1;
+  64:main.c        **** uint8_t delayBetweenLoops = 3;
+  65:main.c        **** uint8_t maxResolution = 16;
+  66:main.c        **** uint8_t minResolution = 8;
+  67:main.c        **** uint8_t maxIDAC = 255;
+  68:main.c        **** uint8_t minIDAC = 1;
+  69:main.c        **** uint8_t clockDividerLowByte = 0;
+  70:main.c        **** uint8_t IDACLowByte = 0;
+  71:main.c        **** uint8_t maxScanSpeed = 3;
+  72:main.c        **** uint8_t minScanSpeed = 0;
+  73:main.c        **** uint8_t sensorResolution = 10;
+  74:main.c        **** 
+  75:main.c        **** extern uint8 CapSense_widgetResolution[];
+  76:main.c        **** extern uint8 CapSense_idacSettings[];
+  77:main.c        **** extern uint8 CapSense_analogSwitchDivider;
+  78:main.c        **** 
+  79:main.c        **** 
+  80:main.c        **** int main(void)
+  81:main.c        **** {
+  82:main.c        ****   
+  83:main.c        ****     uint8 midiMsg[MIDI_MSG_SIZE];   
+  84:main.c        ****             
+  85:main.c        ****     /* Enable global interrupts */
+  86:main.c        ****     CyGlobalIntEnable;
+  87:main.c        ****     Em_EEPROM_Init((uint32_t)Em_EEPROM_em_EepromStorage);
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 3
+
+
+  88:main.c        **** 
+  89:main.c        ****     /* Start USBFS device 0 with VDDD operation */
+  90:main.c        ****     USB_Start(DEVICE, USB_DWR_VDDD_OPERATION); 
+  91:main.c        **** 
+  92:main.c        ****     //maybe use the actual EEPROM in PSOC5 instead of emulated? 
+  93:main.c        ****     eepromReturnValue = Em_EEPROM_Read(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPROM_SIZE); 
+  94:main.c        ****         
+  95:main.c        ****     //set local variables and settings to the settings retrieved from the EEPROM storage
+  96:main.c        ****     rawVsCooked = EEPROMarray[0];
+  97:main.c        ****     numActiveSensors = EEPROMarray[1];
+  98:main.c        ****     setActiveSensors();
+  99:main.c        ****     sensorResolution = EEPROMarray[2];
+ 100:main.c        ****     setResolution(sensorResolution);
+ 101:main.c        ****     setClockDivider(EEPROMarray[3]);
+ 102:main.c        ****     setIDAC(EEPROMarray[4]);
+ 103:main.c        ****     setScanSpeed( EEPROMarray[5]);
+ 104:main.c        ****     
+ 105:main.c        ****     
+ 106:main.c        ****     CapSense_Start();
+ 107:main.c        ****     CapSense_InitializeAllBaselines();
+ 108:main.c        ****     
+ 109:main.c        ****     while(1u)
+ 110:main.c        ****     {
+ 111:main.c        ****         /* Check whether the scanning of all enabled widgets is completed. */
+ 112:main.c        ****         if(0u == CapSense_IsBusy())
+ 113:main.c        ****         {
+ 114:main.c        ****             /* Update all baselines */
+ 115:main.c        ****             CapSense_UpdateEnabledBaselines();
+ 116:main.c        **** 
+ 117:main.c        ****             /* Start scanning all enabled sensors */
+ 118:main.c        ****             CapSense_ScanEnabledWidgets();
+ 119:main.c        ****             
+ 120:main.c        ****             
+ 121:main.c        ****               /* Display CapSense state using LED */
+ 122:main.c        ****             CapSense_DisplayState();
+ 123:main.c        ****             
+ 124:main.c        ****             
+ 125:main.c        ****             /* Host can send double SET_INTERFACE request */
+ 126:main.c        ****             if(0u != USB_IsConfigurationChanged())
+ 127:main.c        ****             {
+ 128:main.c        ****                 /* Initialize IN endpoints when device configured */
+ 129:main.c        ****                 if(0u != USB_GetConfiguration())   
+ 130:main.c        ****                 {
+ 131:main.c        ****                     
+ 132:main.c        ****                 	/* Enable output endpoint */
+ 133:main.c        ****                     USB_MIDI_Init();
+ 134:main.c        ****                 }
+ 135:main.c        **** 
+ 136:main.c        ****             }        
+ 137:main.c        ****             
+ 138:main.c        ****             /* Service USB MIDI when device is configured */
+ 139:main.c        ****             if(0u != USB_GetConfiguration())    
+ 140:main.c        ****             {
+ 141:main.c        ****                 /* Call this API from UART RX ISR for Auto DMA mode */
+ 142:main.c        ****                 #if(!USB_EP_MANAGEMENT_DMA_AUTO) 
+ 143:main.c        ****                     USB_MIDI_IN_Service();
+ 144:main.c        ****                 #endif
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 4
+
+
+ 145:main.c        ****                 /* In Manual EP Memory Management mode OUT_EP_Service() 
+ 146:main.c        ****                 *  may have to be called from main foreground or from OUT EP ISR
+ 147:main.c        ****                 */
+ 148:main.c        ****                 #if(!USB_EP_MANAGEMENT_DMA_AUTO) 
+ 149:main.c        ****                     USB_MIDI_OUT_Service();
+ 150:main.c        ****                 #endif
+ 151:main.c        **** 
+ 152:main.c        ****                 
+ 153:main.c        ****                 for (int i = 0; i < numActiveSensors; i++)
+ 154:main.c        ****                 {
+ 155:main.c        ****             		uint16_t tempSensor = 0;
+ 156:main.c        ****                     
+ 157:main.c        ****                     if (rawVsCooked == 0)
+ 158:main.c        ****                     {
+ 159:main.c        ****                         tempSensor = CapSense_sensorRaw[i];
+ 160:main.c        ****                     }
+ 161:main.c        ****                     else
+ 162:main.c        ****                     {
+ 163:main.c        ****                         tempSensor = CapSense_sensorSignal[i];
+ 164:main.c        ****                     }
+ 165:main.c        ****                     //filter out repeat values to keep the communication on the USB bus to a minimu
+ 166:main.c        ****                     if (tempSensor != capSensorsPrev[i])
+ 167:main.c        ****                     {   
+ 168:main.c        ****                         midiMsg[MIDI_MSG_TYPE] = USB_MIDI_CONTROL_CHANGE;
+ 169:main.c        ****             			midiMsg[MIDI_CC_NUMBER] = (i * 3);
+ 170:main.c        ****                         midiMsg[MIDI_CC_VALUE] = (tempSensor & 127);
+ 171:main.c        ****                         USB_PutUsbMidiIn(USB_3BYTE_COMMON, midiMsg, USB_MIDI_CABLE_00);            
+ 172:main.c        ****                         midiMsg[MIDI_MSG_TYPE] = USB_MIDI_CONTROL_CHANGE;
+ 173:main.c        ****             			midiMsg[MIDI_CC_NUMBER] = (i * 3) + 1;
+ 174:main.c        ****                         midiMsg[MIDI_CC_VALUE] =(tempSensor >> 7) & 127;
+ 175:main.c        ****                         USB_PutUsbMidiIn(USB_3BYTE_COMMON, midiMsg, USB_MIDI_CABLE_00);
+ 176:main.c        ****                         midiMsg[MIDI_CC_NUMBER] = (i * 3) + 2;
+ 177:main.c        ****                         midiMsg[MIDI_CC_VALUE] =(tempSensor >> 14) & 127;
+ 178:main.c        ****                         USB_PutUsbMidiIn(USB_3BYTE_COMMON, midiMsg, USB_MIDI_CABLE_00);
+ 179:main.c        ****                     }
+ 180:main.c        ****                     //store values for future comparison
+ 181:main.c        ****                     capSensorsPrev[i] = tempSensor;
+ 182:main.c        ****         		}
+ 183:main.c        ****             }
+ 184:main.c        ****         }
+ 185:main.c        ****     }
+ 186:main.c        **** }
+ 187:main.c        **** 
+ 188:main.c        **** 
+ 189:main.c        **** void CapSense_DisplayState(void)
+ 190:main.c        **** {
+  28              		.loc 1 190 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 08B5     		push	{r3, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 3, -8
+  35              		.cfi_offset 14, -4
+ 191:main.c        ****     /* Display BUTTON0 state */
+ 192:main.c        ****     if (CapSense_CheckIsWidgetActive(CapSense_SENSOR_BUTTON0__BTN))
+  36              		.loc 1 192 0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 5
+
+
+  37 0002 0020     		movs	r0, #0
+  38 0004 FFF7FEFF 		bl	CapSense_CheckIsWidgetActive
+  39              	.LVL0:
+  40 0008 18B1     		cbz	r0, .L2
+ 193:main.c        ****     {
+ 194:main.c        ****         LED1_Write(1u);
+  41              		.loc 1 194 0
+  42 000a 0120     		movs	r0, #1
+  43 000c FFF7FEFF 		bl	LED1_Write
+  44              	.LVL1:
+  45 0010 08BD     		pop	{r3, pc}
+  46              	.L2:
+ 195:main.c        ****     }
+ 196:main.c        ****     else
+ 197:main.c        ****     {
+ 198:main.c        ****         LED1_Write(0u);
+  47              		.loc 1 198 0
+  48 0012 0020     		movs	r0, #0
+  49 0014 FFF7FEFF 		bl	LED1_Write
+  50              	.LVL2:
+  51 0018 08BD     		pop	{r3, pc}
+  52              		.cfi_endproc
+  53              	.LFE64:
+  54              		.size	CapSense_DisplayState, .-CapSense_DisplayState
+  55 001a 00BF     		.section	.text.setActiveSensors,"ax",%progbits
+  56              		.align	2
+  57              		.global	setActiveSensors
+  58              		.thumb
+  59              		.thumb_func
+  60              		.type	setActiveSensors, %function
+  61              	setActiveSensors:
+  62              	.LFB66:
+ 199:main.c        ****     }
+ 200:main.c        **** 
+ 201:main.c        **** 
+ 202:main.c        **** }
+ 203:main.c        **** 
+ 204:main.c        **** 
+ 205:main.c        **** /*******************************************************************************
+ 206:main.c        **** * Function Name: USB_callbackLocalMidiEvent
+ 207:main.c        **** ********************************************************************************
+ 208:main.c        **** * Summary: Local processing of the USB MIDI out-events.
+ 209:main.c        **** *
+ 210:main.c        **** *******************************************************************************/
+ 211:main.c        **** void USB_callbackLocalMidiEvent(uint8 cable, uint8 *midiMsg) CYREENTRANT
+ 212:main.c        **** {
+ 213:main.c        ****     /* Support General System On/Off Message. */
+ 214:main.c        ****     {
+ 215:main.c        ****         if(midiMsg[USB_EVENT_BYTE0] == USB_MIDI_SYSEX_GEN_MESSAGE)
+ 216:main.c        ****         {
+ 217:main.c        ****             if(midiMsg[USB_EVENT_BYTE1] == USB_MIDI_SYSEX_SYSTEM_ON)
+ 218:main.c        ****             {
+ 219:main.c        ****                 //MIDI_PWR_Write(0u); /* Power ON */
+ 220:main.c        ****             }
+ 221:main.c        ****             else if(midiMsg[USB_EVENT_BYTE1] == USB_MIDI_SYSEX_SYSTEM_OFF)
+ 222:main.c        ****             {
+ 223:main.c        ****                 //MIDI_PWR_Write(1u); /* Power OFF */
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 6
+
+
+ 224:main.c        ****             }
+ 225:main.c        ****         }
+ 226:main.c        ****         
+ 227:main.c        ****         //raw vs cooked change
+ 228:main.c        ****         if ((midiMsg[USB_EVENT_BYTE0] == USB_MIDI_NOTE_ON) && (midiMsg[USB_EVENT_BYTE1] == 61))
+ 229:main.c        ****         {
+ 230:main.c        ****             rawVsCooked = (midiMsg[USB_EVENT_BYTE2] > 0);
+ 231:main.c        ****             EEPROMarray[0] = rawVsCooked;
+ 232:main.c        ****             eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPROM_S
+ 233:main.c        ****         }
+ 234:main.c        ****         
+ 235:main.c        ****         
+ 236:main.c        ****         //numActiveSensors change
+ 237:main.c        ****         if ((midiMsg[USB_EVENT_BYTE0] == USB_MIDI_CONTROL_CHANGE) && (midiMsg[USB_EVENT_BYTE1] == 0
+ 238:main.c        ****         {
+ 239:main.c        ****             if (midiMsg[USB_EVENT_BYTE2] <= maxActiveSensors)
+ 240:main.c        ****             {
+ 241:main.c        ****                 numActiveSensors = midiMsg[USB_EVENT_BYTE2];
+ 242:main.c        ****                 
+ 243:main.c        ****                 EEPROMarray[1] = numActiveSensors;
+ 244:main.c        ****                 eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPR
+ 245:main.c        ****                 
+ 246:main.c        ****                 setActiveSensors();
+ 247:main.c        ****             }
+ 248:main.c        ****         }
+ 249:main.c        ****         
+ 250:main.c        ****         //set resolution
+ 251:main.c        ****         if ((midiMsg[USB_EVENT_BYTE0] == USB_MIDI_CONTROL_CHANGE) && (midiMsg[USB_EVENT_BYTE1] == 1
+ 252:main.c        ****         {
+ 253:main.c        ****             if ((midiMsg[USB_EVENT_BYTE2] <= maxResolution) && (midiMsg[USB_EVENT_BYTE2] >= minReso
+ 254:main.c        ****             {
+ 255:main.c        ****                 sensorResolution = midiMsg[USB_EVENT_BYTE2];
+ 256:main.c        ****                 setResolution(sensorResolution);
+ 257:main.c        ****                 EEPROMarray[2] = sensorResolution;
+ 258:main.c        ****                 eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPR
+ 259:main.c        ****             }
+ 260:main.c        ****         }
+ 261:main.c        ****        
+ 262:main.c        ****         //clock divider high = 2
+ 263:main.c        ****         //clock divider low = 3
+ 264:main.c        ****         //capsense clock divider change
+ 265:main.c        ****         
+ 266:main.c        ****         if ((midiMsg[USB_EVENT_BYTE0] == USB_MIDI_CONTROL_CHANGE) && (midiMsg[USB_EVENT_BYTE1] == 2
+ 267:main.c        ****         {
+ 268:main.c        ****             uint8_t tempClockDivider = (midiMsg[USB_EVENT_BYTE2] << 7) + clockDividerLowByte;
+ 269:main.c        **** 
+ 270:main.c        ****             if ((tempClockDivider <= maxClockDivider) && (tempClockDivider >= minClockDivider))
+ 271:main.c        ****             {
+ 272:main.c        ****                 clockDivider = tempClockDivider;
+ 273:main.c        ****                 EEPROMarray[3] = clockDivider;
+ 274:main.c        ****                 eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPR
+ 275:main.c        ****                 setClockDivider(clockDivider);
+ 276:main.c        ****             }
+ 277:main.c        ****         }
+ 278:main.c        ****         if ((midiMsg[USB_EVENT_BYTE0] == USB_MIDI_CONTROL_CHANGE) && (midiMsg[USB_EVENT_BYTE1] == 3
+ 279:main.c        ****         {
+ 280:main.c        ****             if (midiMsg[USB_EVENT_BYTE2] < 128)
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 7
+
+
+ 281:main.c        ****             {
+ 282:main.c        ****                 clockDividerLowByte = midiMsg[USB_EVENT_BYTE2];
+ 283:main.c        ****             }
+ 284:main.c        ****         }
+ 285:main.c        ****         
+ 286:main.c        ****         
+ 287:main.c        ****         //IDAC high = 4
+ 288:main.c        ****         //IDAC low = 5
+ 289:main.c        ****         //set IDAC
+ 290:main.c        ****         if ((midiMsg[USB_EVENT_BYTE0] == USB_MIDI_CONTROL_CHANGE) && (midiMsg[USB_EVENT_BYTE1] == 4
+ 291:main.c        ****         {
+ 292:main.c        ****             uint8_t tempIDAC =  (midiMsg[USB_EVENT_BYTE2] << 7) + IDACLowByte;
+ 293:main.c        ****             
+ 294:main.c        ****             if ((tempIDAC <= maxIDAC) && (tempIDAC >= minIDAC))
+ 295:main.c        ****             {
+ 296:main.c        ****                 setIDAC(tempIDAC);
+ 297:main.c        ****                 EEPROMarray[4] = tempIDAC;
+ 298:main.c        ****                 eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPR
+ 299:main.c        ****             }
+ 300:main.c        ****         }
+ 301:main.c        ****         if ((midiMsg[USB_EVENT_BYTE0] == USB_MIDI_CONTROL_CHANGE) && (midiMsg[USB_EVENT_BYTE1] == 5
+ 302:main.c        ****         {
+ 303:main.c        ****             if (midiMsg[USB_EVENT_BYTE2] < 128)
+ 304:main.c        ****             {
+ 305:main.c        ****                 IDACLowByte = midiMsg[USB_EVENT_BYTE2];
+ 306:main.c        ****             }
+ 307:main.c        ****         }
+ 308:main.c        ****         
+ 309:main.c        ****         
+ 310:main.c        ****         //set Scan Speed
+ 311:main.c        ****         if ((midiMsg[USB_EVENT_BYTE0] == USB_MIDI_CONTROL_CHANGE) && (midiMsg[USB_EVENT_BYTE1] == 6
+ 312:main.c        ****         {
+ 313:main.c        ****             uint8_t tempScanSpeed = midiMsg[USB_EVENT_BYTE2];
+ 314:main.c        ****             if ((tempScanSpeed >= minScanSpeed) && (tempScanSpeed <= maxScanSpeed))
+ 315:main.c        ****             {
+ 316:main.c        ****                 setScanSpeed(tempScanSpeed);
+ 317:main.c        ****                 EEPROMarray[5] = tempScanSpeed;
+ 318:main.c        ****                 eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPR
+ 319:main.c        ****             }
+ 320:main.c        ****         }
+ 321:main.c        ****         
+ 322:main.c        ****         //initialize baselines
+ 323:main.c        ****         if ((midiMsg[USB_EVENT_BYTE0] == USB_MIDI_NOTE_ON) && (midiMsg[USB_EVENT_BYTE1] == 60))
+ 324:main.c        ****         {
+ 325:main.c        ****             CapSense_InitializeAllBaselines();
+ 326:main.c        ****         }
+ 327:main.c        ****         
+ 328:main.c        ****         //initialize baselines
+ 329:main.c        ****         CapSense_InitializeAllBaselines();
+ 330:main.c        ****         
+ 331:main.c        ****     }
+ 332:main.c        ****     cable = cable;
+ 333:main.c        **** }    
+ 334:main.c        **** 
+ 335:main.c        **** void setActiveSensors(void)
+ 336:main.c        **** {
+  63              		.loc 1 336 0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 8
+
+
+  64              		.cfi_startproc
+  65              		@ args = 0, pretend = 0, frame = 0
+  66              		@ frame_needed = 0, uses_anonymous_args = 0
+  67 0000 38B5     		push	{r3, r4, r5, lr}
+  68              		.cfi_def_cfa_offset 16
+  69              		.cfi_offset 3, -16
+  70              		.cfi_offset 4, -12
+  71              		.cfi_offset 5, -8
+  72              		.cfi_offset 14, -4
+  73              	.LVL3:
+  74              	.LBB2:
+ 337:main.c        ****     // turn on the sensors before the numActiveSensors point
+ 338:main.c        ****     for (int i = 0; i < numActiveSensors; i++)
+  75              		.loc 1 338 0
+  76 0002 0024     		movs	r4, #0
+  77 0004 03E0     		b	.L6
+  78              	.LVL4:
+  79              	.L7:
+ 339:main.c        ****     {
+ 340:main.c        ****         CapSense_EnableWidget(i);
+  80              		.loc 1 340 0 discriminator 3
+  81 0006 E0B2     		uxtb	r0, r4
+  82 0008 FFF7FEFF 		bl	CapSense_EnableWidget
+  83              	.LVL5:
+ 338:main.c        ****     {
+  84              		.loc 1 338 0 discriminator 3
+  85 000c 0134     		adds	r4, r4, #1
+  86              	.LVL6:
+  87              	.L6:
+ 338:main.c        ****     {
+  88              		.loc 1 338 0 is_stmt 0 discriminator 1
+  89 000e 094B     		ldr	r3, .L12
+  90 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  91 0012 1D46     		mov	r5, r3
+  92 0014 9C42     		cmp	r4, r3
+  93 0016 F6DB     		blt	.L7
+  94              	.LBE2:
+ 341:main.c        ****     }
+ 342:main.c        ****     if (numActiveSensors < maxActiveSensors)
+  95              		.loc 1 342 0 is_stmt 1
+  96 0018 064A     		ldr	r2, .L12
+  97 001a 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+  98 001c 9342     		cmp	r3, r2
+  99 001e 04D3     		bcc	.L8
+ 100              	.LBB3:
+ 101 0020 38BD     		pop	{r3, r4, r5, pc}
+ 102              	.LVL7:
+ 103              	.L10:
+ 343:main.c        ****     {
+ 344:main.c        ****        //turn off the sensors beyond the numActiveSensors point
+ 345:main.c        ****         for(int i = numActiveSensors; i < maxActiveSensors; i++)
+ 346:main.c        ****         {
+ 347:main.c        ****             CapSense_DisableWidget(i);
+ 104              		.loc 1 347 0 discriminator 3
+ 105 0022 E8B2     		uxtb	r0, r5
+ 106 0024 FFF7FEFF 		bl	CapSense_DisableWidget
+ 107              	.LVL8:
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 9
+
+
+ 345:main.c        ****         {
+ 108              		.loc 1 345 0 discriminator 3
+ 109 0028 0135     		adds	r5, r5, #1
+ 110              	.LVL9:
+ 111              	.L8:
+ 345:main.c        ****         {
+ 112              		.loc 1 345 0 is_stmt 0 discriminator 1
+ 113 002a 024B     		ldr	r3, .L12
+ 114 002c 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 115 002e 9D42     		cmp	r5, r3
+ 116 0030 F7DB     		blt	.L10
+ 117 0032 38BD     		pop	{r3, r4, r5, pc}
+ 118              	.LVL10:
+ 119              	.L13:
+ 120              		.align	2
+ 121              	.L12:
+ 122 0034 00000000 		.word	.LANCHOR0
+ 123              	.LBE3:
+ 124              		.cfi_endproc
+ 125              	.LFE66:
+ 126              		.size	setActiveSensors, .-setActiveSensors
+ 127              		.section	.text.setScanSpeed,"ax",%progbits
+ 128              		.align	2
+ 129              		.global	setScanSpeed
+ 130              		.thumb
+ 131              		.thumb_func
+ 132              		.type	setScanSpeed, %function
+ 133              	setScanSpeed:
+ 134              	.LFB67:
+ 348:main.c        ****         }
+ 349:main.c        ****     }
+ 350:main.c        **** }
+ 351:main.c        **** 
+ 352:main.c        **** void setScanSpeed(uint8 newSpeed)
+ 353:main.c        **** {           
+ 135              		.loc 1 353 0 is_stmt 1
+ 136              		.cfi_startproc
+ 137              		@ args = 0, pretend = 0, frame = 0
+ 138              		@ frame_needed = 0, uses_anonymous_args = 0
+ 139              	.LVL11:
+ 140 0000 08B5     		push	{r3, lr}
+ 141              		.cfi_def_cfa_offset 8
+ 142              		.cfi_offset 3, -8
+ 143              		.cfi_offset 14, -4
+ 354:main.c        ****     if ((newSpeed <= maxScanSpeed) && (newSpeed >= minScanSpeed))
+ 144              		.loc 1 354 0
+ 145 0002 0F4B     		ldr	r3, .L20
+ 146 0004 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 147 0006 8342     		cmp	r3, r0
+ 148 0008 19D3     		bcc	.L14
+ 149              		.loc 1 354 0 is_stmt 0 discriminator 1
+ 150 000a 0E4B     		ldr	r3, .L20+4
+ 151 000c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 152 000e 9842     		cmp	r0, r3
+ 153 0010 15D3     		bcc	.L14
+ 355:main.c        ****     {
+ 356:main.c        ****         if (newSpeed == 0)
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 10
+
+
+ 154              		.loc 1 356 0 is_stmt 1
+ 155 0012 18B9     		cbnz	r0, .L16
+ 357:main.c        ****         {
+ 358:main.c        ****             CapSense_SetScanSpeed(CapSense_SCAN_SPEED_SLOW);
+ 156              		.loc 1 358 0
+ 157 0014 0F20     		movs	r0, #15
+ 158              	.LVL12:
+ 159 0016 FFF7FEFF 		bl	CapSense_SetScanSpeed
+ 160              	.LVL13:
+ 161 001a 08BD     		pop	{r3, pc}
+ 162              	.LVL14:
+ 163              	.L16:
+ 359:main.c        ****         }
+ 360:main.c        ****         else if (newSpeed == 1)
+ 164              		.loc 1 360 0
+ 165 001c 0128     		cmp	r0, #1
+ 166 001e 03D1     		bne	.L17
+ 361:main.c        ****         {
+ 362:main.c        ****             CapSense_SetScanSpeed(CapSense_SCAN_SPEED_NORMAL );
+ 167              		.loc 1 362 0
+ 168 0020 0720     		movs	r0, #7
+ 169              	.LVL15:
+ 170 0022 FFF7FEFF 		bl	CapSense_SetScanSpeed
+ 171              	.LVL16:
+ 172 0026 08BD     		pop	{r3, pc}
+ 173              	.LVL17:
+ 174              	.L17:
+ 363:main.c        ****         }
+ 364:main.c        ****         else if (newSpeed == 2)
+ 175              		.loc 1 364 0
+ 176 0028 0228     		cmp	r0, #2
+ 177 002a 03D1     		bne	.L18
+ 365:main.c        ****         {
+ 366:main.c        ****             CapSense_SetScanSpeed(CapSense_SCAN_SPEED_FAST  );
+ 178              		.loc 1 366 0
+ 179 002c 0320     		movs	r0, #3
+ 180              	.LVL18:
+ 181 002e FFF7FEFF 		bl	CapSense_SetScanSpeed
+ 182              	.LVL19:
+ 183 0032 08BD     		pop	{r3, pc}
+ 184              	.LVL20:
+ 185              	.L18:
+ 367:main.c        ****         }
+ 368:main.c        ****         else if (newSpeed == 3)
+ 186              		.loc 1 368 0
+ 187 0034 0328     		cmp	r0, #3
+ 188 0036 02D1     		bne	.L14
+ 369:main.c        ****         {
+ 370:main.c        ****             CapSense_SetScanSpeed(CapSense_SCAN_SPEED_ULTRA_FAST );
+ 189              		.loc 1 370 0
+ 190 0038 0120     		movs	r0, #1
+ 191              	.LVL21:
+ 192 003a FFF7FEFF 		bl	CapSense_SetScanSpeed
+ 193              	.LVL22:
+ 194              	.L14:
+ 195 003e 08BD     		pop	{r3, pc}
+ 196              	.L21:
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 11
+
+
+ 197              		.align	2
+ 198              	.L20:
+ 199 0040 00000000 		.word	.LANCHOR0
+ 200 0044 00000000 		.word	.LANCHOR1
+ 201              		.cfi_endproc
+ 202              	.LFE67:
+ 203              		.size	setScanSpeed, .-setScanSpeed
+ 204              		.section	.text.setResolution,"ax",%progbits
+ 205              		.align	2
+ 206              		.global	setResolution
+ 207              		.thumb
+ 208              		.thumb_func
+ 209              		.type	setResolution, %function
+ 210              	setResolution:
+ 211              	.LFB68:
+ 371:main.c        ****         }
+ 372:main.c        ****     }
+ 373:main.c        **** }
+ 374:main.c        **** 
+ 375:main.c        **** void setResolution(uint8_t newResolution)
+ 376:main.c        **** {
+ 212              		.loc 1 376 0
+ 213              		.cfi_startproc
+ 214              		@ args = 0, pretend = 0, frame = 0
+ 215              		@ frame_needed = 0, uses_anonymous_args = 0
+ 216              		@ link register save eliminated.
+ 217              	.LVL23:
+ 377:main.c        ****     uint8_t tempRes = 0;
+ 378:main.c        ****     
+ 379:main.c        ****     if (newResolution == 8)
+ 218              		.loc 1 379 0
+ 219 0000 0828     		cmp	r0, #8
+ 220 0002 11D0     		beq	.L26
+ 380:main.c        ****     {
+ 381:main.c        ****        tempRes = CapSense_PWM_RESOLUTION_8_BITS;
+ 382:main.c        ****     }
+ 383:main.c        ****     else if (newResolution == 9)
+ 221              		.loc 1 383 0
+ 222 0004 0928     		cmp	r0, #9
+ 223 0006 11D0     		beq	.L27
+ 384:main.c        ****     {
+ 385:main.c        ****          tempRes = CapSense_PWM_RESOLUTION_9_BITS;
+ 386:main.c        ****     }
+ 387:main.c        ****     else if (newResolution == 10)
+ 224              		.loc 1 387 0
+ 225 0008 0A28     		cmp	r0, #10
+ 226 000a 11D0     		beq	.L28
+ 388:main.c        ****     {
+ 389:main.c        ****          tempRes = CapSense_PWM_RESOLUTION_10_BITS;
+ 390:main.c        ****     }
+ 391:main.c        ****     else if (newResolution == 11)
+ 227              		.loc 1 391 0
+ 228 000c 0B28     		cmp	r0, #11
+ 229 000e 11D0     		beq	.L29
+ 392:main.c        ****     {
+ 393:main.c        ****          tempRes = CapSense_PWM_RESOLUTION_11_BITS;
+ 394:main.c        ****     }
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 12
+
+
+ 395:main.c        ****     else if (newResolution == 12)
+ 230              		.loc 1 395 0
+ 231 0010 0C28     		cmp	r0, #12
+ 232 0012 11D0     		beq	.L30
+ 396:main.c        ****     {
+ 397:main.c        ****          tempRes = CapSense_PWM_RESOLUTION_12_BITS;
+ 398:main.c        ****     }
+ 399:main.c        ****     else if (newResolution == 13)
+ 233              		.loc 1 399 0
+ 234 0014 0D28     		cmp	r0, #13
+ 235 0016 11D0     		beq	.L31
+ 400:main.c        ****     {
+ 401:main.c        ****          tempRes = CapSense_PWM_RESOLUTION_13_BITS;
+ 402:main.c        ****     }
+ 403:main.c        ****     else if (newResolution == 14)
+ 236              		.loc 1 403 0
+ 237 0018 0E28     		cmp	r0, #14
+ 238 001a 11D0     		beq	.L32
+ 404:main.c        ****     {
+ 405:main.c        ****          tempRes = CapSense_PWM_RESOLUTION_14_BITS;
+ 406:main.c        ****     }
+ 407:main.c        ****     else if (newResolution == 15)
+ 239              		.loc 1 407 0
+ 240 001c 0F28     		cmp	r0, #15
+ 241 001e 11D0     		beq	.L33
+ 408:main.c        ****     {
+ 409:main.c        ****          tempRes = CapSense_PWM_RESOLUTION_15_BITS;
+ 410:main.c        ****     }
+ 411:main.c        ****     else if (newResolution == 16)
+ 242              		.loc 1 411 0
+ 243 0020 1028     		cmp	r0, #16
+ 244 0022 11D0     		beq	.L34
+ 377:main.c        ****     
+ 245              		.loc 1 377 0
+ 246 0024 0021     		movs	r1, #0
+ 247 0026 10E0     		b	.L23
+ 248              	.L26:
+ 381:main.c        ****     }
+ 249              		.loc 1 381 0
+ 250 0028 0021     		movs	r1, #0
+ 251 002a 0EE0     		b	.L23
+ 252              	.L27:
+ 385:main.c        ****     }
+ 253              		.loc 1 385 0
+ 254 002c 0121     		movs	r1, #1
+ 255 002e 0CE0     		b	.L23
+ 256              	.L28:
+ 389:main.c        ****     }
+ 257              		.loc 1 389 0
+ 258 0030 0321     		movs	r1, #3
+ 259 0032 0AE0     		b	.L23
+ 260              	.L29:
+ 393:main.c        ****     }
+ 261              		.loc 1 393 0
+ 262 0034 0721     		movs	r1, #7
+ 263 0036 08E0     		b	.L23
+ 264              	.L30:
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 13
+
+
+ 397:main.c        ****     }
+ 265              		.loc 1 397 0
+ 266 0038 0F21     		movs	r1, #15
+ 267 003a 06E0     		b	.L23
+ 268              	.L31:
+ 401:main.c        ****     }
+ 269              		.loc 1 401 0
+ 270 003c 1F21     		movs	r1, #31
+ 271 003e 04E0     		b	.L23
+ 272              	.L32:
+ 405:main.c        ****     }
+ 273              		.loc 1 405 0
+ 274 0040 3F21     		movs	r1, #63
+ 275 0042 02E0     		b	.L23
+ 276              	.L33:
+ 409:main.c        ****     }
+ 277              		.loc 1 409 0
+ 278 0044 7F21     		movs	r1, #127
+ 279 0046 00E0     		b	.L23
+ 280              	.L34:
+ 412:main.c        ****     {
+ 413:main.c        ****          tempRes = CapSense_PWM_RESOLUTION_16_BITS;
+ 281              		.loc 1 413 0
+ 282 0048 FF21     		movs	r1, #255
+ 283              	.L23:
+ 284              	.LVL24:
+ 285              	.LBB4:
+ 414:main.c        ****     }
+ 415:main.c        ****     
+ 416:main.c        ****     for (int i = 0; i < maxActiveSensors; i++)
+ 286              		.loc 1 416 0
+ 287 004a 0023     		movs	r3, #0
+ 288 004c 02E0     		b	.L24
+ 289              	.LVL25:
+ 290              	.L25:
+ 417:main.c        ****     {
+ 418:main.c        ****         CapSense_widgetResolution[i] = tempRes;
+ 291              		.loc 1 418 0 discriminator 3
+ 292 004e 044A     		ldr	r2, .L35
+ 293 0050 D154     		strb	r1, [r2, r3]
+ 416:main.c        ****     {
+ 294              		.loc 1 416 0 discriminator 3
+ 295 0052 0133     		adds	r3, r3, #1
+ 296              	.LVL26:
+ 297              	.L24:
+ 416:main.c        ****     {
+ 298              		.loc 1 416 0 is_stmt 0 discriminator 1
+ 299 0054 034A     		ldr	r2, .L35+4
+ 300 0056 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 301 0058 9342     		cmp	r3, r2
+ 302 005a F8DB     		blt	.L25
+ 303              	.LBE4:
+ 419:main.c        ****     }
+ 420:main.c        **** }
+ 304              		.loc 1 420 0 is_stmt 1
+ 305 005c 7047     		bx	lr
+ 306              	.L36:
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 14
+
+
+ 307 005e 00BF     		.align	2
+ 308              	.L35:
+ 309 0060 00000000 		.word	CapSense_widgetResolution
+ 310 0064 00000000 		.word	.LANCHOR0
+ 311              		.cfi_endproc
+ 312              	.LFE68:
+ 313              		.size	setResolution, .-setResolution
+ 314              		.section	.text.setClockDivider,"ax",%progbits
+ 315              		.align	2
+ 316              		.global	setClockDivider
+ 317              		.thumb
+ 318              		.thumb_func
+ 319              		.type	setClockDivider, %function
+ 320              	setClockDivider:
+ 321              	.LFB69:
+ 421:main.c        **** 
+ 422:main.c        **** void setClockDivider(uint8_t newClockDivider)
+ 423:main.c        **** {
+ 322              		.loc 1 423 0
+ 323              		.cfi_startproc
+ 324              		@ args = 0, pretend = 0, frame = 0
+ 325              		@ frame_needed = 0, uses_anonymous_args = 0
+ 326              		@ link register save eliminated.
+ 327              	.LVL27:
+ 424:main.c        ****     CapSense_analogSwitchDivider = newClockDivider;
+ 328              		.loc 1 424 0
+ 329 0000 014B     		ldr	r3, .L38
+ 330 0002 1870     		strb	r0, [r3]
+ 331 0004 7047     		bx	lr
+ 332              	.L39:
+ 333 0006 00BF     		.align	2
+ 334              	.L38:
+ 335 0008 00000000 		.word	CapSense_analogSwitchDivider
+ 336              		.cfi_endproc
+ 337              	.LFE69:
+ 338              		.size	setClockDivider, .-setClockDivider
+ 339              		.section	.text.setIDAC,"ax",%progbits
+ 340              		.align	2
+ 341              		.global	setIDAC
+ 342              		.thumb
+ 343              		.thumb_func
+ 344              		.type	setIDAC, %function
+ 345              	setIDAC:
+ 346              	.LFB70:
+ 425:main.c        **** }
+ 426:main.c        **** 
+ 427:main.c        **** void setIDAC(uint8_t newIDAC)
+ 428:main.c        **** {
+ 347              		.loc 1 428 0
+ 348              		.cfi_startproc
+ 349              		@ args = 0, pretend = 0, frame = 0
+ 350              		@ frame_needed = 0, uses_anonymous_args = 0
+ 351              		@ link register save eliminated.
+ 352              	.LVL28:
+ 353              	.LBB5:
+ 429:main.c        ****     for (int i = 0; i < maxActiveSensors; i++)
+ 354              		.loc 1 429 0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 15
+
+
+ 355 0000 0023     		movs	r3, #0
+ 356 0002 02E0     		b	.L41
+ 357              	.LVL29:
+ 358              	.L42:
+ 430:main.c        ****     {
+ 431:main.c        ****         CapSense_idacSettings[i] = newIDAC;
+ 359              		.loc 1 431 0 discriminator 3
+ 360 0004 034A     		ldr	r2, .L43
+ 361 0006 D054     		strb	r0, [r2, r3]
+ 429:main.c        ****     for (int i = 0; i < maxActiveSensors; i++)
+ 362              		.loc 1 429 0 discriminator 3
+ 363 0008 0133     		adds	r3, r3, #1
+ 364              	.LVL30:
+ 365              	.L41:
+ 429:main.c        ****     for (int i = 0; i < maxActiveSensors; i++)
+ 366              		.loc 1 429 0 is_stmt 0 discriminator 1
+ 367 000a 034A     		ldr	r2, .L43+4
+ 368 000c 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 369 000e 9342     		cmp	r3, r2
+ 370 0010 F8DB     		blt	.L42
+ 371              	.LBE5:
+ 432:main.c        ****     }
+ 433:main.c        **** }
+ 372              		.loc 1 433 0 is_stmt 1
+ 373 0012 7047     		bx	lr
+ 374              	.L44:
+ 375              		.align	2
+ 376              	.L43:
+ 377 0014 00000000 		.word	CapSense_idacSettings
+ 378 0018 00000000 		.word	.LANCHOR0
+ 379              		.cfi_endproc
+ 380              	.LFE70:
+ 381              		.size	setIDAC, .-setIDAC
+ 382              		.section	.text.main,"ax",%progbits
+ 383              		.align	2
+ 384              		.global	main
+ 385              		.thumb
+ 386              		.thumb_func
+ 387              		.type	main, %function
+ 388              	main:
+ 389              	.LFB63:
+  81:main.c        ****   
+ 390              		.loc 1 81 0
+ 391              		.cfi_startproc
+ 392              		@ args = 0, pretend = 0, frame = 8
+ 393              		@ frame_needed = 0, uses_anonymous_args = 0
+ 394 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 395              		.cfi_def_cfa_offset 20
+ 396              		.cfi_offset 4, -20
+ 397              		.cfi_offset 5, -16
+ 398              		.cfi_offset 6, -12
+ 399              		.cfi_offset 7, -8
+ 400              		.cfi_offset 14, -4
+ 401 0002 83B0     		sub	sp, sp, #12
+ 402              		.cfi_def_cfa_offset 32
+  86:main.c        ****     Em_EEPROM_Init((uint32_t)Em_EEPROM_em_EepromStorage);
+ 403              		.loc 1 86 0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 16
+
+
+ 404              		.syntax unified
+ 405              	@ 86 "main.c" 1
+ 406 0004 62B6     		CPSIE   i
+ 407              	@ 0 "" 2
+  87:main.c        **** 
+ 408              		.loc 1 87 0
+ 409              		.thumb
+ 410              		.syntax unified
+ 411 0006 4348     		ldr	r0, .L56
+ 412 0008 FFF7FEFF 		bl	Em_EEPROM_Init
+ 413              	.LVL31:
+  90:main.c        **** 
+ 414              		.loc 1 90 0
+ 415 000c 0221     		movs	r1, #2
+ 416 000e 0020     		movs	r0, #0
+ 417 0010 FFF7FEFF 		bl	USB_Start
+ 418              	.LVL32:
+  93:main.c        ****         
+ 419              		.loc 1 93 0
+ 420 0014 404C     		ldr	r4, .L56+4
+ 421 0016 414B     		ldr	r3, .L56+8
+ 422 0018 0F22     		movs	r2, #15
+ 423 001a 2146     		mov	r1, r4
+ 424 001c 0020     		movs	r0, #0
+ 425 001e FFF7FEFF 		bl	Cy_Em_EEPROM_Read
+ 426              	.LVL33:
+ 427 0022 3F4B     		ldr	r3, .L56+12
+ 428 0024 1870     		strb	r0, [r3]
+  96:main.c        ****     numActiveSensors = EEPROMarray[1];
+ 429              		.loc 1 96 0
+ 430 0026 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 431 0028 3E4B     		ldr	r3, .L56+16
+ 432 002a 5A70     		strb	r2, [r3, #1]
+  97:main.c        ****     setActiveSensors();
+ 433              		.loc 1 97 0
+ 434 002c 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 435 002e 3E4D     		ldr	r5, .L56+20
+ 436 0030 2B70     		strb	r3, [r5]
+  98:main.c        ****     sensorResolution = EEPROMarray[2];
+ 437              		.loc 1 98 0
+ 438 0032 FFF7FEFF 		bl	setActiveSensors
+ 439              	.LVL34:
+  99:main.c        ****     setResolution(sensorResolution);
+ 440              		.loc 1 99 0
+ 441 0036 A078     		ldrb	r0, [r4, #2]	@ zero_extendqisi2
+ 442 0038 E870     		strb	r0, [r5, #3]
+ 100:main.c        ****     setClockDivider(EEPROMarray[3]);
+ 443              		.loc 1 100 0
+ 444 003a FFF7FEFF 		bl	setResolution
+ 445              	.LVL35:
+ 101:main.c        ****     setIDAC(EEPROMarray[4]);
+ 446              		.loc 1 101 0
+ 447 003e E078     		ldrb	r0, [r4, #3]	@ zero_extendqisi2
+ 448 0040 FFF7FEFF 		bl	setClockDivider
+ 449              	.LVL36:
+ 102:main.c        ****     setScanSpeed( EEPROMarray[5]);
+ 450              		.loc 1 102 0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 17
+
+
+ 451 0044 2079     		ldrb	r0, [r4, #4]	@ zero_extendqisi2
+ 452 0046 FFF7FEFF 		bl	setIDAC
+ 453              	.LVL37:
+ 103:main.c        ****     
+ 454              		.loc 1 103 0
+ 455 004a 6079     		ldrb	r0, [r4, #5]	@ zero_extendqisi2
+ 456 004c FFF7FEFF 		bl	setScanSpeed
+ 457              	.LVL38:
+ 106:main.c        ****     CapSense_InitializeAllBaselines();
+ 458              		.loc 1 106 0
+ 459 0050 FFF7FEFF 		bl	CapSense_Start
+ 460              	.LVL39:
+ 107:main.c        ****     
+ 461              		.loc 1 107 0
+ 462 0054 FFF7FEFF 		bl	CapSense_InitializeAllBaselines
+ 463              	.LVL40:
+ 464              	.L46:
+ 112:main.c        ****         {
+ 465              		.loc 1 112 0
+ 466 0058 FFF7FEFF 		bl	CapSense_IsBusy
+ 467              	.LVL41:
+ 468 005c 0028     		cmp	r0, #0
+ 469 005e FBD1     		bne	.L46
+ 115:main.c        **** 
+ 470              		.loc 1 115 0
+ 471 0060 FFF7FEFF 		bl	CapSense_UpdateEnabledBaselines
+ 472              	.LVL42:
+ 118:main.c        ****             
+ 473              		.loc 1 118 0
+ 474 0064 FFF7FEFF 		bl	CapSense_ScanEnabledWidgets
+ 475              	.LVL43:
+ 122:main.c        ****             
+ 476              		.loc 1 122 0
+ 477 0068 FFF7FEFF 		bl	CapSense_DisplayState
+ 478              	.LVL44:
+ 126:main.c        ****             {
+ 479              		.loc 1 126 0
+ 480 006c FFF7FEFF 		bl	USB_IsConfigurationChanged
+ 481              	.LVL45:
+ 482 0070 20B1     		cbz	r0, .L47
+ 129:main.c        ****                 {
+ 483              		.loc 1 129 0
+ 484 0072 FFF7FEFF 		bl	USB_GetConfiguration
+ 485              	.LVL46:
+ 486 0076 08B1     		cbz	r0, .L47
+ 133:main.c        ****                 }
+ 487              		.loc 1 133 0
+ 488 0078 FFF7FEFF 		bl	USB_MIDI_Init
+ 489              	.LVL47:
+ 490              	.L47:
+ 139:main.c        ****             {
+ 491              		.loc 1 139 0
+ 492 007c FFF7FEFF 		bl	USB_GetConfiguration
+ 493              	.LVL48:
+ 494 0080 0028     		cmp	r0, #0
+ 495 0082 E9D0     		beq	.L46
+ 143:main.c        ****                 #endif
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 18
+
+
+ 496              		.loc 1 143 0
+ 497 0084 FFF7FEFF 		bl	USB_MIDI_IN_Service
+ 498              	.LVL49:
+ 149:main.c        ****                 #endif
+ 499              		.loc 1 149 0
+ 500 0088 FFF7FEFF 		bl	USB_MIDI_OUT_Service
+ 501              	.LVL50:
+ 502              	.LBB6:
+ 153:main.c        ****                 {
+ 503              		.loc 1 153 0
+ 504 008c 0024     		movs	r4, #0
+ 505 008e 3CE0     		b	.L49
+ 506              	.LVL51:
+ 507              	.L53:
+ 508              	.LBB7:
+ 157:main.c        ****                     {
+ 509              		.loc 1 157 0
+ 510 0090 244B     		ldr	r3, .L56+16
+ 511 0092 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 512 0094 1BB9     		cbnz	r3, .L50
+ 159:main.c        ****                     }
+ 513              		.loc 1 159 0
+ 514 0096 254B     		ldr	r3, .L56+24
+ 515 0098 33F81450 		ldrh	r5, [r3, r4, lsl #1]
+ 516              	.LVL52:
+ 517 009c 02E0     		b	.L51
+ 518              	.LVL53:
+ 519              	.L50:
+ 163:main.c        ****                     }
+ 520              		.loc 1 163 0
+ 521 009e 244B     		ldr	r3, .L56+28
+ 522 00a0 33F81450 		ldrh	r5, [r3, r4, lsl #1]
+ 523              	.LVL54:
+ 524              	.L51:
+ 166:main.c        ****                     {   
+ 525              		.loc 1 166 0
+ 526 00a4 234B     		ldr	r3, .L56+32
+ 527 00a6 33F81430 		ldrh	r3, [r3, r4, lsl #1]
+ 528 00aa 9D42     		cmp	r5, r3
+ 529 00ac 29D0     		beq	.L52
+ 168:main.c        ****             			midiMsg[MIDI_CC_NUMBER] = (i * 3);
+ 530              		.loc 1 168 0
+ 531 00ae B027     		movs	r7, #176
+ 532 00b0 8DF80470 		strb	r7, [sp, #4]
+ 169:main.c        ****                         midiMsg[MIDI_CC_VALUE] = (tempSensor & 127);
+ 533              		.loc 1 169 0
+ 534 00b4 04EB4406 		add	r6, r4, r4, lsl #1
+ 535 00b8 F6B2     		uxtb	r6, r6
+ 536 00ba 8DF80560 		strb	r6, [sp, #5]
+ 170:main.c        ****                         USB_PutUsbMidiIn(USB_3BYTE_COMMON, midiMsg, USB_MIDI_CABLE_00);            
+ 537              		.loc 1 170 0
+ 538 00be 05F07F03 		and	r3, r5, #127
+ 539 00c2 8DF80630 		strb	r3, [sp, #6]
+ 171:main.c        ****                         midiMsg[MIDI_MSG_TYPE] = USB_MIDI_CONTROL_CHANGE;
+ 540              		.loc 1 171 0
+ 541 00c6 0022     		movs	r2, #0
+ 542 00c8 01A9     		add	r1, sp, #4
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 19
+
+
+ 543 00ca 0320     		movs	r0, #3
+ 544 00cc FFF7FEFF 		bl	USB_PutUsbMidiIn
+ 545              	.LVL55:
+ 172:main.c        ****             			midiMsg[MIDI_CC_NUMBER] = (i * 3) + 1;
+ 546              		.loc 1 172 0
+ 547 00d0 8DF80470 		strb	r7, [sp, #4]
+ 173:main.c        ****                         midiMsg[MIDI_CC_VALUE] =(tempSensor >> 7) & 127;
+ 548              		.loc 1 173 0
+ 549 00d4 731C     		adds	r3, r6, #1
+ 550 00d6 8DF80530 		strb	r3, [sp, #5]
+ 174:main.c        ****                         USB_PutUsbMidiIn(USB_3BYTE_COMMON, midiMsg, USB_MIDI_CABLE_00);
+ 551              		.loc 1 174 0
+ 552 00da C5F3C613 		ubfx	r3, r5, #7, #7
+ 553 00de 8DF80630 		strb	r3, [sp, #6]
+ 175:main.c        ****                         midiMsg[MIDI_CC_NUMBER] = (i * 3) + 2;
+ 554              		.loc 1 175 0
+ 555 00e2 0022     		movs	r2, #0
+ 556 00e4 01A9     		add	r1, sp, #4
+ 557 00e6 0320     		movs	r0, #3
+ 558 00e8 FFF7FEFF 		bl	USB_PutUsbMidiIn
+ 559              	.LVL56:
+ 176:main.c        ****                         midiMsg[MIDI_CC_VALUE] =(tempSensor >> 14) & 127;
+ 560              		.loc 1 176 0
+ 561 00ec 0236     		adds	r6, r6, #2
+ 562 00ee 8DF80560 		strb	r6, [sp, #5]
+ 177:main.c        ****                         USB_PutUsbMidiIn(USB_3BYTE_COMMON, midiMsg, USB_MIDI_CABLE_00);
+ 563              		.loc 1 177 0
+ 564 00f2 AB0B     		lsrs	r3, r5, #14
+ 565 00f4 8DF80630 		strb	r3, [sp, #6]
+ 178:main.c        ****                     }
+ 566              		.loc 1 178 0
+ 567 00f8 0022     		movs	r2, #0
+ 568 00fa 01A9     		add	r1, sp, #4
+ 569 00fc 0320     		movs	r0, #3
+ 570 00fe FFF7FEFF 		bl	USB_PutUsbMidiIn
+ 571              	.LVL57:
+ 572              	.L52:
+ 181:main.c        ****         		}
+ 573              		.loc 1 181 0 discriminator 2
+ 574 0102 0C4B     		ldr	r3, .L56+32
+ 575 0104 23F81450 		strh	r5, [r3, r4, lsl #1]	@ movhi
+ 576              	.LBE7:
+ 153:main.c        ****                 {
+ 577              		.loc 1 153 0 discriminator 2
+ 578 0108 0134     		adds	r4, r4, #1
+ 579              	.LVL58:
+ 580              	.L49:
+ 153:main.c        ****                 {
+ 581              		.loc 1 153 0 is_stmt 0 discriminator 1
+ 582 010a 074B     		ldr	r3, .L56+20
+ 583 010c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 584 010e 9C42     		cmp	r4, r3
+ 585 0110 BEDB     		blt	.L53
+ 586 0112 A1E7     		b	.L46
+ 587              	.L57:
+ 588              		.align	2
+ 589              	.L56:
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 20
+
+
+ 590 0114 00000000 		.word	.LANCHOR2
+ 591 0118 00000000 		.word	EEPROMarray
+ 592 011c 00000000 		.word	Em_EEPROM_context
+ 593 0120 00000000 		.word	eepromReturnValue
+ 594 0124 00000000 		.word	.LANCHOR1
+ 595 0128 00000000 		.word	.LANCHOR0
+ 596 012c 00000000 		.word	CapSense_sensorRaw
+ 597 0130 00000000 		.word	CapSense_sensorSignal
+ 598 0134 00000000 		.word	capSensorsPrev
+ 599              	.LBE6:
+ 600              		.cfi_endproc
+ 601              	.LFE63:
+ 602              		.size	main, .-main
+ 603              		.section	.text.USB_callbackLocalMidiEvent,"ax",%progbits
+ 604              		.align	2
+ 605              		.global	USB_callbackLocalMidiEvent
+ 606              		.thumb
+ 607              		.thumb_func
+ 608              		.type	USB_callbackLocalMidiEvent, %function
+ 609              	USB_callbackLocalMidiEvent:
+ 610              	.LFB65:
+ 212:main.c        ****     /* Support General System On/Off Message. */
+ 611              		.loc 1 212 0 is_stmt 1
+ 612              		.cfi_startproc
+ 613              		@ args = 0, pretend = 0, frame = 0
+ 614              		@ frame_needed = 0, uses_anonymous_args = 0
+ 615              	.LVL59:
+ 616 0000 38B5     		push	{r3, r4, r5, lr}
+ 617              		.cfi_def_cfa_offset 16
+ 618              		.cfi_offset 3, -16
+ 619              		.cfi_offset 4, -12
+ 620              		.cfi_offset 5, -8
+ 621              		.cfi_offset 14, -4
+ 622 0002 0C46     		mov	r4, r1
+ 215:main.c        ****         {
+ 623              		.loc 1 215 0
+ 624 0004 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 228:main.c        ****         {
+ 625              		.loc 1 228 0
+ 626 0006 902B     		cmp	r3, #144
+ 627 0008 11D1     		bne	.L59
+ 228:main.c        ****         {
+ 628              		.loc 1 228 0 is_stmt 0 discriminator 1
+ 629 000a 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
+ 630 000c 3D2B     		cmp	r3, #61
+ 631 000e 0ED1     		bne	.L59
+ 230:main.c        ****             EEPROMarray[0] = rawVsCooked;
+ 632              		.loc 1 230 0 is_stmt 1
+ 633 0010 8B78     		ldrb	r3, [r1, #2]	@ zero_extendqisi2
+ 634 0012 0033     		adds	r3, r3, #0
+ 635 0014 18BF     		it	ne
+ 636 0016 0123     		movne	r3, #1
+ 637 0018 5F4A     		ldr	r2, .L69
+ 638 001a 5370     		strb	r3, [r2, #1]
+ 231:main.c        ****             eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPROM_S
+ 639              		.loc 1 231 0
+ 640 001c 5F49     		ldr	r1, .L69+4
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 21
+
+
+ 641              	.LVL60:
+ 642 001e 0B70     		strb	r3, [r1]
+ 232:main.c        ****         }
+ 643              		.loc 1 232 0
+ 644 0020 5F4B     		ldr	r3, .L69+8
+ 645 0022 0F22     		movs	r2, #15
+ 646 0024 0020     		movs	r0, #0
+ 647              	.LVL61:
+ 648 0026 FFF7FEFF 		bl	Cy_Em_EEPROM_Write
+ 649              	.LVL62:
+ 650 002a 5E4B     		ldr	r3, .L69+12
+ 651 002c 1870     		strb	r0, [r3]
+ 652              	.L59:
+ 237:main.c        ****         {
+ 653              		.loc 1 237 0
+ 654 002e 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 655 0030 B02B     		cmp	r3, #176
+ 656 0032 13D1     		bne	.L60
+ 237:main.c        ****         {
+ 657              		.loc 1 237 0 is_stmt 0 discriminator 1
+ 658 0034 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 659 0036 8BB9     		cbnz	r3, .L60
+ 239:main.c        ****             {
+ 660              		.loc 1 239 0 is_stmt 1
+ 661 0038 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 662 003a 5B4A     		ldr	r2, .L69+16
+ 663 003c 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 664 003e 9342     		cmp	r3, r2
+ 665 0040 0CD8     		bhi	.L60
+ 241:main.c        ****                 
+ 666              		.loc 1 241 0
+ 667 0042 594A     		ldr	r2, .L69+16
+ 668 0044 1370     		strb	r3, [r2]
+ 243:main.c        ****                 eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPR
+ 669              		.loc 1 243 0
+ 670 0046 5549     		ldr	r1, .L69+4
+ 671 0048 4B70     		strb	r3, [r1, #1]
+ 244:main.c        ****                 
+ 672              		.loc 1 244 0
+ 673 004a 554B     		ldr	r3, .L69+8
+ 674 004c 0F22     		movs	r2, #15
+ 675 004e 0020     		movs	r0, #0
+ 676 0050 FFF7FEFF 		bl	Cy_Em_EEPROM_Write
+ 677              	.LVL63:
+ 678 0054 534B     		ldr	r3, .L69+12
+ 679 0056 1870     		strb	r0, [r3]
+ 246:main.c        ****             }
+ 680              		.loc 1 246 0
+ 681 0058 FFF7FEFF 		bl	setActiveSensors
+ 682              	.LVL64:
+ 683              	.L60:
+ 251:main.c        ****         {
+ 684              		.loc 1 251 0
+ 685 005c 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 686 005e B02B     		cmp	r3, #176
+ 687 0060 19D1     		bne	.L61
+ 251:main.c        ****         {
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 22
+
+
+ 688              		.loc 1 251 0 is_stmt 0 discriminator 1
+ 689 0062 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 690 0064 012B     		cmp	r3, #1
+ 691 0066 16D1     		bne	.L61
+ 253:main.c        ****             {
+ 692              		.loc 1 253 0 is_stmt 1
+ 693 0068 A078     		ldrb	r0, [r4, #2]	@ zero_extendqisi2
+ 694 006a 4F4B     		ldr	r3, .L69+16
+ 695 006c 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 696 006e 9842     		cmp	r0, r3
+ 697 0070 11D8     		bhi	.L61
+ 253:main.c        ****             {
+ 698              		.loc 1 253 0 is_stmt 0 discriminator 1
+ 699 0072 4D4B     		ldr	r3, .L69+16
+ 700 0074 5B79     		ldrb	r3, [r3, #5]	@ zero_extendqisi2
+ 701 0076 9842     		cmp	r0, r3
+ 702 0078 0DD3     		bcc	.L61
+ 255:main.c        ****                 setResolution(sensorResolution);
+ 703              		.loc 1 255 0 is_stmt 1
+ 704 007a 4B4D     		ldr	r5, .L69+16
+ 705 007c E870     		strb	r0, [r5, #3]
+ 256:main.c        ****                 EEPROMarray[2] = sensorResolution;
+ 706              		.loc 1 256 0
+ 707 007e FFF7FEFF 		bl	setResolution
+ 708              	.LVL65:
+ 257:main.c        ****                 eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPR
+ 709              		.loc 1 257 0
+ 710 0082 4649     		ldr	r1, .L69+4
+ 711 0084 EB78     		ldrb	r3, [r5, #3]	@ zero_extendqisi2
+ 712 0086 8B70     		strb	r3, [r1, #2]
+ 258:main.c        ****             }
+ 713              		.loc 1 258 0
+ 714 0088 454B     		ldr	r3, .L69+8
+ 715 008a 0F22     		movs	r2, #15
+ 716 008c 0020     		movs	r0, #0
+ 717 008e FFF7FEFF 		bl	Cy_Em_EEPROM_Write
+ 718              	.LVL66:
+ 719 0092 444B     		ldr	r3, .L69+12
+ 720 0094 1870     		strb	r0, [r3]
+ 721              	.L61:
+ 266:main.c        ****         {
+ 722              		.loc 1 266 0
+ 723 0096 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 724 0098 B02B     		cmp	r3, #176
+ 725 009a 1ED1     		bne	.L62
+ 266:main.c        ****         {
+ 726              		.loc 1 266 0 is_stmt 0 discriminator 1
+ 727 009c 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 728 009e 022B     		cmp	r3, #2
+ 729 00a0 1BD1     		bne	.L62
+ 730              	.LBB8:
+ 268:main.c        **** 
+ 731              		.loc 1 268 0 is_stmt 1
+ 732 00a2 A278     		ldrb	r2, [r4, #2]	@ zero_extendqisi2
+ 733 00a4 3C4B     		ldr	r3, .L69
+ 734 00a6 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 735 00a8 03EBC213 		add	r3, r3, r2, lsl #7
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 23
+
+
+ 736 00ac DBB2     		uxtb	r3, r3
+ 737              	.LVL67:
+ 270:main.c        ****             {
+ 738              		.loc 1 270 0
+ 739 00ae 3E4A     		ldr	r2, .L69+16
+ 740 00b0 9279     		ldrb	r2, [r2, #6]	@ zero_extendqisi2
+ 741 00b2 9342     		cmp	r3, r2
+ 742 00b4 11D8     		bhi	.L62
+ 270:main.c        ****             {
+ 743              		.loc 1 270 0 is_stmt 0 discriminator 1
+ 744 00b6 3C4A     		ldr	r2, .L69+16
+ 745 00b8 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 746 00ba 9342     		cmp	r3, r2
+ 747 00bc 0DD3     		bcc	.L62
+ 272:main.c        ****                 EEPROMarray[3] = clockDivider;
+ 748              		.loc 1 272 0 is_stmt 1
+ 749 00be 3A4D     		ldr	r5, .L69+16
+ 750 00c0 2B72     		strb	r3, [r5, #8]
+ 273:main.c        ****                 eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPR
+ 751              		.loc 1 273 0
+ 752 00c2 3649     		ldr	r1, .L69+4
+ 753 00c4 CB70     		strb	r3, [r1, #3]
+ 274:main.c        ****                 setClockDivider(clockDivider);
+ 754              		.loc 1 274 0
+ 755 00c6 364B     		ldr	r3, .L69+8
+ 756              	.LVL68:
+ 757 00c8 0F22     		movs	r2, #15
+ 758 00ca 0020     		movs	r0, #0
+ 759 00cc FFF7FEFF 		bl	Cy_Em_EEPROM_Write
+ 760              	.LVL69:
+ 761 00d0 344B     		ldr	r3, .L69+12
+ 762 00d2 1870     		strb	r0, [r3]
+ 275:main.c        ****             }
+ 763              		.loc 1 275 0
+ 764 00d4 287A     		ldrb	r0, [r5, #8]	@ zero_extendqisi2
+ 765 00d6 FFF7FEFF 		bl	setClockDivider
+ 766              	.LVL70:
+ 767              	.L62:
+ 768              	.LBE8:
+ 278:main.c        ****         {
+ 769              		.loc 1 278 0
+ 770 00da 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 771 00dc B02B     		cmp	r3, #176
+ 772 00de 08D1     		bne	.L63
+ 278:main.c        ****         {
+ 773              		.loc 1 278 0 is_stmt 0 discriminator 1
+ 774 00e0 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 775 00e2 032B     		cmp	r3, #3
+ 776 00e4 05D1     		bne	.L63
+ 280:main.c        ****             {
+ 777              		.loc 1 280 0 is_stmt 1
+ 778 00e6 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 779 00e8 13F0800F 		tst	r3, #128
+ 780 00ec 01D1     		bne	.L63
+ 282:main.c        ****             }
+ 781              		.loc 1 282 0
+ 782 00ee 2A4A     		ldr	r2, .L69
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 24
+
+
+ 783 00f0 9370     		strb	r3, [r2, #2]
+ 784              	.L63:
+ 290:main.c        ****         {
+ 785              		.loc 1 290 0
+ 786 00f2 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 787 00f4 B02B     		cmp	r3, #176
+ 788 00f6 1CD1     		bne	.L64
+ 290:main.c        ****         {
+ 789              		.loc 1 290 0 is_stmt 0 discriminator 1
+ 790 00f8 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 791 00fa 042B     		cmp	r3, #4
+ 792 00fc 19D1     		bne	.L64
+ 793              	.LBB9:
+ 292:main.c        ****             
+ 794              		.loc 1 292 0 is_stmt 1
+ 795 00fe A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 796 0100 254B     		ldr	r3, .L69
+ 797 0102 DB78     		ldrb	r3, [r3, #3]	@ zero_extendqisi2
+ 798 0104 03EBC515 		add	r5, r3, r5, lsl #7
+ 799 0108 EDB2     		uxtb	r5, r5
+ 800              	.LVL71:
+ 294:main.c        ****             {
+ 801              		.loc 1 294 0
+ 802 010a 274B     		ldr	r3, .L69+16
+ 803 010c 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 804 010e 9D42     		cmp	r5, r3
+ 805 0110 0FD8     		bhi	.L64
+ 294:main.c        ****             {
+ 806              		.loc 1 294 0 is_stmt 0 discriminator 1
+ 807 0112 254B     		ldr	r3, .L69+16
+ 808 0114 9B7A     		ldrb	r3, [r3, #10]	@ zero_extendqisi2
+ 809 0116 9D42     		cmp	r5, r3
+ 810 0118 0BD3     		bcc	.L64
+ 296:main.c        ****                 EEPROMarray[4] = tempIDAC;
+ 811              		.loc 1 296 0 is_stmt 1
+ 812 011a 2846     		mov	r0, r5
+ 813 011c FFF7FEFF 		bl	setIDAC
+ 814              	.LVL72:
+ 297:main.c        ****                 eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPR
+ 815              		.loc 1 297 0
+ 816 0120 1E49     		ldr	r1, .L69+4
+ 817 0122 0D71     		strb	r5, [r1, #4]
+ 298:main.c        ****             }
+ 818              		.loc 1 298 0
+ 819 0124 1E4B     		ldr	r3, .L69+8
+ 820 0126 0F22     		movs	r2, #15
+ 821 0128 0020     		movs	r0, #0
+ 822 012a FFF7FEFF 		bl	Cy_Em_EEPROM_Write
+ 823              	.LVL73:
+ 824 012e 1D4B     		ldr	r3, .L69+12
+ 825 0130 1870     		strb	r0, [r3]
+ 826              	.LVL74:
+ 827              	.L64:
+ 828              	.LBE9:
+ 301:main.c        ****         {
+ 829              		.loc 1 301 0
+ 830 0132 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 25
+
+
+ 831 0134 B02B     		cmp	r3, #176
+ 832 0136 08D1     		bne	.L65
+ 301:main.c        ****         {
+ 833              		.loc 1 301 0 is_stmt 0 discriminator 1
+ 834 0138 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 835 013a 052B     		cmp	r3, #5
+ 836 013c 05D1     		bne	.L65
+ 303:main.c        ****             {
+ 837              		.loc 1 303 0 is_stmt 1
+ 838 013e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 839 0140 13F0800F 		tst	r3, #128
+ 840 0144 01D1     		bne	.L65
+ 305:main.c        ****             }
+ 841              		.loc 1 305 0
+ 842 0146 144A     		ldr	r2, .L69
+ 843 0148 D370     		strb	r3, [r2, #3]
+ 844              	.L65:
+ 311:main.c        ****         {
+ 845              		.loc 1 311 0
+ 846 014a 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 847 014c B02B     		cmp	r3, #176
+ 848 014e 17D1     		bne	.L66
+ 311:main.c        ****         {
+ 849              		.loc 1 311 0 is_stmt 0 discriminator 1
+ 850 0150 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 851 0152 062B     		cmp	r3, #6
+ 852 0154 14D1     		bne	.L66
+ 853              	.LBB10:
+ 313:main.c        ****             if ((tempScanSpeed >= minScanSpeed) && (tempScanSpeed <= maxScanSpeed))
+ 854              		.loc 1 313 0 is_stmt 1
+ 855 0156 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 856              	.LVL75:
+ 314:main.c        ****             {
+ 857              		.loc 1 314 0
+ 858 0158 0F4B     		ldr	r3, .L69
+ 859 015a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 860 015c 9D42     		cmp	r5, r3
+ 861 015e 0FD3     		bcc	.L66
+ 314:main.c        ****             {
+ 862              		.loc 1 314 0 is_stmt 0 discriminator 1
+ 863 0160 114B     		ldr	r3, .L69+16
+ 864 0162 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 865 0164 9D42     		cmp	r5, r3
+ 866 0166 0BD8     		bhi	.L66
+ 316:main.c        ****                 EEPROMarray[5] = tempScanSpeed;
+ 867              		.loc 1 316 0 is_stmt 1
+ 868 0168 2846     		mov	r0, r5
+ 869 016a FFF7FEFF 		bl	setScanSpeed
+ 870              	.LVL76:
+ 317:main.c        ****                 eepromReturnValue = Em_EEPROM_Write(LOGICAL_EEPROM_START, EEPROMarray, LOGICAL_EEPR
+ 871              		.loc 1 317 0
+ 872 016e 0B49     		ldr	r1, .L69+4
+ 873 0170 4D71     		strb	r5, [r1, #5]
+ 318:main.c        ****             }
+ 874              		.loc 1 318 0
+ 875 0172 0B4B     		ldr	r3, .L69+8
+ 876 0174 0F22     		movs	r2, #15
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 26
+
+
+ 877 0176 0020     		movs	r0, #0
+ 878 0178 FFF7FEFF 		bl	Cy_Em_EEPROM_Write
+ 879              	.LVL77:
+ 880 017c 094B     		ldr	r3, .L69+12
+ 881 017e 1870     		strb	r0, [r3]
+ 882              	.LVL78:
+ 883              	.L66:
+ 884              	.LBE10:
+ 323:main.c        ****         {
+ 885              		.loc 1 323 0
+ 886 0180 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 887 0182 902B     		cmp	r3, #144
+ 888 0184 04D1     		bne	.L67
+ 323:main.c        ****         {
+ 889              		.loc 1 323 0 is_stmt 0 discriminator 1
+ 890 0186 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 891 0188 3C2B     		cmp	r3, #60
+ 892 018a 01D1     		bne	.L67
+ 325:main.c        ****         }
+ 893              		.loc 1 325 0 is_stmt 1
+ 894 018c FFF7FEFF 		bl	CapSense_InitializeAllBaselines
+ 895              	.LVL79:
+ 896              	.L67:
+ 329:main.c        ****         
+ 897              		.loc 1 329 0
+ 898 0190 FFF7FEFF 		bl	CapSense_InitializeAllBaselines
+ 899              	.LVL80:
+ 900 0194 38BD     		pop	{r3, r4, r5, pc}
+ 901              	.LVL81:
+ 902              	.L70:
+ 903 0196 00BF     		.align	2
+ 904              	.L69:
+ 905 0198 00000000 		.word	.LANCHOR1
+ 906 019c 00000000 		.word	EEPROMarray
+ 907 01a0 00000000 		.word	Em_EEPROM_context
+ 908 01a4 00000000 		.word	eepromReturnValue
+ 909 01a8 00000000 		.word	.LANCHOR0
+ 910              		.cfi_endproc
+ 911              	.LFE65:
+ 912              		.size	USB_callbackLocalMidiEvent, .-USB_callbackLocalMidiEvent
+ 913              		.global	sensorResolution
+ 914              		.global	minScanSpeed
+ 915              		.global	maxScanSpeed
+ 916              		.global	IDACLowByte
+ 917              		.global	clockDividerLowByte
+ 918              		.global	minIDAC
+ 919              		.global	maxIDAC
+ 920              		.global	minResolution
+ 921              		.global	maxResolution
+ 922              		.global	delayBetweenLoops
+ 923              		.global	minClockDivider
+ 924              		.global	maxClockDivider
+ 925              		.global	clockDivider
+ 926              		.global	maxActiveSensors
+ 927              		.global	rawVsCooked
+ 928              		.global	numActiveSensors
+ 929              		.comm	capSensorsPrev,52,4
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 27
+
+
+ 930              		.comm	EEPROMarray,15,4
+ 931              		.comm	eepromReturnValue,1,1
+ 932              		.global	Em_EEPROM_em_EepromStorage
+ 933              		.section	.rodata
+ 934              		.align	8
+ 935              		.set	.LANCHOR2,. + 0
+ 936              		.type	Em_EEPROM_em_EepromStorage, %object
+ 937              		.size	Em_EEPROM_em_EepromStorage, 5120
+ 938              	Em_EEPROM_em_EepromStorage:
+ 939 0000 00000000 		.space	5120
+ 939      00000000 
+ 939      00000000 
+ 939      00000000 
+ 939      00000000 
+ 940              		.data
+ 941              		.set	.LANCHOR0,. + 0
+ 942              		.type	numActiveSensors, %object
+ 943              		.size	numActiveSensors, 1
+ 944              	numActiveSensors:
+ 945 0000 02       		.byte	2
+ 946              		.type	maxActiveSensors, %object
+ 947              		.size	maxActiveSensors, 1
+ 948              	maxActiveSensors:
+ 949 0001 1A       		.byte	26
+ 950              		.type	maxScanSpeed, %object
+ 951              		.size	maxScanSpeed, 1
+ 952              	maxScanSpeed:
+ 953 0002 03       		.byte	3
+ 954              		.type	sensorResolution, %object
+ 955              		.size	sensorResolution, 1
+ 956              	sensorResolution:
+ 957 0003 0A       		.byte	10
+ 958              		.type	maxResolution, %object
+ 959              		.size	maxResolution, 1
+ 960              	maxResolution:
+ 961 0004 10       		.byte	16
+ 962              		.type	minResolution, %object
+ 963              		.size	minResolution, 1
+ 964              	minResolution:
+ 965 0005 08       		.byte	8
+ 966              		.type	maxClockDivider, %object
+ 967              		.size	maxClockDivider, 1
+ 968              	maxClockDivider:
+ 969 0006 FF       		.byte	-1
+ 970              		.type	minClockDivider, %object
+ 971              		.size	minClockDivider, 1
+ 972              	minClockDivider:
+ 973 0007 01       		.byte	1
+ 974              		.type	clockDivider, %object
+ 975              		.size	clockDivider, 1
+ 976              	clockDivider:
+ 977 0008 0B       		.byte	11
+ 978              		.type	maxIDAC, %object
+ 979              		.size	maxIDAC, 1
+ 980              	maxIDAC:
+ 981 0009 FF       		.byte	-1
+ 982              		.type	minIDAC, %object
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 28
+
+
+ 983              		.size	minIDAC, 1
+ 984              	minIDAC:
+ 985 000a 01       		.byte	1
+ 986              		.type	delayBetweenLoops, %object
+ 987              		.size	delayBetweenLoops, 1
+ 988              	delayBetweenLoops:
+ 989 000b 03       		.byte	3
+ 990              		.bss
+ 991              		.set	.LANCHOR1,. + 0
+ 992              		.type	minScanSpeed, %object
+ 993              		.size	minScanSpeed, 1
+ 994              	minScanSpeed:
+ 995 0000 00       		.space	1
+ 996              		.type	rawVsCooked, %object
+ 997              		.size	rawVsCooked, 1
+ 998              	rawVsCooked:
+ 999 0001 00       		.space	1
+ 1000              		.type	clockDividerLowByte, %object
+ 1001              		.size	clockDividerLowByte, 1
+ 1002              	clockDividerLowByte:
+ 1003 0002 00       		.space	1
+ 1004              		.type	IDACLowByte, %object
+ 1005              		.size	IDACLowByte, 1
+ 1006              	IDACLowByte:
+ 1007 0003 00       		.space	1
+ 1008              		.text
+ 1009              	.Letext0:
+ 1010              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 1011              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 1012              		.file 4 "Generated_Source\\PSoC5/cytypes.h"
+ 1013              		.file 5 "Generated_Source\\PSoC5/cy_em_eeprom.h"
+ 1014              		.file 6 "Generated_Source\\PSoC5/CapSense.h"
+ 1015              		.file 7 "Generated_Source\\PSoC5/CapSense_CSHL.h"
+ 1016              		.file 8 "Generated_Source\\PSoC5/Em_EEPROM.h"
+ 1017              		.file 9 "Generated_Source\\PSoC5/core_cm3.h"
+ 1018              		.file 10 "Generated_Source\\PSoC5/LED1.h"
+ 1019              		.file 11 "Generated_Source\\PSoC5/USB_midi.h"
+ 1020              		.file 12 "Generated_Source\\PSoC5/USB.h"
+ 1021              		.section	.debug_info,"",%progbits
+ 1022              	.Ldebug_info0:
+ 1023 0000 C1090000 		.4byte	0x9c1
+ 1024 0004 0400     		.2byte	0x4
+ 1025 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1026 000a 04       		.byte	0x4
+ 1027 000b 01       		.uleb128 0x1
+ 1028 000c 2C060000 		.4byte	.LASF105
+ 1029 0010 0C       		.byte	0xc
+ 1030 0011 EF040000 		.4byte	.LASF106
+ 1031 0015 C2060000 		.4byte	.LASF107
+ 1032 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1033 001d 00000000 		.4byte	0
+ 1034 0021 00000000 		.4byte	.Ldebug_line0
+ 1035 0025 02       		.uleb128 0x2
+ 1036 0026 01       		.byte	0x1
+ 1037 0027 06       		.byte	0x6
+ 1038 0028 A7050000 		.4byte	.LASF0
+ 1039 002c 03       		.uleb128 0x3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 29
+
+
+ 1040 002d BA020000 		.4byte	.LASF3
+ 1041 0031 02       		.byte	0x2
+ 1042 0032 1D       		.byte	0x1d
+ 1043 0033 37000000 		.4byte	0x37
+ 1044 0037 02       		.uleb128 0x2
+ 1045 0038 01       		.byte	0x1
+ 1046 0039 08       		.byte	0x8
+ 1047 003a 1B030000 		.4byte	.LASF1
+ 1048 003e 02       		.uleb128 0x2
+ 1049 003f 02       		.byte	0x2
+ 1050 0040 05       		.byte	0x5
+ 1051 0041 B0020000 		.4byte	.LASF2
+ 1052 0045 03       		.uleb128 0x3
+ 1053 0046 25010000 		.4byte	.LASF4
+ 1054 004a 02       		.byte	0x2
+ 1055 004b 2B       		.byte	0x2b
+ 1056 004c 50000000 		.4byte	0x50
+ 1057 0050 02       		.uleb128 0x2
+ 1058 0051 02       		.byte	0x2
+ 1059 0052 07       		.byte	0x7
+ 1060 0053 2D040000 		.4byte	.LASF5
+ 1061 0057 03       		.uleb128 0x3
+ 1062 0058 87050000 		.4byte	.LASF6
+ 1063 005c 02       		.byte	0x2
+ 1064 005d 3F       		.byte	0x3f
+ 1065 005e 62000000 		.4byte	0x62
+ 1066 0062 02       		.uleb128 0x2
+ 1067 0063 04       		.byte	0x4
+ 1068 0064 05       		.byte	0x5
+ 1069 0065 88020000 		.4byte	.LASF7
+ 1070 0069 03       		.uleb128 0x3
+ 1071 006a EC000000 		.4byte	.LASF8
+ 1072 006e 02       		.byte	0x2
+ 1073 006f 41       		.byte	0x41
+ 1074 0070 74000000 		.4byte	0x74
+ 1075 0074 02       		.uleb128 0x2
+ 1076 0075 04       		.byte	0x4
+ 1077 0076 07       		.byte	0x7
+ 1078 0077 C1030000 		.4byte	.LASF9
+ 1079 007b 02       		.uleb128 0x2
+ 1080 007c 08       		.byte	0x8
+ 1081 007d 05       		.byte	0x5
+ 1082 007e 6A020000 		.4byte	.LASF10
+ 1083 0082 02       		.uleb128 0x2
+ 1084 0083 08       		.byte	0x8
+ 1085 0084 07       		.byte	0x7
+ 1086 0085 39030000 		.4byte	.LASF11
+ 1087 0089 04       		.uleb128 0x4
+ 1088 008a 04       		.byte	0x4
+ 1089 008b 05       		.byte	0x5
+ 1090 008c 696E7400 		.ascii	"int\000"
+ 1091 0090 02       		.uleb128 0x2
+ 1092 0091 04       		.byte	0x4
+ 1093 0092 07       		.byte	0x7
+ 1094 0093 82030000 		.4byte	.LASF12
+ 1095 0097 03       		.uleb128 0x3
+ 1096 0098 B3050000 		.4byte	.LASF13
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 30
+
+
+ 1097 009c 03       		.byte	0x3
+ 1098 009d 18       		.byte	0x18
+ 1099 009e 2C000000 		.4byte	0x2c
+ 1100 00a2 03       		.uleb128 0x3
+ 1101 00a3 A2030000 		.4byte	.LASF14
+ 1102 00a7 03       		.byte	0x3
+ 1103 00a8 24       		.byte	0x24
+ 1104 00a9 45000000 		.4byte	0x45
+ 1105 00ad 03       		.uleb128 0x3
+ 1106 00ae 60040000 		.4byte	.LASF15
+ 1107 00b2 03       		.byte	0x3
+ 1108 00b3 2C       		.byte	0x2c
+ 1109 00b4 57000000 		.4byte	0x57
+ 1110 00b8 03       		.uleb128 0x3
+ 1111 00b9 50030000 		.4byte	.LASF16
+ 1112 00bd 03       		.byte	0x3
+ 1113 00be 30       		.byte	0x30
+ 1114 00bf 69000000 		.4byte	0x69
+ 1115 00c3 05       		.uleb128 0x5
+ 1116 00c4 D0010000 		.4byte	.LASF17
+ 1117 00c8 04       		.byte	0x4
+ 1118 00c9 E401     		.2byte	0x1e4
+ 1119 00cb 37000000 		.4byte	0x37
+ 1120 00cf 05       		.uleb128 0x5
+ 1121 00d0 7F010000 		.4byte	.LASF18
+ 1122 00d4 04       		.byte	0x4
+ 1123 00d5 E501     		.2byte	0x1e5
+ 1124 00d7 50000000 		.4byte	0x50
+ 1125 00db 05       		.uleb128 0x5
+ 1126 00dc 71050000 		.4byte	.LASF19
+ 1127 00e0 04       		.byte	0x4
+ 1128 00e1 E601     		.2byte	0x1e6
+ 1129 00e3 74000000 		.4byte	0x74
+ 1130 00e7 02       		.uleb128 0x2
+ 1131 00e8 04       		.byte	0x4
+ 1132 00e9 04       		.byte	0x4
+ 1133 00ea 59020000 		.4byte	.LASF20
+ 1134 00ee 02       		.uleb128 0x2
+ 1135 00ef 08       		.byte	0x8
+ 1136 00f0 04       		.byte	0x4
+ 1137 00f1 F4050000 		.4byte	.LASF21
+ 1138 00f5 02       		.uleb128 0x2
+ 1139 00f6 01       		.byte	0x1
+ 1140 00f7 08       		.byte	0x8
+ 1141 00f8 56040000 		.4byte	.LASF22
+ 1142 00fc 02       		.uleb128 0x2
+ 1143 00fd 08       		.byte	0x8
+ 1144 00fe 04       		.byte	0x4
+ 1145 00ff 0F030000 		.4byte	.LASF23
+ 1146 0103 02       		.uleb128 0x2
+ 1147 0104 04       		.byte	0x4
+ 1148 0105 07       		.byte	0x7
+ 1149 0106 CB050000 		.4byte	.LASF24
+ 1150 010a 06       		.uleb128 0x6
+ 1151 010b C3000000 		.4byte	0xc3
+ 1152 010f 1A010000 		.4byte	0x11a
+ 1153 0113 07       		.uleb128 0x7
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 31
+
+
+ 1154 0114 03010000 		.4byte	0x103
+ 1155 0118 03       		.byte	0x3
+ 1156 0119 00       		.byte	0
+ 1157 011a 08       		.uleb128 0x8
+ 1158 011b 1C       		.byte	0x1c
+ 1159 011c 05       		.byte	0x5
+ 1160 011d 1601     		.2byte	0x116
+ 1161 011f 8C010000 		.4byte	0x18c
+ 1162 0123 09       		.uleb128 0x9
+ 1163 0124 8B040000 		.4byte	.LASF25
+ 1164 0128 05       		.byte	0x5
+ 1165 0129 1B01     		.2byte	0x11b
+ 1166 012b DB000000 		.4byte	0xdb
+ 1167 012f 00       		.byte	0
+ 1168 0130 09       		.uleb128 0x9
+ 1169 0131 3A070000 		.4byte	.LASF26
+ 1170 0135 05       		.byte	0x5
+ 1171 0136 2001     		.2byte	0x120
+ 1172 0138 DB000000 		.4byte	0xdb
+ 1173 013c 04       		.byte	0x4
+ 1174 013d 09       		.uleb128 0x9
+ 1175 013e F7000000 		.4byte	.LASF27
+ 1176 0142 05       		.byte	0x5
+ 1177 0143 2301     		.2byte	0x123
+ 1178 0145 DB000000 		.4byte	0xdb
+ 1179 0149 08       		.byte	0x8
+ 1180 014a 09       		.uleb128 0x9
+ 1181 014b 5C000000 		.4byte	.LASF28
+ 1182 014f 05       		.byte	0x5
+ 1183 0150 2601     		.2byte	0x126
+ 1184 0152 DB000000 		.4byte	0xdb
+ 1185 0156 0C       		.byte	0xc
+ 1186 0157 09       		.uleb128 0x9
+ 1187 0158 0C060000 		.4byte	.LASF29
+ 1188 015c 05       		.byte	0x5
+ 1189 015d 2B01     		.2byte	0x12b
+ 1190 015f DB000000 		.4byte	0xdb
+ 1191 0163 10       		.byte	0x10
+ 1192 0164 09       		.uleb128 0x9
+ 1193 0165 95040000 		.4byte	.LASF30
+ 1194 0169 05       		.byte	0x5
+ 1195 016a 2E01     		.2byte	0x12e
+ 1196 016c C3000000 		.4byte	0xc3
+ 1197 0170 14       		.byte	0x14
+ 1198 0171 09       		.uleb128 0x9
+ 1199 0172 3A010000 		.4byte	.LASF31
+ 1200 0176 05       		.byte	0x5
+ 1201 0177 3301     		.2byte	0x133
+ 1202 0179 C3000000 		.4byte	0xc3
+ 1203 017d 15       		.byte	0x15
+ 1204 017e 09       		.uleb128 0x9
+ 1205 017f 8F030000 		.4byte	.LASF32
+ 1206 0183 05       		.byte	0x5
+ 1207 0184 3601     		.2byte	0x136
+ 1208 0186 DB000000 		.4byte	0xdb
+ 1209 018a 18       		.byte	0x18
+ 1210 018b 00       		.byte	0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 32
+
+
+ 1211 018c 05       		.uleb128 0x5
+ 1212 018d A3040000 		.4byte	.LASF33
+ 1213 0191 05       		.byte	0x5
+ 1214 0192 3701     		.2byte	0x137
+ 1215 0194 1A010000 		.4byte	0x11a
+ 1216 0198 0A       		.uleb128 0xa
+ 1217 0199 01       		.byte	0x1
+ 1218 019a 37000000 		.4byte	0x37
+ 1219 019e 05       		.byte	0x5
+ 1220 019f 5401     		.2byte	0x154
+ 1221 01a1 C4010000 		.4byte	0x1c4
+ 1222 01a5 0B       		.uleb128 0xb
+ 1223 01a6 76040000 		.4byte	.LASF34
+ 1224 01aa 00       		.byte	0
+ 1225 01ab 0B       		.uleb128 0xb
+ 1226 01ac 0C050000 		.4byte	.LASF35
+ 1227 01b0 01       		.byte	0x1
+ 1228 01b1 0B       		.uleb128 0xb
+ 1229 01b2 59030000 		.4byte	.LASF36
+ 1230 01b6 02       		.byte	0x2
+ 1231 01b7 0B       		.uleb128 0xb
+ 1232 01b8 EF030000 		.4byte	.LASF37
+ 1233 01bc 03       		.byte	0x3
+ 1234 01bd 0B       		.uleb128 0xb
+ 1235 01be 67010000 		.4byte	.LASF38
+ 1236 01c2 04       		.byte	0x4
+ 1237 01c3 00       		.byte	0
+ 1238 01c4 05       		.uleb128 0x5
+ 1239 01c5 D6040000 		.4byte	.LASF39
+ 1240 01c9 05       		.byte	0x5
+ 1241 01ca 5A01     		.2byte	0x15a
+ 1242 01cc 98010000 		.4byte	0x198
+ 1243 01d0 0C       		.uleb128 0xc
+ 1244 01d1 F6040000 		.4byte	.LASF40
+ 1245 01d5 01       		.byte	0x1
+ 1246 01d6 BD       		.byte	0xbd
+ 1247 01d7 00000000 		.4byte	.LFB64
+ 1248 01db 1A000000 		.4byte	.LFE64-.LFB64
+ 1249 01df 01       		.uleb128 0x1
+ 1250 01e0 9C       		.byte	0x9c
+ 1251 01e1 1B020000 		.4byte	0x21b
+ 1252 01e5 0D       		.uleb128 0xd
+ 1253 01e6 08000000 		.4byte	.LVL0
+ 1254 01ea E2080000 		.4byte	0x8e2
+ 1255 01ee F8010000 		.4byte	0x1f8
+ 1256 01f2 0E       		.uleb128 0xe
+ 1257 01f3 01       		.uleb128 0x1
+ 1258 01f4 50       		.byte	0x50
+ 1259 01f5 01       		.uleb128 0x1
+ 1260 01f6 30       		.byte	0x30
+ 1261 01f7 00       		.byte	0
+ 1262 01f8 0D       		.uleb128 0xd
+ 1263 01f9 10000000 		.4byte	.LVL1
+ 1264 01fd ED080000 		.4byte	0x8ed
+ 1265 0201 0B020000 		.4byte	0x20b
+ 1266 0205 0E       		.uleb128 0xe
+ 1267 0206 01       		.uleb128 0x1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 33
+
+
+ 1268 0207 50       		.byte	0x50
+ 1269 0208 01       		.uleb128 0x1
+ 1270 0209 31       		.byte	0x31
+ 1271 020a 00       		.byte	0
+ 1272 020b 0F       		.uleb128 0xf
+ 1273 020c 18000000 		.4byte	.LVL2
+ 1274 0210 ED080000 		.4byte	0x8ed
+ 1275 0214 0E       		.uleb128 0xe
+ 1276 0215 01       		.uleb128 0x1
+ 1277 0216 50       		.byte	0x50
+ 1278 0217 01       		.uleb128 0x1
+ 1279 0218 30       		.byte	0x30
+ 1280 0219 00       		.byte	0
+ 1281 021a 00       		.byte	0
+ 1282 021b 10       		.uleb128 0x10
+ 1283 021c BF010000 		.4byte	.LASF41
+ 1284 0220 01       		.byte	0x1
+ 1285 0221 4F01     		.2byte	0x14f
+ 1286 0223 00000000 		.4byte	.LFB66
+ 1287 0227 38000000 		.4byte	.LFE66-.LFB66
+ 1288 022b 01       		.uleb128 0x1
+ 1289 022c 9C       		.byte	0x9c
+ 1290 022d 86020000 		.4byte	0x286
+ 1291 0231 11       		.uleb128 0x11
+ 1292 0232 02000000 		.4byte	.LBB2
+ 1293 0236 16000000 		.4byte	.LBE2-.LBB2
+ 1294 023a 5D020000 		.4byte	0x25d
+ 1295 023e 12       		.uleb128 0x12
+ 1296 023f 6900     		.ascii	"i\000"
+ 1297 0241 01       		.byte	0x1
+ 1298 0242 5201     		.2byte	0x152
+ 1299 0244 89000000 		.4byte	0x89
+ 1300 0248 00000000 		.4byte	.LLST0
+ 1301 024c 0F       		.uleb128 0xf
+ 1302 024d 0C000000 		.4byte	.LVL5
+ 1303 0251 F8080000 		.4byte	0x8f8
+ 1304 0255 0E       		.uleb128 0xe
+ 1305 0256 01       		.uleb128 0x1
+ 1306 0257 50       		.byte	0x50
+ 1307 0258 02       		.uleb128 0x2
+ 1308 0259 74       		.byte	0x74
+ 1309 025a 00       		.sleb128 0
+ 1310 025b 00       		.byte	0
+ 1311 025c 00       		.byte	0
+ 1312 025d 13       		.uleb128 0x13
+ 1313 025e 20000000 		.4byte	.LBB3
+ 1314 0262 18000000 		.4byte	.LBE3-.LBB3
+ 1315 0266 12       		.uleb128 0x12
+ 1316 0267 6900     		.ascii	"i\000"
+ 1317 0269 01       		.byte	0x1
+ 1318 026a 5901     		.2byte	0x159
+ 1319 026c 89000000 		.4byte	0x89
+ 1320 0270 1F000000 		.4byte	.LLST1
+ 1321 0274 0F       		.uleb128 0xf
+ 1322 0275 28000000 		.4byte	.LVL8
+ 1323 0279 03090000 		.4byte	0x903
+ 1324 027d 0E       		.uleb128 0xe
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 34
+
+
+ 1325 027e 01       		.uleb128 0x1
+ 1326 027f 50       		.byte	0x50
+ 1327 0280 02       		.uleb128 0x2
+ 1328 0281 75       		.byte	0x75
+ 1329 0282 00       		.sleb128 0
+ 1330 0283 00       		.byte	0
+ 1331 0284 00       		.byte	0
+ 1332 0285 00       		.byte	0
+ 1333 0286 10       		.uleb128 0x10
+ 1334 0287 86010000 		.4byte	.LASF42
+ 1335 028b 01       		.byte	0x1
+ 1336 028c 6001     		.2byte	0x160
+ 1337 028e 00000000 		.4byte	.LFB67
+ 1338 0292 48000000 		.4byte	.LFE67-.LFB67
+ 1339 0296 01       		.uleb128 0x1
+ 1340 0297 9C       		.byte	0x9c
+ 1341 0298 F5020000 		.4byte	0x2f5
+ 1342 029c 14       		.uleb128 0x14
+ 1343 029d 47070000 		.4byte	.LASF44
+ 1344 02a1 01       		.byte	0x1
+ 1345 02a2 6001     		.2byte	0x160
+ 1346 02a4 C3000000 		.4byte	0xc3
+ 1347 02a8 32000000 		.4byte	.LLST2
+ 1348 02ac 0D       		.uleb128 0xd
+ 1349 02ad 1A000000 		.4byte	.LVL13
+ 1350 02b1 0E090000 		.4byte	0x90e
+ 1351 02b5 BF020000 		.4byte	0x2bf
+ 1352 02b9 0E       		.uleb128 0xe
+ 1353 02ba 01       		.uleb128 0x1
+ 1354 02bb 50       		.byte	0x50
+ 1355 02bc 01       		.uleb128 0x1
+ 1356 02bd 3F       		.byte	0x3f
+ 1357 02be 00       		.byte	0
+ 1358 02bf 0D       		.uleb128 0xd
+ 1359 02c0 26000000 		.4byte	.LVL16
+ 1360 02c4 0E090000 		.4byte	0x90e
+ 1361 02c8 D2020000 		.4byte	0x2d2
+ 1362 02cc 0E       		.uleb128 0xe
+ 1363 02cd 01       		.uleb128 0x1
+ 1364 02ce 50       		.byte	0x50
+ 1365 02cf 01       		.uleb128 0x1
+ 1366 02d0 37       		.byte	0x37
+ 1367 02d1 00       		.byte	0
+ 1368 02d2 0D       		.uleb128 0xd
+ 1369 02d3 32000000 		.4byte	.LVL19
+ 1370 02d7 0E090000 		.4byte	0x90e
+ 1371 02db E5020000 		.4byte	0x2e5
+ 1372 02df 0E       		.uleb128 0xe
+ 1373 02e0 01       		.uleb128 0x1
+ 1374 02e1 50       		.byte	0x50
+ 1375 02e2 01       		.uleb128 0x1
+ 1376 02e3 33       		.byte	0x33
+ 1377 02e4 00       		.byte	0
+ 1378 02e5 0F       		.uleb128 0xf
+ 1379 02e6 3E000000 		.4byte	.LVL22
+ 1380 02ea 0E090000 		.4byte	0x90e
+ 1381 02ee 0E       		.uleb128 0xe
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 35
+
+
+ 1382 02ef 01       		.uleb128 0x1
+ 1383 02f0 50       		.byte	0x50
+ 1384 02f1 01       		.uleb128 0x1
+ 1385 02f2 31       		.byte	0x31
+ 1386 02f3 00       		.byte	0
+ 1387 02f4 00       		.byte	0
+ 1388 02f5 10       		.uleb128 0x10
+ 1389 02f6 CF000000 		.4byte	.LASF43
+ 1390 02fa 01       		.byte	0x1
+ 1391 02fb 7701     		.2byte	0x177
+ 1392 02fd 00000000 		.4byte	.LFB68
+ 1393 0301 68000000 		.4byte	.LFE68-.LFB68
+ 1394 0305 01       		.uleb128 0x1
+ 1395 0306 9C       		.byte	0x9c
+ 1396 0307 42030000 		.4byte	0x342
+ 1397 030b 15       		.uleb128 0x15
+ 1398 030c 1D000000 		.4byte	.LASF45
+ 1399 0310 01       		.byte	0x1
+ 1400 0311 7701     		.2byte	0x177
+ 1401 0313 97000000 		.4byte	0x97
+ 1402 0317 01       		.uleb128 0x1
+ 1403 0318 50       		.byte	0x50
+ 1404 0319 16       		.uleb128 0x16
+ 1405 031a DA020000 		.4byte	.LASF46
+ 1406 031e 01       		.byte	0x1
+ 1407 031f 7901     		.2byte	0x179
+ 1408 0321 97000000 		.4byte	0x97
+ 1409 0325 9E000000 		.4byte	.LLST3
+ 1410 0329 13       		.uleb128 0x13
+ 1411 032a 4A000000 		.4byte	.LBB4
+ 1412 032e 12000000 		.4byte	.LBE4-.LBB4
+ 1413 0332 12       		.uleb128 0x12
+ 1414 0333 6900     		.ascii	"i\000"
+ 1415 0335 01       		.byte	0x1
+ 1416 0336 A001     		.2byte	0x1a0
+ 1417 0338 89000000 		.4byte	0x89
+ 1418 033c BD000000 		.4byte	.LLST4
+ 1419 0340 00       		.byte	0
+ 1420 0341 00       		.byte	0
+ 1421 0342 10       		.uleb128 0x10
+ 1422 0343 00000000 		.4byte	.LASF47
+ 1423 0347 01       		.byte	0x1
+ 1424 0348 A601     		.2byte	0x1a6
+ 1425 034a 00000000 		.4byte	.LFB69
+ 1426 034e 0C000000 		.4byte	.LFE69-.LFB69
+ 1427 0352 01       		.uleb128 0x1
+ 1428 0353 9C       		.byte	0x9c
+ 1429 0354 67030000 		.4byte	0x367
+ 1430 0358 15       		.uleb128 0x15
+ 1431 0359 D6010000 		.4byte	.LASF48
+ 1432 035d 01       		.byte	0x1
+ 1433 035e A601     		.2byte	0x1a6
+ 1434 0360 97000000 		.4byte	0x97
+ 1435 0364 01       		.uleb128 0x1
+ 1436 0365 50       		.byte	0x50
+ 1437 0366 00       		.byte	0
+ 1438 0367 10       		.uleb128 0x10
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 36
+
+
+ 1439 0368 54000000 		.4byte	.LASF49
+ 1440 036c 01       		.byte	0x1
+ 1441 036d AB01     		.2byte	0x1ab
+ 1442 036f 00000000 		.4byte	.LFB70
+ 1443 0373 1C000000 		.4byte	.LFE70-.LFB70
+ 1444 0377 01       		.uleb128 0x1
+ 1445 0378 9C       		.byte	0x9c
+ 1446 0379 A4030000 		.4byte	0x3a4
+ 1447 037d 15       		.uleb128 0x15
+ 1448 037e E7030000 		.4byte	.LASF50
+ 1449 0382 01       		.byte	0x1
+ 1450 0383 AB01     		.2byte	0x1ab
+ 1451 0385 97000000 		.4byte	0x97
+ 1452 0389 01       		.uleb128 0x1
+ 1453 038a 50       		.byte	0x50
+ 1454 038b 13       		.uleb128 0x13
+ 1455 038c 00000000 		.4byte	.LBB5
+ 1456 0390 12000000 		.4byte	.LBE5-.LBB5
+ 1457 0394 12       		.uleb128 0x12
+ 1458 0395 6900     		.ascii	"i\000"
+ 1459 0397 01       		.byte	0x1
+ 1460 0398 AD01     		.2byte	0x1ad
+ 1461 039a 89000000 		.4byte	0x89
+ 1462 039e DC000000 		.4byte	.LLST5
+ 1463 03a2 00       		.byte	0
+ 1464 03a3 00       		.byte	0
+ 1465 03a4 17       		.uleb128 0x17
+ 1466 03a5 5B040000 		.4byte	.LASF108
+ 1467 03a9 01       		.byte	0x1
+ 1468 03aa 50       		.byte	0x50
+ 1469 03ab 89000000 		.4byte	0x89
+ 1470 03af 00000000 		.4byte	.LFB63
+ 1471 03b3 38010000 		.4byte	.LFE63-.LFB63
+ 1472 03b7 01       		.uleb128 0x1
+ 1473 03b8 9C       		.byte	0x9c
+ 1474 03b9 3C050000 		.4byte	0x53c
+ 1475 03bd 18       		.uleb128 0x18
+ 1476 03be BA060000 		.4byte	.LASF51
+ 1477 03c2 01       		.byte	0x1
+ 1478 03c3 53       		.byte	0x53
+ 1479 03c4 0A010000 		.4byte	0x10a
+ 1480 03c8 02       		.uleb128 0x2
+ 1481 03c9 91       		.byte	0x91
+ 1482 03ca 64       		.sleb128 -28
+ 1483 03cb 11       		.uleb128 0x11
+ 1484 03cc 8C000000 		.4byte	.LBB6
+ 1485 03d0 AC000000 		.4byte	.LBE6-.LBB6
+ 1486 03d4 55040000 		.4byte	0x455
+ 1487 03d8 19       		.uleb128 0x19
+ 1488 03d9 6900     		.ascii	"i\000"
+ 1489 03db 01       		.byte	0x1
+ 1490 03dc 99       		.byte	0x99
+ 1491 03dd 89000000 		.4byte	0x89
+ 1492 03e1 FB000000 		.4byte	.LLST6
+ 1493 03e5 13       		.uleb128 0x13
+ 1494 03e6 90000000 		.4byte	.LBB7
+ 1495 03ea 78000000 		.4byte	.LBE7-.LBB7
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 37
+
+
+ 1496 03ee 1A       		.uleb128 0x1a
+ 1497 03ef 66050000 		.4byte	.LASF52
+ 1498 03f3 01       		.byte	0x1
+ 1499 03f4 9B       		.byte	0x9b
+ 1500 03f5 A2000000 		.4byte	0xa2
+ 1501 03f9 1A010000 		.4byte	.LLST7
+ 1502 03fd 0D       		.uleb128 0xd
+ 1503 03fe D0000000 		.4byte	.LVL55
+ 1504 0402 1A090000 		.4byte	0x91a
+ 1505 0406 1B040000 		.4byte	0x41b
+ 1506 040a 0E       		.uleb128 0xe
+ 1507 040b 01       		.uleb128 0x1
+ 1508 040c 50       		.byte	0x50
+ 1509 040d 01       		.uleb128 0x1
+ 1510 040e 33       		.byte	0x33
+ 1511 040f 0E       		.uleb128 0xe
+ 1512 0410 01       		.uleb128 0x1
+ 1513 0411 51       		.byte	0x51
+ 1514 0412 02       		.uleb128 0x2
+ 1515 0413 91       		.byte	0x91
+ 1516 0414 64       		.sleb128 -28
+ 1517 0415 0E       		.uleb128 0xe
+ 1518 0416 01       		.uleb128 0x1
+ 1519 0417 52       		.byte	0x52
+ 1520 0418 01       		.uleb128 0x1
+ 1521 0419 30       		.byte	0x30
+ 1522 041a 00       		.byte	0
+ 1523 041b 0D       		.uleb128 0xd
+ 1524 041c EC000000 		.4byte	.LVL56
+ 1525 0420 1A090000 		.4byte	0x91a
+ 1526 0424 39040000 		.4byte	0x439
+ 1527 0428 0E       		.uleb128 0xe
+ 1528 0429 01       		.uleb128 0x1
+ 1529 042a 50       		.byte	0x50
+ 1530 042b 01       		.uleb128 0x1
+ 1531 042c 33       		.byte	0x33
+ 1532 042d 0E       		.uleb128 0xe
+ 1533 042e 01       		.uleb128 0x1
+ 1534 042f 51       		.byte	0x51
+ 1535 0430 02       		.uleb128 0x2
+ 1536 0431 91       		.byte	0x91
+ 1537 0432 64       		.sleb128 -28
+ 1538 0433 0E       		.uleb128 0xe
+ 1539 0434 01       		.uleb128 0x1
+ 1540 0435 52       		.byte	0x52
+ 1541 0436 01       		.uleb128 0x1
+ 1542 0437 30       		.byte	0x30
+ 1543 0438 00       		.byte	0
+ 1544 0439 0F       		.uleb128 0xf
+ 1545 043a 02010000 		.4byte	.LVL57
+ 1546 043e 1A090000 		.4byte	0x91a
+ 1547 0442 0E       		.uleb128 0xe
+ 1548 0443 01       		.uleb128 0x1
+ 1549 0444 50       		.byte	0x50
+ 1550 0445 01       		.uleb128 0x1
+ 1551 0446 33       		.byte	0x33
+ 1552 0447 0E       		.uleb128 0xe
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 38
+
+
+ 1553 0448 01       		.uleb128 0x1
+ 1554 0449 51       		.byte	0x51
+ 1555 044a 02       		.uleb128 0x2
+ 1556 044b 91       		.byte	0x91
+ 1557 044c 64       		.sleb128 -28
+ 1558 044d 0E       		.uleb128 0xe
+ 1559 044e 01       		.uleb128 0x1
+ 1560 044f 52       		.byte	0x52
+ 1561 0450 01       		.uleb128 0x1
+ 1562 0451 30       		.byte	0x30
+ 1563 0452 00       		.byte	0
+ 1564 0453 00       		.byte	0
+ 1565 0454 00       		.byte	0
+ 1566 0455 0D       		.uleb128 0xd
+ 1567 0456 0C000000 		.4byte	.LVL31
+ 1568 045a 25090000 		.4byte	0x925
+ 1569 045e 6C040000 		.4byte	0x46c
+ 1570 0462 0E       		.uleb128 0xe
+ 1571 0463 01       		.uleb128 0x1
+ 1572 0464 50       		.byte	0x50
+ 1573 0465 05       		.uleb128 0x5
+ 1574 0466 03       		.byte	0x3
+ 1575 0467 00000000 		.4byte	.LANCHOR2
+ 1576 046b 00       		.byte	0
+ 1577 046c 0D       		.uleb128 0xd
+ 1578 046d 14000000 		.4byte	.LVL32
+ 1579 0471 30090000 		.4byte	0x930
+ 1580 0475 84040000 		.4byte	0x484
+ 1581 0479 0E       		.uleb128 0xe
+ 1582 047a 01       		.uleb128 0x1
+ 1583 047b 50       		.byte	0x50
+ 1584 047c 01       		.uleb128 0x1
+ 1585 047d 30       		.byte	0x30
+ 1586 047e 0E       		.uleb128 0xe
+ 1587 047f 01       		.uleb128 0x1
+ 1588 0480 51       		.byte	0x51
+ 1589 0481 01       		.uleb128 0x1
+ 1590 0482 32       		.byte	0x32
+ 1591 0483 00       		.byte	0
+ 1592 0484 0D       		.uleb128 0xd
+ 1593 0485 22000000 		.4byte	.LVL33
+ 1594 0489 3C090000 		.4byte	0x93c
+ 1595 048d A2040000 		.4byte	0x4a2
+ 1596 0491 0E       		.uleb128 0xe
+ 1597 0492 01       		.uleb128 0x1
+ 1598 0493 50       		.byte	0x50
+ 1599 0494 01       		.uleb128 0x1
+ 1600 0495 30       		.byte	0x30
+ 1601 0496 0E       		.uleb128 0xe
+ 1602 0497 01       		.uleb128 0x1
+ 1603 0498 51       		.byte	0x51
+ 1604 0499 02       		.uleb128 0x2
+ 1605 049a 74       		.byte	0x74
+ 1606 049b 00       		.sleb128 0
+ 1607 049c 0E       		.uleb128 0xe
+ 1608 049d 01       		.uleb128 0x1
+ 1609 049e 52       		.byte	0x52
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 39
+
+
+ 1610 049f 01       		.uleb128 0x1
+ 1611 04a0 3F       		.byte	0x3f
+ 1612 04a1 00       		.byte	0
+ 1613 04a2 1B       		.uleb128 0x1b
+ 1614 04a3 36000000 		.4byte	.LVL34
+ 1615 04a7 1B020000 		.4byte	0x21b
+ 1616 04ab 1B       		.uleb128 0x1b
+ 1617 04ac 3E000000 		.4byte	.LVL35
+ 1618 04b0 F5020000 		.4byte	0x2f5
+ 1619 04b4 1B       		.uleb128 0x1b
+ 1620 04b5 44000000 		.4byte	.LVL36
+ 1621 04b9 42030000 		.4byte	0x342
+ 1622 04bd 1B       		.uleb128 0x1b
+ 1623 04be 4A000000 		.4byte	.LVL37
+ 1624 04c2 67030000 		.4byte	0x367
+ 1625 04c6 1B       		.uleb128 0x1b
+ 1626 04c7 50000000 		.4byte	.LVL38
+ 1627 04cb 86020000 		.4byte	0x286
+ 1628 04cf 1B       		.uleb128 0x1b
+ 1629 04d0 54000000 		.4byte	.LVL39
+ 1630 04d4 48090000 		.4byte	0x948
+ 1631 04d8 1B       		.uleb128 0x1b
+ 1632 04d9 58000000 		.4byte	.LVL40
+ 1633 04dd 53090000 		.4byte	0x953
+ 1634 04e1 1B       		.uleb128 0x1b
+ 1635 04e2 5C000000 		.4byte	.LVL41
+ 1636 04e6 5E090000 		.4byte	0x95e
+ 1637 04ea 1B       		.uleb128 0x1b
+ 1638 04eb 64000000 		.4byte	.LVL42
+ 1639 04ef 69090000 		.4byte	0x969
+ 1640 04f3 1B       		.uleb128 0x1b
+ 1641 04f4 68000000 		.4byte	.LVL43
+ 1642 04f8 74090000 		.4byte	0x974
+ 1643 04fc 1B       		.uleb128 0x1b
+ 1644 04fd 6C000000 		.4byte	.LVL44
+ 1645 0501 D0010000 		.4byte	0x1d0
+ 1646 0505 1B       		.uleb128 0x1b
+ 1647 0506 70000000 		.4byte	.LVL45
+ 1648 050a 7F090000 		.4byte	0x97f
+ 1649 050e 1B       		.uleb128 0x1b
+ 1650 050f 76000000 		.4byte	.LVL46
+ 1651 0513 8B090000 		.4byte	0x98b
+ 1652 0517 1B       		.uleb128 0x1b
+ 1653 0518 7C000000 		.4byte	.LVL47
+ 1654 051c 97090000 		.4byte	0x997
+ 1655 0520 1B       		.uleb128 0x1b
+ 1656 0521 80000000 		.4byte	.LVL48
+ 1657 0525 8B090000 		.4byte	0x98b
+ 1658 0529 1B       		.uleb128 0x1b
+ 1659 052a 88000000 		.4byte	.LVL49
+ 1660 052e A2090000 		.4byte	0x9a2
+ 1661 0532 1B       		.uleb128 0x1b
+ 1662 0533 8C000000 		.4byte	.LVL50
+ 1663 0537 AD090000 		.4byte	0x9ad
+ 1664 053b 00       		.byte	0
+ 1665 053c 0C       		.uleb128 0xc
+ 1666 053d E2020000 		.4byte	.LASF53
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 40
+
+
+ 1667 0541 01       		.byte	0x1
+ 1668 0542 D3       		.byte	0xd3
+ 1669 0543 00000000 		.4byte	.LFB65
+ 1670 0547 AC010000 		.4byte	.LFE65-.LFB65
+ 1671 054b 01       		.uleb128 0x1
+ 1672 054c 9C       		.byte	0x9c
+ 1673 054d DD060000 		.4byte	0x6dd
+ 1674 0551 1C       		.uleb128 0x1c
+ 1675 0552 58050000 		.4byte	.LASF54
+ 1676 0556 01       		.byte	0x1
+ 1677 0557 D3       		.byte	0xd3
+ 1678 0558 C3000000 		.4byte	0xc3
+ 1679 055c 50010000 		.4byte	.LLST8
+ 1680 0560 1C       		.uleb128 0x1c
+ 1681 0561 BA060000 		.4byte	.LASF51
+ 1682 0565 01       		.byte	0x1
+ 1683 0566 D3       		.byte	0xd3
+ 1684 0567 DD060000 		.4byte	0x6dd
+ 1685 056b 7F010000 		.4byte	.LLST9
+ 1686 056f 11       		.uleb128 0x11
+ 1687 0570 A2000000 		.4byte	.LBB8
+ 1688 0574 38000000 		.4byte	.LBE8-.LBB8
+ 1689 0578 B7050000 		.4byte	0x5b7
+ 1690 057c 16       		.uleb128 0x16
+ 1691 057d 56010000 		.4byte	.LASF55
+ 1692 0581 01       		.byte	0x1
+ 1693 0582 0C01     		.2byte	0x10c
+ 1694 0584 97000000 		.4byte	0x97
+ 1695 0588 AB010000 		.4byte	.LLST10
+ 1696 058c 0D       		.uleb128 0xd
+ 1697 058d D0000000 		.4byte	.LVL69
+ 1698 0591 B8090000 		.4byte	0x9b8
+ 1699 0595 AD050000 		.4byte	0x5ad
+ 1700 0599 0E       		.uleb128 0xe
+ 1701 059a 01       		.uleb128 0x1
+ 1702 059b 50       		.byte	0x50
+ 1703 059c 01       		.uleb128 0x1
+ 1704 059d 30       		.byte	0x30
+ 1705 059e 0E       		.uleb128 0xe
+ 1706 059f 01       		.uleb128 0x1
+ 1707 05a0 51       		.byte	0x51
+ 1708 05a1 05       		.uleb128 0x5
+ 1709 05a2 03       		.byte	0x3
+ 1710 05a3 00000000 		.4byte	EEPROMarray
+ 1711 05a7 0E       		.uleb128 0xe
+ 1712 05a8 01       		.uleb128 0x1
+ 1713 05a9 52       		.byte	0x52
+ 1714 05aa 01       		.uleb128 0x1
+ 1715 05ab 3F       		.byte	0x3f
+ 1716 05ac 00       		.byte	0
+ 1717 05ad 1B       		.uleb128 0x1b
+ 1718 05ae DA000000 		.4byte	.LVL70
+ 1719 05b2 42030000 		.4byte	0x342
+ 1720 05b6 00       		.byte	0
+ 1721 05b7 11       		.uleb128 0x11
+ 1722 05b8 FE000000 		.4byte	.LBB9
+ 1723 05bc 34000000 		.4byte	.LBE9-.LBB9
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 41
+
+
+ 1724 05c0 06060000 		.4byte	0x606
+ 1725 05c4 16       		.uleb128 0x16
+ 1726 05c5 39000000 		.4byte	.LASF56
+ 1727 05c9 01       		.byte	0x1
+ 1728 05ca 2401     		.2byte	0x124
+ 1729 05cc 97000000 		.4byte	0x97
+ 1730 05d0 CD010000 		.4byte	.LLST11
+ 1731 05d4 0D       		.uleb128 0xd
+ 1732 05d5 20010000 		.4byte	.LVL72
+ 1733 05d9 67030000 		.4byte	0x367
+ 1734 05dd E8050000 		.4byte	0x5e8
+ 1735 05e1 0E       		.uleb128 0xe
+ 1736 05e2 01       		.uleb128 0x1
+ 1737 05e3 50       		.byte	0x50
+ 1738 05e4 02       		.uleb128 0x2
+ 1739 05e5 75       		.byte	0x75
+ 1740 05e6 00       		.sleb128 0
+ 1741 05e7 00       		.byte	0
+ 1742 05e8 0F       		.uleb128 0xf
+ 1743 05e9 2E010000 		.4byte	.LVL73
+ 1744 05ed B8090000 		.4byte	0x9b8
+ 1745 05f1 0E       		.uleb128 0xe
+ 1746 05f2 01       		.uleb128 0x1
+ 1747 05f3 50       		.byte	0x50
+ 1748 05f4 01       		.uleb128 0x1
+ 1749 05f5 30       		.byte	0x30
+ 1750 05f6 0E       		.uleb128 0xe
+ 1751 05f7 01       		.uleb128 0x1
+ 1752 05f8 51       		.byte	0x51
+ 1753 05f9 05       		.uleb128 0x5
+ 1754 05fa 03       		.byte	0x3
+ 1755 05fb 00000000 		.4byte	EEPROMarray
+ 1756 05ff 0E       		.uleb128 0xe
+ 1757 0600 01       		.uleb128 0x1
+ 1758 0601 52       		.byte	0x52
+ 1759 0602 01       		.uleb128 0x1
+ 1760 0603 3F       		.byte	0x3f
+ 1761 0604 00       		.byte	0
+ 1762 0605 00       		.byte	0
+ 1763 0606 11       		.uleb128 0x11
+ 1764 0607 56010000 		.4byte	.LBB10
+ 1765 060b 2A000000 		.4byte	.LBE10-.LBB10
+ 1766 060f 55060000 		.4byte	0x655
+ 1767 0613 16       		.uleb128 0x16
+ 1768 0614 68040000 		.4byte	.LASF57
+ 1769 0618 01       		.byte	0x1
+ 1770 0619 3901     		.2byte	0x139
+ 1771 061b 97000000 		.4byte	0x97
+ 1772 061f E0010000 		.4byte	.LLST12
+ 1773 0623 0D       		.uleb128 0xd
+ 1774 0624 6E010000 		.4byte	.LVL76
+ 1775 0628 86020000 		.4byte	0x286
+ 1776 062c 37060000 		.4byte	0x637
+ 1777 0630 0E       		.uleb128 0xe
+ 1778 0631 01       		.uleb128 0x1
+ 1779 0632 50       		.byte	0x50
+ 1780 0633 02       		.uleb128 0x2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 42
+
+
+ 1781 0634 75       		.byte	0x75
+ 1782 0635 00       		.sleb128 0
+ 1783 0636 00       		.byte	0
+ 1784 0637 0F       		.uleb128 0xf
+ 1785 0638 7C010000 		.4byte	.LVL77
+ 1786 063c B8090000 		.4byte	0x9b8
+ 1787 0640 0E       		.uleb128 0xe
+ 1788 0641 01       		.uleb128 0x1
+ 1789 0642 50       		.byte	0x50
+ 1790 0643 01       		.uleb128 0x1
+ 1791 0644 30       		.byte	0x30
+ 1792 0645 0E       		.uleb128 0xe
+ 1793 0646 01       		.uleb128 0x1
+ 1794 0647 51       		.byte	0x51
+ 1795 0648 05       		.uleb128 0x5
+ 1796 0649 03       		.byte	0x3
+ 1797 064a 00000000 		.4byte	EEPROMarray
+ 1798 064e 0E       		.uleb128 0xe
+ 1799 064f 01       		.uleb128 0x1
+ 1800 0650 52       		.byte	0x52
+ 1801 0651 01       		.uleb128 0x1
+ 1802 0652 3F       		.byte	0x3f
+ 1803 0653 00       		.byte	0
+ 1804 0654 00       		.byte	0
+ 1805 0655 0D       		.uleb128 0xd
+ 1806 0656 2A000000 		.4byte	.LVL62
+ 1807 065a B8090000 		.4byte	0x9b8
+ 1808 065e 76060000 		.4byte	0x676
+ 1809 0662 0E       		.uleb128 0xe
+ 1810 0663 01       		.uleb128 0x1
+ 1811 0664 50       		.byte	0x50
+ 1812 0665 01       		.uleb128 0x1
+ 1813 0666 30       		.byte	0x30
+ 1814 0667 0E       		.uleb128 0xe
+ 1815 0668 01       		.uleb128 0x1
+ 1816 0669 51       		.byte	0x51
+ 1817 066a 05       		.uleb128 0x5
+ 1818 066b 03       		.byte	0x3
+ 1819 066c 00000000 		.4byte	EEPROMarray
+ 1820 0670 0E       		.uleb128 0xe
+ 1821 0671 01       		.uleb128 0x1
+ 1822 0672 52       		.byte	0x52
+ 1823 0673 01       		.uleb128 0x1
+ 1824 0674 3F       		.byte	0x3f
+ 1825 0675 00       		.byte	0
+ 1826 0676 0D       		.uleb128 0xd
+ 1827 0677 54000000 		.4byte	.LVL63
+ 1828 067b B8090000 		.4byte	0x9b8
+ 1829 067f 97060000 		.4byte	0x697
+ 1830 0683 0E       		.uleb128 0xe
+ 1831 0684 01       		.uleb128 0x1
+ 1832 0685 50       		.byte	0x50
+ 1833 0686 01       		.uleb128 0x1
+ 1834 0687 30       		.byte	0x30
+ 1835 0688 0E       		.uleb128 0xe
+ 1836 0689 01       		.uleb128 0x1
+ 1837 068a 51       		.byte	0x51
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 43
+
+
+ 1838 068b 05       		.uleb128 0x5
+ 1839 068c 03       		.byte	0x3
+ 1840 068d 00000000 		.4byte	EEPROMarray
+ 1841 0691 0E       		.uleb128 0xe
+ 1842 0692 01       		.uleb128 0x1
+ 1843 0693 52       		.byte	0x52
+ 1844 0694 01       		.uleb128 0x1
+ 1845 0695 3F       		.byte	0x3f
+ 1846 0696 00       		.byte	0
+ 1847 0697 1B       		.uleb128 0x1b
+ 1848 0698 5C000000 		.4byte	.LVL64
+ 1849 069c 1B020000 		.4byte	0x21b
+ 1850 06a0 1B       		.uleb128 0x1b
+ 1851 06a1 82000000 		.4byte	.LVL65
+ 1852 06a5 F5020000 		.4byte	0x2f5
+ 1853 06a9 0D       		.uleb128 0xd
+ 1854 06aa 92000000 		.4byte	.LVL66
+ 1855 06ae B8090000 		.4byte	0x9b8
+ 1856 06b2 CA060000 		.4byte	0x6ca
+ 1857 06b6 0E       		.uleb128 0xe
+ 1858 06b7 01       		.uleb128 0x1
+ 1859 06b8 50       		.byte	0x50
+ 1860 06b9 01       		.uleb128 0x1
+ 1861 06ba 30       		.byte	0x30
+ 1862 06bb 0E       		.uleb128 0xe
+ 1863 06bc 01       		.uleb128 0x1
+ 1864 06bd 51       		.byte	0x51
+ 1865 06be 05       		.uleb128 0x5
+ 1866 06bf 03       		.byte	0x3
+ 1867 06c0 00000000 		.4byte	EEPROMarray
+ 1868 06c4 0E       		.uleb128 0xe
+ 1869 06c5 01       		.uleb128 0x1
+ 1870 06c6 52       		.byte	0x52
+ 1871 06c7 01       		.uleb128 0x1
+ 1872 06c8 3F       		.byte	0x3f
+ 1873 06c9 00       		.byte	0
+ 1874 06ca 1B       		.uleb128 0x1b
+ 1875 06cb 90010000 		.4byte	.LVL79
+ 1876 06cf 53090000 		.4byte	0x953
+ 1877 06d3 1B       		.uleb128 0x1b
+ 1878 06d4 94010000 		.4byte	.LVL80
+ 1879 06d8 53090000 		.4byte	0x953
+ 1880 06dc 00       		.byte	0
+ 1881 06dd 1D       		.uleb128 0x1d
+ 1882 06de 04       		.byte	0x4
+ 1883 06df C3000000 		.4byte	0xc3
+ 1884 06e3 06       		.uleb128 0x6
+ 1885 06e4 CF000000 		.4byte	0xcf
+ 1886 06e8 F3060000 		.4byte	0x6f3
+ 1887 06ec 07       		.uleb128 0x7
+ 1888 06ed 03010000 		.4byte	0x103
+ 1889 06f1 19       		.byte	0x19
+ 1890 06f2 00       		.byte	0
+ 1891 06f3 1E       		.uleb128 0x1e
+ 1892 06f4 9D020000 		.4byte	.LASF58
+ 1893 06f8 06       		.byte	0x6
+ 1894 06f9 D202     		.2byte	0x2d2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 44
+
+
+ 1895 06fb E3060000 		.4byte	0x6e3
+ 1896 06ff 1E       		.uleb128 0x1e
+ 1897 0700 AB030000 		.4byte	.LASF59
+ 1898 0704 07       		.byte	0x7
+ 1899 0705 2101     		.2byte	0x121
+ 1900 0707 E3060000 		.4byte	0x6e3
+ 1901 070b 1F       		.uleb128 0x1f
+ 1902 070c FD020000 		.4byte	.LASF60
+ 1903 0710 08       		.byte	0x8
+ 1904 0711 82       		.byte	0x82
+ 1905 0712 8C010000 		.4byte	0x18c
+ 1906 0716 06       		.uleb128 0x6
+ 1907 0717 27070000 		.4byte	0x727
+ 1908 071b 27070000 		.4byte	0x727
+ 1909 071f 20       		.uleb128 0x20
+ 1910 0720 03010000 		.4byte	0x103
+ 1911 0724 FF13     		.2byte	0x13ff
+ 1912 0726 00       		.byte	0
+ 1913 0727 21       		.uleb128 0x21
+ 1914 0728 97000000 		.4byte	0x97
+ 1915 072c 22       		.uleb128 0x22
+ 1916 072d BB040000 		.4byte	.LASF61
+ 1917 0731 01       		.byte	0x1
+ 1918 0732 28       		.byte	0x28
+ 1919 0733 3D070000 		.4byte	0x73d
+ 1920 0737 05       		.uleb128 0x5
+ 1921 0738 03       		.byte	0x3
+ 1922 0739 00000000 		.4byte	Em_EEPROM_em_EepromStorage
+ 1923 073d 21       		.uleb128 0x21
+ 1924 073e 16070000 		.4byte	0x716
+ 1925 0742 1E       		.uleb128 0x1e
+ 1926 0743 1F060000 		.4byte	.LASF62
+ 1927 0747 09       		.byte	0x9
+ 1928 0748 1207     		.2byte	0x712
+ 1929 074a 4E070000 		.4byte	0x74e
+ 1930 074e 23       		.uleb128 0x23
+ 1931 074f AD000000 		.4byte	0xad
+ 1932 0753 22       		.uleb128 0x22
+ 1933 0754 E2050000 		.4byte	.LASF63
+ 1934 0758 01       		.byte	0x1
+ 1935 0759 2C       		.byte	0x2c
+ 1936 075a C4010000 		.4byte	0x1c4
+ 1937 075e 05       		.uleb128 0x5
+ 1938 075f 03       		.byte	0x3
+ 1939 0760 00000000 		.4byte	eepromReturnValue
+ 1940 0764 06       		.uleb128 0x6
+ 1941 0765 97000000 		.4byte	0x97
+ 1942 0769 74070000 		.4byte	0x774
+ 1943 076d 07       		.uleb128 0x7
+ 1944 076e 03010000 		.4byte	0x103
+ 1945 0772 0E       		.byte	0xe
+ 1946 0773 00       		.byte	0
+ 1947 0774 22       		.uleb128 0x22
+ 1948 0775 C3000000 		.4byte	.LASF64
+ 1949 0779 01       		.byte	0x1
+ 1950 077a 2F       		.byte	0x2f
+ 1951 077b 64070000 		.4byte	0x764
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 45
+
+
+ 1952 077f 05       		.uleb128 0x5
+ 1953 0780 03       		.byte	0x3
+ 1954 0781 00000000 		.4byte	EEPROMarray
+ 1955 0785 06       		.uleb128 0x6
+ 1956 0786 A2000000 		.4byte	0xa2
+ 1957 078a 95070000 		.4byte	0x795
+ 1958 078e 07       		.uleb128 0x7
+ 1959 078f 03010000 		.4byte	0x103
+ 1960 0793 19       		.byte	0x19
+ 1961 0794 00       		.byte	0
+ 1962 0795 22       		.uleb128 0x22
+ 1963 0796 DD000000 		.4byte	.LASF65
+ 1964 079a 01       		.byte	0x1
+ 1965 079b 31       		.byte	0x31
+ 1966 079c 85070000 		.4byte	0x785
+ 1967 07a0 05       		.uleb128 0x5
+ 1968 07a1 03       		.byte	0x3
+ 1969 07a2 00000000 		.4byte	capSensorsPrev
+ 1970 07a6 22       		.uleb128 0x22
+ 1971 07a7 0C070000 		.4byte	.LASF66
+ 1972 07ab 01       		.byte	0x1
+ 1973 07ac 3A       		.byte	0x3a
+ 1974 07ad 97000000 		.4byte	0x97
+ 1975 07b1 05       		.uleb128 0x5
+ 1976 07b2 03       		.byte	0x3
+ 1977 07b3 00000000 		.4byte	numActiveSensors
+ 1978 07b7 22       		.uleb128 0x22
+ 1979 07b8 1C020000 		.4byte	.LASF67
+ 1980 07bc 01       		.byte	0x1
+ 1981 07bd 3B       		.byte	0x3b
+ 1982 07be 97000000 		.4byte	0x97
+ 1983 07c2 05       		.uleb128 0x5
+ 1984 07c3 03       		.byte	0x3
+ 1985 07c4 00000000 		.4byte	rawVsCooked
+ 1986 07c8 22       		.uleb128 0x22
+ 1987 07c9 1C040000 		.4byte	.LASF68
+ 1988 07cd 01       		.byte	0x1
+ 1989 07ce 3C       		.byte	0x3c
+ 1990 07cf 97000000 		.4byte	0x97
+ 1991 07d3 05       		.uleb128 0x5
+ 1992 07d4 03       		.byte	0x3
+ 1993 07d5 00000000 		.4byte	maxActiveSensors
+ 1994 07d9 22       		.uleb128 0x22
+ 1995 07da 30050000 		.4byte	.LASF69
+ 1996 07de 01       		.byte	0x1
+ 1997 07df 3D       		.byte	0x3d
+ 1998 07e0 97000000 		.4byte	0x97
+ 1999 07e4 05       		.uleb128 0x5
+ 2000 07e5 03       		.byte	0x3
+ 2001 07e6 00000000 		.4byte	clockDivider
+ 2002 07ea 22       		.uleb128 0x22
+ 2003 07eb 78020000 		.4byte	.LASF70
+ 2004 07ef 01       		.byte	0x1
+ 2005 07f0 3E       		.byte	0x3e
+ 2006 07f1 97000000 		.4byte	0x97
+ 2007 07f5 05       		.uleb128 0x5
+ 2008 07f6 03       		.byte	0x3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 46
+
+
+ 2009 07f7 00000000 		.4byte	maxClockDivider
+ 2010 07fb 22       		.uleb128 0x22
+ 2011 07fc 29030000 		.4byte	.LASF71
+ 2012 0800 01       		.byte	0x1
+ 2013 0801 3F       		.byte	0x3f
+ 2014 0802 97000000 		.4byte	0x97
+ 2015 0806 05       		.uleb128 0x5
+ 2016 0807 03       		.byte	0x3
+ 2017 0808 00000000 		.4byte	minClockDivider
+ 2018 080c 22       		.uleb128 0x22
+ 2019 080d 42000000 		.4byte	.LASF72
+ 2020 0811 01       		.byte	0x1
+ 2021 0812 40       		.byte	0x40
+ 2022 0813 97000000 		.4byte	0x97
+ 2023 0817 05       		.uleb128 0x5
+ 2024 0818 03       		.byte	0x3
+ 2025 0819 00000000 		.4byte	delayBetweenLoops
+ 2026 081d 22       		.uleb128 0x22
+ 2027 081e 2B000000 		.4byte	.LASF73
+ 2028 0822 01       		.byte	0x1
+ 2029 0823 41       		.byte	0x41
+ 2030 0824 97000000 		.4byte	0x97
+ 2031 0828 05       		.uleb128 0x5
+ 2032 0829 03       		.byte	0x3
+ 2033 082a 00000000 		.4byte	maxResolution
+ 2034 082e 22       		.uleb128 0x22
+ 2035 082f D4050000 		.4byte	.LASF74
+ 2036 0833 01       		.byte	0x1
+ 2037 0834 42       		.byte	0x42
+ 2038 0835 97000000 		.4byte	0x97
+ 2039 0839 05       		.uleb128 0x5
+ 2040 083a 03       		.byte	0x3
+ 2041 083b 00000000 		.4byte	minResolution
+ 2042 083f 22       		.uleb128 0x22
+ 2043 0840 93010000 		.4byte	.LASF75
+ 2044 0844 01       		.byte	0x1
+ 2045 0845 43       		.byte	0x43
+ 2046 0846 97000000 		.4byte	0x97
+ 2047 084a 05       		.uleb128 0x5
+ 2048 084b 03       		.byte	0x3
+ 2049 084c 00000000 		.4byte	maxIDAC
+ 2050 0850 22       		.uleb128 0x22
+ 2051 0851 5E050000 		.4byte	.LASF76
+ 2052 0855 01       		.byte	0x1
+ 2053 0856 44       		.byte	0x44
+ 2054 0857 97000000 		.4byte	0x97
+ 2055 085b 05       		.uleb128 0x5
+ 2056 085c 03       		.byte	0x3
+ 2057 085d 00000000 		.4byte	minIDAC
+ 2058 0861 22       		.uleb128 0x22
+ 2059 0862 28020000 		.4byte	.LASF77
+ 2060 0866 01       		.byte	0x1
+ 2061 0867 45       		.byte	0x45
+ 2062 0868 97000000 		.4byte	0x97
+ 2063 086c 05       		.uleb128 0x5
+ 2064 086d 03       		.byte	0x3
+ 2065 086e 00000000 		.4byte	clockDividerLowByte
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 47
+
+
+ 2066 0872 22       		.uleb128 0x22
+ 2067 0873 91020000 		.4byte	.LASF78
+ 2068 0877 01       		.byte	0x1
+ 2069 0878 46       		.byte	0x46
+ 2070 0879 97000000 		.4byte	0x97
+ 2071 087d 05       		.uleb128 0x5
+ 2072 087e 03       		.byte	0x3
+ 2073 087f 00000000 		.4byte	IDACLowByte
+ 2074 0883 22       		.uleb128 0x22
+ 2075 0884 10000000 		.4byte	.LASF79
+ 2076 0888 01       		.byte	0x1
+ 2077 0889 47       		.byte	0x47
+ 2078 088a 97000000 		.4byte	0x97
+ 2079 088e 05       		.uleb128 0x5
+ 2080 088f 03       		.byte	0x3
+ 2081 0890 00000000 		.4byte	maxScanSpeed
+ 2082 0894 22       		.uleb128 0x22
+ 2083 0895 23050000 		.4byte	.LASF80
+ 2084 0899 01       		.byte	0x1
+ 2085 089a 48       		.byte	0x48
+ 2086 089b 97000000 		.4byte	0x97
+ 2087 089f 05       		.uleb128 0x5
+ 2088 08a0 03       		.byte	0x3
+ 2089 08a1 00000000 		.4byte	minScanSpeed
+ 2090 08a5 22       		.uleb128 0x22
+ 2091 08a6 AE010000 		.4byte	.LASF81
+ 2092 08aa 01       		.byte	0x1
+ 2093 08ab 49       		.byte	0x49
+ 2094 08ac 97000000 		.4byte	0x97
+ 2095 08b0 05       		.uleb128 0x5
+ 2096 08b1 03       		.byte	0x3
+ 2097 08b2 00000000 		.4byte	sensorResolution
+ 2098 08b6 06       		.uleb128 0x6
+ 2099 08b7 C3000000 		.4byte	0xc3
+ 2100 08bb C1080000 		.4byte	0x8c1
+ 2101 08bf 24       		.uleb128 0x24
+ 2102 08c0 00       		.byte	0
+ 2103 08c1 1F       		.uleb128 0x1f
+ 2104 08c2 E6010000 		.4byte	.LASF82
+ 2105 08c6 01       		.byte	0x1
+ 2106 08c7 4B       		.byte	0x4b
+ 2107 08c8 B6080000 		.4byte	0x8b6
+ 2108 08cc 1F       		.uleb128 0x1f
+ 2109 08cd 40040000 		.4byte	.LASF83
+ 2110 08d1 01       		.byte	0x1
+ 2111 08d2 4C       		.byte	0x4c
+ 2112 08d3 B6080000 		.4byte	0x8b6
+ 2113 08d7 1F       		.uleb128 0x1f
+ 2114 08d8 3C020000 		.4byte	.LASF84
+ 2115 08dc 01       		.byte	0x1
+ 2116 08dd 4D       		.byte	0x4d
+ 2117 08de C3000000 		.4byte	0xc3
+ 2118 08e2 25       		.uleb128 0x25
+ 2119 08e3 1D070000 		.4byte	.LASF85
+ 2120 08e7 1D070000 		.4byte	.LASF85
+ 2121 08eb 07       		.byte	0x7
+ 2122 08ec B4       		.byte	0xb4
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 48
+
+
+ 2123 08ed 25       		.uleb128 0x25
+ 2124 08ee 5F020000 		.4byte	.LASF86
+ 2125 08f2 5F020000 		.4byte	.LASF86
+ 2126 08f6 0A       		.byte	0xa
+ 2127 08f7 26       		.byte	0x26
+ 2128 08f8 25       		.uleb128 0x25
+ 2129 08f9 91050000 		.4byte	.LASF87
+ 2130 08fd 91050000 		.4byte	.LASF87
+ 2131 0901 07       		.byte	0x7
+ 2132 0902 B6       		.byte	0xb6
+ 2133 0903 25       		.uleb128 0x25
+ 2134 0904 05040000 		.4byte	.LASF88
+ 2135 0908 05040000 		.4byte	.LASF88
+ 2136 090c 07       		.byte	0x7
+ 2137 090d B7       		.byte	0xb7
+ 2138 090e 26       		.uleb128 0x26
+ 2139 090f C4020000 		.4byte	.LASF89
+ 2140 0913 C4020000 		.4byte	.LASF89
+ 2141 0917 06       		.byte	0x6
+ 2142 0918 BE02     		.2byte	0x2be
+ 2143 091a 25       		.uleb128 0x25
+ 2144 091b FB050000 		.4byte	.LASF90
+ 2145 091f FB050000 		.4byte	.LASF90
+ 2146 0923 0B       		.byte	0xb
+ 2147 0924 5B       		.byte	0x5b
+ 2148 0925 25       		.uleb128 0x25
+ 2149 0926 78050000 		.4byte	.LASF91
+ 2150 092a 78050000 		.4byte	.LASF91
+ 2151 092e 08       		.byte	0x8
+ 2152 092f 31       		.byte	0x31
+ 2153 0930 26       		.uleb128 0x26
+ 2154 0931 30010000 		.4byte	.LASF92
+ 2155 0935 30010000 		.4byte	.LASF92
+ 2156 0939 0C       		.byte	0xc
+ 2157 093a 2A01     		.2byte	0x12a
+ 2158 093c 26       		.uleb128 0x26
+ 2159 093d 67000000 		.4byte	.LASF93
+ 2160 0941 67000000 		.4byte	.LASF93
+ 2161 0945 05       		.byte	0x5
+ 2162 0946 6801     		.2byte	0x168
+ 2163 0948 25       		.uleb128 0x25
+ 2164 0949 73030000 		.4byte	.LASF94
+ 2165 094d 73030000 		.4byte	.LASF94
+ 2166 0951 06       		.byte	0x6
+ 2167 0952 93       		.byte	0x93
+ 2168 0953 25       		.uleb128 0x25
+ 2169 0954 79000000 		.4byte	.LASF95
+ 2170 0958 79000000 		.4byte	.LASF95
+ 2171 095c 07       		.byte	0x7
+ 2172 095d AE       		.byte	0xae
+ 2173 095e 25       		.uleb128 0x25
+ 2174 095f BB050000 		.4byte	.LASF96
+ 2175 0963 BB050000 		.4byte	.LASF96
+ 2176 0967 06       		.byte	0x6
+ 2177 0968 99       		.byte	0x99
+ 2178 0969 25       		.uleb128 0x25
+ 2179 096a 05010000 		.4byte	.LASF97
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 49
+
+
+ 2180 096e 05010000 		.4byte	.LASF97
+ 2181 0972 07       		.byte	0x7
+ 2182 0973 B2       		.byte	0xb2
+ 2183 0974 25       		.uleb128 0x25
+ 2184 0975 00020000 		.4byte	.LASF98
+ 2185 0979 00020000 		.4byte	.LASF98
+ 2186 097d 06       		.byte	0x6
+ 2187 097e 9B       		.byte	0x9b
+ 2188 097f 26       		.uleb128 0x26
+ 2189 0980 3D050000 		.4byte	.LASF99
+ 2190 0984 3D050000 		.4byte	.LASF99
+ 2191 0988 0C       		.byte	0xc
+ 2192 0989 2E01     		.2byte	0x12e
+ 2193 098b 26       		.uleb128 0x26
+ 2194 098c AE000000 		.4byte	.LASF100
+ 2195 0990 AE000000 		.4byte	.LASF100
+ 2196 0994 0C       		.byte	0xc
+ 2197 0995 2D01     		.2byte	0x12d
+ 2198 0997 25       		.uleb128 0x25
+ 2199 0998 48010000 		.4byte	.LASF101
+ 2200 099c 48010000 		.4byte	.LASF101
+ 2201 09a0 0B       		.byte	0xb
+ 2202 09a1 57       		.byte	0x57
+ 2203 09a2 25       		.uleb128 0x25
+ 2204 09a3 D3030000 		.4byte	.LASF102
+ 2205 09a7 D3030000 		.4byte	.LASF102
+ 2206 09ab 0B       		.byte	0xb
+ 2207 09ac 5A       		.byte	0x5a
+ 2208 09ad 25       		.uleb128 0x25
+ 2209 09ae 99000000 		.4byte	.LASF103
+ 2210 09b2 99000000 		.4byte	.LASF103
+ 2211 09b6 0B       		.byte	0xb
+ 2212 09b7 5F       		.byte	0x5f
+ 2213 09b8 26       		.uleb128 0x26
+ 2214 09b9 9B010000 		.4byte	.LASF104
+ 2215 09bd 9B010000 		.4byte	.LASF104
+ 2216 09c1 05       		.byte	0x5
+ 2217 09c2 6C01     		.2byte	0x16c
+ 2218 09c4 00       		.byte	0
+ 2219              		.section	.debug_abbrev,"",%progbits
+ 2220              	.Ldebug_abbrev0:
+ 2221 0000 01       		.uleb128 0x1
+ 2222 0001 11       		.uleb128 0x11
+ 2223 0002 01       		.byte	0x1
+ 2224 0003 25       		.uleb128 0x25
+ 2225 0004 0E       		.uleb128 0xe
+ 2226 0005 13       		.uleb128 0x13
+ 2227 0006 0B       		.uleb128 0xb
+ 2228 0007 03       		.uleb128 0x3
+ 2229 0008 0E       		.uleb128 0xe
+ 2230 0009 1B       		.uleb128 0x1b
+ 2231 000a 0E       		.uleb128 0xe
+ 2232 000b 55       		.uleb128 0x55
+ 2233 000c 17       		.uleb128 0x17
+ 2234 000d 11       		.uleb128 0x11
+ 2235 000e 01       		.uleb128 0x1
+ 2236 000f 10       		.uleb128 0x10
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 50
+
+
+ 2237 0010 17       		.uleb128 0x17
+ 2238 0011 00       		.byte	0
+ 2239 0012 00       		.byte	0
+ 2240 0013 02       		.uleb128 0x2
+ 2241 0014 24       		.uleb128 0x24
+ 2242 0015 00       		.byte	0
+ 2243 0016 0B       		.uleb128 0xb
+ 2244 0017 0B       		.uleb128 0xb
+ 2245 0018 3E       		.uleb128 0x3e
+ 2246 0019 0B       		.uleb128 0xb
+ 2247 001a 03       		.uleb128 0x3
+ 2248 001b 0E       		.uleb128 0xe
+ 2249 001c 00       		.byte	0
+ 2250 001d 00       		.byte	0
+ 2251 001e 03       		.uleb128 0x3
+ 2252 001f 16       		.uleb128 0x16
+ 2253 0020 00       		.byte	0
+ 2254 0021 03       		.uleb128 0x3
+ 2255 0022 0E       		.uleb128 0xe
+ 2256 0023 3A       		.uleb128 0x3a
+ 2257 0024 0B       		.uleb128 0xb
+ 2258 0025 3B       		.uleb128 0x3b
+ 2259 0026 0B       		.uleb128 0xb
+ 2260 0027 49       		.uleb128 0x49
+ 2261 0028 13       		.uleb128 0x13
+ 2262 0029 00       		.byte	0
+ 2263 002a 00       		.byte	0
+ 2264 002b 04       		.uleb128 0x4
+ 2265 002c 24       		.uleb128 0x24
+ 2266 002d 00       		.byte	0
+ 2267 002e 0B       		.uleb128 0xb
+ 2268 002f 0B       		.uleb128 0xb
+ 2269 0030 3E       		.uleb128 0x3e
+ 2270 0031 0B       		.uleb128 0xb
+ 2271 0032 03       		.uleb128 0x3
+ 2272 0033 08       		.uleb128 0x8
+ 2273 0034 00       		.byte	0
+ 2274 0035 00       		.byte	0
+ 2275 0036 05       		.uleb128 0x5
+ 2276 0037 16       		.uleb128 0x16
+ 2277 0038 00       		.byte	0
+ 2278 0039 03       		.uleb128 0x3
+ 2279 003a 0E       		.uleb128 0xe
+ 2280 003b 3A       		.uleb128 0x3a
+ 2281 003c 0B       		.uleb128 0xb
+ 2282 003d 3B       		.uleb128 0x3b
+ 2283 003e 05       		.uleb128 0x5
+ 2284 003f 49       		.uleb128 0x49
+ 2285 0040 13       		.uleb128 0x13
+ 2286 0041 00       		.byte	0
+ 2287 0042 00       		.byte	0
+ 2288 0043 06       		.uleb128 0x6
+ 2289 0044 01       		.uleb128 0x1
+ 2290 0045 01       		.byte	0x1
+ 2291 0046 49       		.uleb128 0x49
+ 2292 0047 13       		.uleb128 0x13
+ 2293 0048 01       		.uleb128 0x1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 51
+
+
+ 2294 0049 13       		.uleb128 0x13
+ 2295 004a 00       		.byte	0
+ 2296 004b 00       		.byte	0
+ 2297 004c 07       		.uleb128 0x7
+ 2298 004d 21       		.uleb128 0x21
+ 2299 004e 00       		.byte	0
+ 2300 004f 49       		.uleb128 0x49
+ 2301 0050 13       		.uleb128 0x13
+ 2302 0051 2F       		.uleb128 0x2f
+ 2303 0052 0B       		.uleb128 0xb
+ 2304 0053 00       		.byte	0
+ 2305 0054 00       		.byte	0
+ 2306 0055 08       		.uleb128 0x8
+ 2307 0056 13       		.uleb128 0x13
+ 2308 0057 01       		.byte	0x1
+ 2309 0058 0B       		.uleb128 0xb
+ 2310 0059 0B       		.uleb128 0xb
+ 2311 005a 3A       		.uleb128 0x3a
+ 2312 005b 0B       		.uleb128 0xb
+ 2313 005c 3B       		.uleb128 0x3b
+ 2314 005d 05       		.uleb128 0x5
+ 2315 005e 01       		.uleb128 0x1
+ 2316 005f 13       		.uleb128 0x13
+ 2317 0060 00       		.byte	0
+ 2318 0061 00       		.byte	0
+ 2319 0062 09       		.uleb128 0x9
+ 2320 0063 0D       		.uleb128 0xd
+ 2321 0064 00       		.byte	0
+ 2322 0065 03       		.uleb128 0x3
+ 2323 0066 0E       		.uleb128 0xe
+ 2324 0067 3A       		.uleb128 0x3a
+ 2325 0068 0B       		.uleb128 0xb
+ 2326 0069 3B       		.uleb128 0x3b
+ 2327 006a 05       		.uleb128 0x5
+ 2328 006b 49       		.uleb128 0x49
+ 2329 006c 13       		.uleb128 0x13
+ 2330 006d 38       		.uleb128 0x38
+ 2331 006e 0B       		.uleb128 0xb
+ 2332 006f 00       		.byte	0
+ 2333 0070 00       		.byte	0
+ 2334 0071 0A       		.uleb128 0xa
+ 2335 0072 04       		.uleb128 0x4
+ 2336 0073 01       		.byte	0x1
+ 2337 0074 0B       		.uleb128 0xb
+ 2338 0075 0B       		.uleb128 0xb
+ 2339 0076 49       		.uleb128 0x49
+ 2340 0077 13       		.uleb128 0x13
+ 2341 0078 3A       		.uleb128 0x3a
+ 2342 0079 0B       		.uleb128 0xb
+ 2343 007a 3B       		.uleb128 0x3b
+ 2344 007b 05       		.uleb128 0x5
+ 2345 007c 01       		.uleb128 0x1
+ 2346 007d 13       		.uleb128 0x13
+ 2347 007e 00       		.byte	0
+ 2348 007f 00       		.byte	0
+ 2349 0080 0B       		.uleb128 0xb
+ 2350 0081 28       		.uleb128 0x28
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 52
+
+
+ 2351 0082 00       		.byte	0
+ 2352 0083 03       		.uleb128 0x3
+ 2353 0084 0E       		.uleb128 0xe
+ 2354 0085 1C       		.uleb128 0x1c
+ 2355 0086 0B       		.uleb128 0xb
+ 2356 0087 00       		.byte	0
+ 2357 0088 00       		.byte	0
+ 2358 0089 0C       		.uleb128 0xc
+ 2359 008a 2E       		.uleb128 0x2e
+ 2360 008b 01       		.byte	0x1
+ 2361 008c 3F       		.uleb128 0x3f
+ 2362 008d 19       		.uleb128 0x19
+ 2363 008e 03       		.uleb128 0x3
+ 2364 008f 0E       		.uleb128 0xe
+ 2365 0090 3A       		.uleb128 0x3a
+ 2366 0091 0B       		.uleb128 0xb
+ 2367 0092 3B       		.uleb128 0x3b
+ 2368 0093 0B       		.uleb128 0xb
+ 2369 0094 27       		.uleb128 0x27
+ 2370 0095 19       		.uleb128 0x19
+ 2371 0096 11       		.uleb128 0x11
+ 2372 0097 01       		.uleb128 0x1
+ 2373 0098 12       		.uleb128 0x12
+ 2374 0099 06       		.uleb128 0x6
+ 2375 009a 40       		.uleb128 0x40
+ 2376 009b 18       		.uleb128 0x18
+ 2377 009c 9742     		.uleb128 0x2117
+ 2378 009e 19       		.uleb128 0x19
+ 2379 009f 01       		.uleb128 0x1
+ 2380 00a0 13       		.uleb128 0x13
+ 2381 00a1 00       		.byte	0
+ 2382 00a2 00       		.byte	0
+ 2383 00a3 0D       		.uleb128 0xd
+ 2384 00a4 898201   		.uleb128 0x4109
+ 2385 00a7 01       		.byte	0x1
+ 2386 00a8 11       		.uleb128 0x11
+ 2387 00a9 01       		.uleb128 0x1
+ 2388 00aa 31       		.uleb128 0x31
+ 2389 00ab 13       		.uleb128 0x13
+ 2390 00ac 01       		.uleb128 0x1
+ 2391 00ad 13       		.uleb128 0x13
+ 2392 00ae 00       		.byte	0
+ 2393 00af 00       		.byte	0
+ 2394 00b0 0E       		.uleb128 0xe
+ 2395 00b1 8A8201   		.uleb128 0x410a
+ 2396 00b4 00       		.byte	0
+ 2397 00b5 02       		.uleb128 0x2
+ 2398 00b6 18       		.uleb128 0x18
+ 2399 00b7 9142     		.uleb128 0x2111
+ 2400 00b9 18       		.uleb128 0x18
+ 2401 00ba 00       		.byte	0
+ 2402 00bb 00       		.byte	0
+ 2403 00bc 0F       		.uleb128 0xf
+ 2404 00bd 898201   		.uleb128 0x4109
+ 2405 00c0 01       		.byte	0x1
+ 2406 00c1 11       		.uleb128 0x11
+ 2407 00c2 01       		.uleb128 0x1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 53
+
+
+ 2408 00c3 31       		.uleb128 0x31
+ 2409 00c4 13       		.uleb128 0x13
+ 2410 00c5 00       		.byte	0
+ 2411 00c6 00       		.byte	0
+ 2412 00c7 10       		.uleb128 0x10
+ 2413 00c8 2E       		.uleb128 0x2e
+ 2414 00c9 01       		.byte	0x1
+ 2415 00ca 3F       		.uleb128 0x3f
+ 2416 00cb 19       		.uleb128 0x19
+ 2417 00cc 03       		.uleb128 0x3
+ 2418 00cd 0E       		.uleb128 0xe
+ 2419 00ce 3A       		.uleb128 0x3a
+ 2420 00cf 0B       		.uleb128 0xb
+ 2421 00d0 3B       		.uleb128 0x3b
+ 2422 00d1 05       		.uleb128 0x5
+ 2423 00d2 27       		.uleb128 0x27
+ 2424 00d3 19       		.uleb128 0x19
+ 2425 00d4 11       		.uleb128 0x11
+ 2426 00d5 01       		.uleb128 0x1
+ 2427 00d6 12       		.uleb128 0x12
+ 2428 00d7 06       		.uleb128 0x6
+ 2429 00d8 40       		.uleb128 0x40
+ 2430 00d9 18       		.uleb128 0x18
+ 2431 00da 9742     		.uleb128 0x2117
+ 2432 00dc 19       		.uleb128 0x19
+ 2433 00dd 01       		.uleb128 0x1
+ 2434 00de 13       		.uleb128 0x13
+ 2435 00df 00       		.byte	0
+ 2436 00e0 00       		.byte	0
+ 2437 00e1 11       		.uleb128 0x11
+ 2438 00e2 0B       		.uleb128 0xb
+ 2439 00e3 01       		.byte	0x1
+ 2440 00e4 11       		.uleb128 0x11
+ 2441 00e5 01       		.uleb128 0x1
+ 2442 00e6 12       		.uleb128 0x12
+ 2443 00e7 06       		.uleb128 0x6
+ 2444 00e8 01       		.uleb128 0x1
+ 2445 00e9 13       		.uleb128 0x13
+ 2446 00ea 00       		.byte	0
+ 2447 00eb 00       		.byte	0
+ 2448 00ec 12       		.uleb128 0x12
+ 2449 00ed 34       		.uleb128 0x34
+ 2450 00ee 00       		.byte	0
+ 2451 00ef 03       		.uleb128 0x3
+ 2452 00f0 08       		.uleb128 0x8
+ 2453 00f1 3A       		.uleb128 0x3a
+ 2454 00f2 0B       		.uleb128 0xb
+ 2455 00f3 3B       		.uleb128 0x3b
+ 2456 00f4 05       		.uleb128 0x5
+ 2457 00f5 49       		.uleb128 0x49
+ 2458 00f6 13       		.uleb128 0x13
+ 2459 00f7 02       		.uleb128 0x2
+ 2460 00f8 17       		.uleb128 0x17
+ 2461 00f9 00       		.byte	0
+ 2462 00fa 00       		.byte	0
+ 2463 00fb 13       		.uleb128 0x13
+ 2464 00fc 0B       		.uleb128 0xb
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 54
+
+
+ 2465 00fd 01       		.byte	0x1
+ 2466 00fe 11       		.uleb128 0x11
+ 2467 00ff 01       		.uleb128 0x1
+ 2468 0100 12       		.uleb128 0x12
+ 2469 0101 06       		.uleb128 0x6
+ 2470 0102 00       		.byte	0
+ 2471 0103 00       		.byte	0
+ 2472 0104 14       		.uleb128 0x14
+ 2473 0105 05       		.uleb128 0x5
+ 2474 0106 00       		.byte	0
+ 2475 0107 03       		.uleb128 0x3
+ 2476 0108 0E       		.uleb128 0xe
+ 2477 0109 3A       		.uleb128 0x3a
+ 2478 010a 0B       		.uleb128 0xb
+ 2479 010b 3B       		.uleb128 0x3b
+ 2480 010c 05       		.uleb128 0x5
+ 2481 010d 49       		.uleb128 0x49
+ 2482 010e 13       		.uleb128 0x13
+ 2483 010f 02       		.uleb128 0x2
+ 2484 0110 17       		.uleb128 0x17
+ 2485 0111 00       		.byte	0
+ 2486 0112 00       		.byte	0
+ 2487 0113 15       		.uleb128 0x15
+ 2488 0114 05       		.uleb128 0x5
+ 2489 0115 00       		.byte	0
+ 2490 0116 03       		.uleb128 0x3
+ 2491 0117 0E       		.uleb128 0xe
+ 2492 0118 3A       		.uleb128 0x3a
+ 2493 0119 0B       		.uleb128 0xb
+ 2494 011a 3B       		.uleb128 0x3b
+ 2495 011b 05       		.uleb128 0x5
+ 2496 011c 49       		.uleb128 0x49
+ 2497 011d 13       		.uleb128 0x13
+ 2498 011e 02       		.uleb128 0x2
+ 2499 011f 18       		.uleb128 0x18
+ 2500 0120 00       		.byte	0
+ 2501 0121 00       		.byte	0
+ 2502 0122 16       		.uleb128 0x16
+ 2503 0123 34       		.uleb128 0x34
+ 2504 0124 00       		.byte	0
+ 2505 0125 03       		.uleb128 0x3
+ 2506 0126 0E       		.uleb128 0xe
+ 2507 0127 3A       		.uleb128 0x3a
+ 2508 0128 0B       		.uleb128 0xb
+ 2509 0129 3B       		.uleb128 0x3b
+ 2510 012a 05       		.uleb128 0x5
+ 2511 012b 49       		.uleb128 0x49
+ 2512 012c 13       		.uleb128 0x13
+ 2513 012d 02       		.uleb128 0x2
+ 2514 012e 17       		.uleb128 0x17
+ 2515 012f 00       		.byte	0
+ 2516 0130 00       		.byte	0
+ 2517 0131 17       		.uleb128 0x17
+ 2518 0132 2E       		.uleb128 0x2e
+ 2519 0133 01       		.byte	0x1
+ 2520 0134 3F       		.uleb128 0x3f
+ 2521 0135 19       		.uleb128 0x19
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 55
+
+
+ 2522 0136 03       		.uleb128 0x3
+ 2523 0137 0E       		.uleb128 0xe
+ 2524 0138 3A       		.uleb128 0x3a
+ 2525 0139 0B       		.uleb128 0xb
+ 2526 013a 3B       		.uleb128 0x3b
+ 2527 013b 0B       		.uleb128 0xb
+ 2528 013c 27       		.uleb128 0x27
+ 2529 013d 19       		.uleb128 0x19
+ 2530 013e 49       		.uleb128 0x49
+ 2531 013f 13       		.uleb128 0x13
+ 2532 0140 8701     		.uleb128 0x87
+ 2533 0142 19       		.uleb128 0x19
+ 2534 0143 11       		.uleb128 0x11
+ 2535 0144 01       		.uleb128 0x1
+ 2536 0145 12       		.uleb128 0x12
+ 2537 0146 06       		.uleb128 0x6
+ 2538 0147 40       		.uleb128 0x40
+ 2539 0148 18       		.uleb128 0x18
+ 2540 0149 9742     		.uleb128 0x2117
+ 2541 014b 19       		.uleb128 0x19
+ 2542 014c 01       		.uleb128 0x1
+ 2543 014d 13       		.uleb128 0x13
+ 2544 014e 00       		.byte	0
+ 2545 014f 00       		.byte	0
+ 2546 0150 18       		.uleb128 0x18
+ 2547 0151 34       		.uleb128 0x34
+ 2548 0152 00       		.byte	0
+ 2549 0153 03       		.uleb128 0x3
+ 2550 0154 0E       		.uleb128 0xe
+ 2551 0155 3A       		.uleb128 0x3a
+ 2552 0156 0B       		.uleb128 0xb
+ 2553 0157 3B       		.uleb128 0x3b
+ 2554 0158 0B       		.uleb128 0xb
+ 2555 0159 49       		.uleb128 0x49
+ 2556 015a 13       		.uleb128 0x13
+ 2557 015b 02       		.uleb128 0x2
+ 2558 015c 18       		.uleb128 0x18
+ 2559 015d 00       		.byte	0
+ 2560 015e 00       		.byte	0
+ 2561 015f 19       		.uleb128 0x19
+ 2562 0160 34       		.uleb128 0x34
+ 2563 0161 00       		.byte	0
+ 2564 0162 03       		.uleb128 0x3
+ 2565 0163 08       		.uleb128 0x8
+ 2566 0164 3A       		.uleb128 0x3a
+ 2567 0165 0B       		.uleb128 0xb
+ 2568 0166 3B       		.uleb128 0x3b
+ 2569 0167 0B       		.uleb128 0xb
+ 2570 0168 49       		.uleb128 0x49
+ 2571 0169 13       		.uleb128 0x13
+ 2572 016a 02       		.uleb128 0x2
+ 2573 016b 17       		.uleb128 0x17
+ 2574 016c 00       		.byte	0
+ 2575 016d 00       		.byte	0
+ 2576 016e 1A       		.uleb128 0x1a
+ 2577 016f 34       		.uleb128 0x34
+ 2578 0170 00       		.byte	0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 56
+
+
+ 2579 0171 03       		.uleb128 0x3
+ 2580 0172 0E       		.uleb128 0xe
+ 2581 0173 3A       		.uleb128 0x3a
+ 2582 0174 0B       		.uleb128 0xb
+ 2583 0175 3B       		.uleb128 0x3b
+ 2584 0176 0B       		.uleb128 0xb
+ 2585 0177 49       		.uleb128 0x49
+ 2586 0178 13       		.uleb128 0x13
+ 2587 0179 02       		.uleb128 0x2
+ 2588 017a 17       		.uleb128 0x17
+ 2589 017b 00       		.byte	0
+ 2590 017c 00       		.byte	0
+ 2591 017d 1B       		.uleb128 0x1b
+ 2592 017e 898201   		.uleb128 0x4109
+ 2593 0181 00       		.byte	0
+ 2594 0182 11       		.uleb128 0x11
+ 2595 0183 01       		.uleb128 0x1
+ 2596 0184 31       		.uleb128 0x31
+ 2597 0185 13       		.uleb128 0x13
+ 2598 0186 00       		.byte	0
+ 2599 0187 00       		.byte	0
+ 2600 0188 1C       		.uleb128 0x1c
+ 2601 0189 05       		.uleb128 0x5
+ 2602 018a 00       		.byte	0
+ 2603 018b 03       		.uleb128 0x3
+ 2604 018c 0E       		.uleb128 0xe
+ 2605 018d 3A       		.uleb128 0x3a
+ 2606 018e 0B       		.uleb128 0xb
+ 2607 018f 3B       		.uleb128 0x3b
+ 2608 0190 0B       		.uleb128 0xb
+ 2609 0191 49       		.uleb128 0x49
+ 2610 0192 13       		.uleb128 0x13
+ 2611 0193 02       		.uleb128 0x2
+ 2612 0194 17       		.uleb128 0x17
+ 2613 0195 00       		.byte	0
+ 2614 0196 00       		.byte	0
+ 2615 0197 1D       		.uleb128 0x1d
+ 2616 0198 0F       		.uleb128 0xf
+ 2617 0199 00       		.byte	0
+ 2618 019a 0B       		.uleb128 0xb
+ 2619 019b 0B       		.uleb128 0xb
+ 2620 019c 49       		.uleb128 0x49
+ 2621 019d 13       		.uleb128 0x13
+ 2622 019e 00       		.byte	0
+ 2623 019f 00       		.byte	0
+ 2624 01a0 1E       		.uleb128 0x1e
+ 2625 01a1 34       		.uleb128 0x34
+ 2626 01a2 00       		.byte	0
+ 2627 01a3 03       		.uleb128 0x3
+ 2628 01a4 0E       		.uleb128 0xe
+ 2629 01a5 3A       		.uleb128 0x3a
+ 2630 01a6 0B       		.uleb128 0xb
+ 2631 01a7 3B       		.uleb128 0x3b
+ 2632 01a8 05       		.uleb128 0x5
+ 2633 01a9 49       		.uleb128 0x49
+ 2634 01aa 13       		.uleb128 0x13
+ 2635 01ab 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 57
+
+
+ 2636 01ac 19       		.uleb128 0x19
+ 2637 01ad 3C       		.uleb128 0x3c
+ 2638 01ae 19       		.uleb128 0x19
+ 2639 01af 00       		.byte	0
+ 2640 01b0 00       		.byte	0
+ 2641 01b1 1F       		.uleb128 0x1f
+ 2642 01b2 34       		.uleb128 0x34
+ 2643 01b3 00       		.byte	0
+ 2644 01b4 03       		.uleb128 0x3
+ 2645 01b5 0E       		.uleb128 0xe
+ 2646 01b6 3A       		.uleb128 0x3a
+ 2647 01b7 0B       		.uleb128 0xb
+ 2648 01b8 3B       		.uleb128 0x3b
+ 2649 01b9 0B       		.uleb128 0xb
+ 2650 01ba 49       		.uleb128 0x49
+ 2651 01bb 13       		.uleb128 0x13
+ 2652 01bc 3F       		.uleb128 0x3f
+ 2653 01bd 19       		.uleb128 0x19
+ 2654 01be 3C       		.uleb128 0x3c
+ 2655 01bf 19       		.uleb128 0x19
+ 2656 01c0 00       		.byte	0
+ 2657 01c1 00       		.byte	0
+ 2658 01c2 20       		.uleb128 0x20
+ 2659 01c3 21       		.uleb128 0x21
+ 2660 01c4 00       		.byte	0
+ 2661 01c5 49       		.uleb128 0x49
+ 2662 01c6 13       		.uleb128 0x13
+ 2663 01c7 2F       		.uleb128 0x2f
+ 2664 01c8 05       		.uleb128 0x5
+ 2665 01c9 00       		.byte	0
+ 2666 01ca 00       		.byte	0
+ 2667 01cb 21       		.uleb128 0x21
+ 2668 01cc 26       		.uleb128 0x26
+ 2669 01cd 00       		.byte	0
+ 2670 01ce 49       		.uleb128 0x49
+ 2671 01cf 13       		.uleb128 0x13
+ 2672 01d0 00       		.byte	0
+ 2673 01d1 00       		.byte	0
+ 2674 01d2 22       		.uleb128 0x22
+ 2675 01d3 34       		.uleb128 0x34
+ 2676 01d4 00       		.byte	0
+ 2677 01d5 03       		.uleb128 0x3
+ 2678 01d6 0E       		.uleb128 0xe
+ 2679 01d7 3A       		.uleb128 0x3a
+ 2680 01d8 0B       		.uleb128 0xb
+ 2681 01d9 3B       		.uleb128 0x3b
+ 2682 01da 0B       		.uleb128 0xb
+ 2683 01db 49       		.uleb128 0x49
+ 2684 01dc 13       		.uleb128 0x13
+ 2685 01dd 3F       		.uleb128 0x3f
+ 2686 01de 19       		.uleb128 0x19
+ 2687 01df 02       		.uleb128 0x2
+ 2688 01e0 18       		.uleb128 0x18
+ 2689 01e1 00       		.byte	0
+ 2690 01e2 00       		.byte	0
+ 2691 01e3 23       		.uleb128 0x23
+ 2692 01e4 35       		.uleb128 0x35
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 58
+
+
+ 2693 01e5 00       		.byte	0
+ 2694 01e6 49       		.uleb128 0x49
+ 2695 01e7 13       		.uleb128 0x13
+ 2696 01e8 00       		.byte	0
+ 2697 01e9 00       		.byte	0
+ 2698 01ea 24       		.uleb128 0x24
+ 2699 01eb 21       		.uleb128 0x21
+ 2700 01ec 00       		.byte	0
+ 2701 01ed 00       		.byte	0
+ 2702 01ee 00       		.byte	0
+ 2703 01ef 25       		.uleb128 0x25
+ 2704 01f0 2E       		.uleb128 0x2e
+ 2705 01f1 00       		.byte	0
+ 2706 01f2 3F       		.uleb128 0x3f
+ 2707 01f3 19       		.uleb128 0x19
+ 2708 01f4 3C       		.uleb128 0x3c
+ 2709 01f5 19       		.uleb128 0x19
+ 2710 01f6 6E       		.uleb128 0x6e
+ 2711 01f7 0E       		.uleb128 0xe
+ 2712 01f8 03       		.uleb128 0x3
+ 2713 01f9 0E       		.uleb128 0xe
+ 2714 01fa 3A       		.uleb128 0x3a
+ 2715 01fb 0B       		.uleb128 0xb
+ 2716 01fc 3B       		.uleb128 0x3b
+ 2717 01fd 0B       		.uleb128 0xb
+ 2718 01fe 00       		.byte	0
+ 2719 01ff 00       		.byte	0
+ 2720 0200 26       		.uleb128 0x26
+ 2721 0201 2E       		.uleb128 0x2e
+ 2722 0202 00       		.byte	0
+ 2723 0203 3F       		.uleb128 0x3f
+ 2724 0204 19       		.uleb128 0x19
+ 2725 0205 3C       		.uleb128 0x3c
+ 2726 0206 19       		.uleb128 0x19
+ 2727 0207 6E       		.uleb128 0x6e
+ 2728 0208 0E       		.uleb128 0xe
+ 2729 0209 03       		.uleb128 0x3
+ 2730 020a 0E       		.uleb128 0xe
+ 2731 020b 3A       		.uleb128 0x3a
+ 2732 020c 0B       		.uleb128 0xb
+ 2733 020d 3B       		.uleb128 0x3b
+ 2734 020e 05       		.uleb128 0x5
+ 2735 020f 00       		.byte	0
+ 2736 0210 00       		.byte	0
+ 2737 0211 00       		.byte	0
+ 2738              		.section	.debug_loc,"",%progbits
+ 2739              	.Ldebug_loc0:
+ 2740              	.LLST0:
+ 2741 0000 02000000 		.4byte	.LVL3
+ 2742 0004 06000000 		.4byte	.LVL4
+ 2743 0008 0200     		.2byte	0x2
+ 2744 000a 30       		.byte	0x30
+ 2745 000b 9F       		.byte	0x9f
+ 2746 000c 06000000 		.4byte	.LVL4
+ 2747 0010 34000000 		.4byte	.LVL10
+ 2748 0014 0100     		.2byte	0x1
+ 2749 0016 54       		.byte	0x54
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 59
+
+
+ 2750 0017 00000000 		.4byte	0
+ 2751 001b 00000000 		.4byte	0
+ 2752              	.LLST1:
+ 2753 001f 22000000 		.4byte	.LVL7
+ 2754 0023 34000000 		.4byte	.LVL10
+ 2755 0027 0100     		.2byte	0x1
+ 2756 0029 55       		.byte	0x55
+ 2757 002a 00000000 		.4byte	0
+ 2758 002e 00000000 		.4byte	0
+ 2759              	.LLST2:
+ 2760 0032 00000000 		.4byte	.LVL11
+ 2761 0036 16000000 		.4byte	.LVL12
+ 2762 003a 0100     		.2byte	0x1
+ 2763 003c 50       		.byte	0x50
+ 2764 003d 16000000 		.4byte	.LVL12
+ 2765 0041 1C000000 		.4byte	.LVL14
+ 2766 0045 0400     		.2byte	0x4
+ 2767 0047 F3       		.byte	0xf3
+ 2768 0048 01       		.uleb128 0x1
+ 2769 0049 50       		.byte	0x50
+ 2770 004a 9F       		.byte	0x9f
+ 2771 004b 1C000000 		.4byte	.LVL14
+ 2772 004f 22000000 		.4byte	.LVL15
+ 2773 0053 0100     		.2byte	0x1
+ 2774 0055 50       		.byte	0x50
+ 2775 0056 22000000 		.4byte	.LVL15
+ 2776 005a 28000000 		.4byte	.LVL17
+ 2777 005e 0400     		.2byte	0x4
+ 2778 0060 F3       		.byte	0xf3
+ 2779 0061 01       		.uleb128 0x1
+ 2780 0062 50       		.byte	0x50
+ 2781 0063 9F       		.byte	0x9f
+ 2782 0064 28000000 		.4byte	.LVL17
+ 2783 0068 2E000000 		.4byte	.LVL18
+ 2784 006c 0100     		.2byte	0x1
+ 2785 006e 50       		.byte	0x50
+ 2786 006f 2E000000 		.4byte	.LVL18
+ 2787 0073 34000000 		.4byte	.LVL20
+ 2788 0077 0400     		.2byte	0x4
+ 2789 0079 F3       		.byte	0xf3
+ 2790 007a 01       		.uleb128 0x1
+ 2791 007b 50       		.byte	0x50
+ 2792 007c 9F       		.byte	0x9f
+ 2793 007d 34000000 		.4byte	.LVL20
+ 2794 0081 3A000000 		.4byte	.LVL21
+ 2795 0085 0100     		.2byte	0x1
+ 2796 0087 50       		.byte	0x50
+ 2797 0088 3A000000 		.4byte	.LVL21
+ 2798 008c 48000000 		.4byte	.LFE67
+ 2799 0090 0400     		.2byte	0x4
+ 2800 0092 F3       		.byte	0xf3
+ 2801 0093 01       		.uleb128 0x1
+ 2802 0094 50       		.byte	0x50
+ 2803 0095 9F       		.byte	0x9f
+ 2804 0096 00000000 		.4byte	0
+ 2805 009a 00000000 		.4byte	0
+ 2806              	.LLST3:
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 60
+
+
+ 2807 009e 00000000 		.4byte	.LVL23
+ 2808 00a2 4A000000 		.4byte	.LVL24
+ 2809 00a6 0200     		.2byte	0x2
+ 2810 00a8 30       		.byte	0x30
+ 2811 00a9 9F       		.byte	0x9f
+ 2812 00aa 4A000000 		.4byte	.LVL24
+ 2813 00ae 68000000 		.4byte	.LFE68
+ 2814 00b2 0100     		.2byte	0x1
+ 2815 00b4 51       		.byte	0x51
+ 2816 00b5 00000000 		.4byte	0
+ 2817 00b9 00000000 		.4byte	0
+ 2818              	.LLST4:
+ 2819 00bd 4A000000 		.4byte	.LVL24
+ 2820 00c1 4E000000 		.4byte	.LVL25
+ 2821 00c5 0200     		.2byte	0x2
+ 2822 00c7 30       		.byte	0x30
+ 2823 00c8 9F       		.byte	0x9f
+ 2824 00c9 4E000000 		.4byte	.LVL25
+ 2825 00cd 68000000 		.4byte	.LFE68
+ 2826 00d1 0100     		.2byte	0x1
+ 2827 00d3 53       		.byte	0x53
+ 2828 00d4 00000000 		.4byte	0
+ 2829 00d8 00000000 		.4byte	0
+ 2830              	.LLST5:
+ 2831 00dc 00000000 		.4byte	.LVL28
+ 2832 00e0 04000000 		.4byte	.LVL29
+ 2833 00e4 0200     		.2byte	0x2
+ 2834 00e6 30       		.byte	0x30
+ 2835 00e7 9F       		.byte	0x9f
+ 2836 00e8 04000000 		.4byte	.LVL29
+ 2837 00ec 1C000000 		.4byte	.LFE70
+ 2838 00f0 0100     		.2byte	0x1
+ 2839 00f2 53       		.byte	0x53
+ 2840 00f3 00000000 		.4byte	0
+ 2841 00f7 00000000 		.4byte	0
+ 2842              	.LLST6:
+ 2843 00fb 8C000000 		.4byte	.LVL50
+ 2844 00ff 90000000 		.4byte	.LVL51
+ 2845 0103 0200     		.2byte	0x2
+ 2846 0105 30       		.byte	0x30
+ 2847 0106 9F       		.byte	0x9f
+ 2848 0107 90000000 		.4byte	.LVL51
+ 2849 010b 38010000 		.4byte	.LFE63
+ 2850 010f 0100     		.2byte	0x1
+ 2851 0111 54       		.byte	0x54
+ 2852 0112 00000000 		.4byte	0
+ 2853 0116 00000000 		.4byte	0
+ 2854              	.LLST7:
+ 2855 011a 90000000 		.4byte	.LVL51
+ 2856 011e 9C000000 		.4byte	.LVL52
+ 2857 0122 0200     		.2byte	0x2
+ 2858 0124 30       		.byte	0x30
+ 2859 0125 9F       		.byte	0x9f
+ 2860 0126 9C000000 		.4byte	.LVL52
+ 2861 012a 9E000000 		.4byte	.LVL53
+ 2862 012e 0100     		.2byte	0x1
+ 2863 0130 55       		.byte	0x55
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 61
+
+
+ 2864 0131 9E000000 		.4byte	.LVL53
+ 2865 0135 A4000000 		.4byte	.LVL54
+ 2866 0139 0200     		.2byte	0x2
+ 2867 013b 30       		.byte	0x30
+ 2868 013c 9F       		.byte	0x9f
+ 2869 013d A4000000 		.4byte	.LVL54
+ 2870 0141 0A010000 		.4byte	.LVL58
+ 2871 0145 0100     		.2byte	0x1
+ 2872 0147 55       		.byte	0x55
+ 2873 0148 00000000 		.4byte	0
+ 2874 014c 00000000 		.4byte	0
+ 2875              	.LLST8:
+ 2876 0150 00000000 		.4byte	.LVL59
+ 2877 0154 26000000 		.4byte	.LVL61
+ 2878 0158 0100     		.2byte	0x1
+ 2879 015a 50       		.byte	0x50
+ 2880 015b 26000000 		.4byte	.LVL61
+ 2881 015f 94010000 		.4byte	.LVL80
+ 2882 0163 0400     		.2byte	0x4
+ 2883 0165 F3       		.byte	0xf3
+ 2884 0166 01       		.uleb128 0x1
+ 2885 0167 50       		.byte	0x50
+ 2886 0168 9F       		.byte	0x9f
+ 2887 0169 94010000 		.4byte	.LVL80
+ 2888 016d AC010000 		.4byte	.LFE65
+ 2889 0171 0400     		.2byte	0x4
+ 2890 0173 F3       		.byte	0xf3
+ 2891 0174 01       		.uleb128 0x1
+ 2892 0175 50       		.byte	0x50
+ 2893 0176 9F       		.byte	0x9f
+ 2894 0177 00000000 		.4byte	0
+ 2895 017b 00000000 		.4byte	0
+ 2896              	.LLST9:
+ 2897 017f 00000000 		.4byte	.LVL59
+ 2898 0183 1E000000 		.4byte	.LVL60
+ 2899 0187 0100     		.2byte	0x1
+ 2900 0189 51       		.byte	0x51
+ 2901 018a 1E000000 		.4byte	.LVL60
+ 2902 018e 96010000 		.4byte	.LVL81
+ 2903 0192 0100     		.2byte	0x1
+ 2904 0194 54       		.byte	0x54
+ 2905 0195 96010000 		.4byte	.LVL81
+ 2906 0199 AC010000 		.4byte	.LFE65
+ 2907 019d 0400     		.2byte	0x4
+ 2908 019f F3       		.byte	0xf3
+ 2909 01a0 01       		.uleb128 0x1
+ 2910 01a1 51       		.byte	0x51
+ 2911 01a2 9F       		.byte	0x9f
+ 2912 01a3 00000000 		.4byte	0
+ 2913 01a7 00000000 		.4byte	0
+ 2914              	.LLST10:
+ 2915 01ab AE000000 		.4byte	.LVL67
+ 2916 01af C8000000 		.4byte	.LVL68
+ 2917 01b3 0100     		.2byte	0x1
+ 2918 01b5 53       		.byte	0x53
+ 2919 01b6 C8000000 		.4byte	.LVL68
+ 2920 01ba CF000000 		.4byte	.LVL69-1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 62
+
+
+ 2921 01be 0500     		.2byte	0x5
+ 2922 01c0 03       		.byte	0x3
+ 2923 01c1 00000000 		.4byte	clockDivider
+ 2924 01c5 00000000 		.4byte	0
+ 2925 01c9 00000000 		.4byte	0
+ 2926              	.LLST11:
+ 2927 01cd 0A010000 		.4byte	.LVL71
+ 2928 01d1 32010000 		.4byte	.LVL74
+ 2929 01d5 0100     		.2byte	0x1
+ 2930 01d7 55       		.byte	0x55
+ 2931 01d8 00000000 		.4byte	0
+ 2932 01dc 00000000 		.4byte	0
+ 2933              	.LLST12:
+ 2934 01e0 58010000 		.4byte	.LVL75
+ 2935 01e4 80010000 		.4byte	.LVL78
+ 2936 01e8 0100     		.2byte	0x1
+ 2937 01ea 55       		.byte	0x55
+ 2938 01eb 00000000 		.4byte	0
+ 2939 01ef 00000000 		.4byte	0
+ 2940              		.section	.debug_aranges,"",%progbits
+ 2941 0000 54000000 		.4byte	0x54
+ 2942 0004 0200     		.2byte	0x2
+ 2943 0006 00000000 		.4byte	.Ldebug_info0
+ 2944 000a 04       		.byte	0x4
+ 2945 000b 00       		.byte	0
+ 2946 000c 0000     		.2byte	0
+ 2947 000e 0000     		.2byte	0
+ 2948 0010 00000000 		.4byte	.LFB64
+ 2949 0014 1A000000 		.4byte	.LFE64-.LFB64
+ 2950 0018 00000000 		.4byte	.LFB66
+ 2951 001c 38000000 		.4byte	.LFE66-.LFB66
+ 2952 0020 00000000 		.4byte	.LFB67
+ 2953 0024 48000000 		.4byte	.LFE67-.LFB67
+ 2954 0028 00000000 		.4byte	.LFB68
+ 2955 002c 68000000 		.4byte	.LFE68-.LFB68
+ 2956 0030 00000000 		.4byte	.LFB69
+ 2957 0034 0C000000 		.4byte	.LFE69-.LFB69
+ 2958 0038 00000000 		.4byte	.LFB70
+ 2959 003c 1C000000 		.4byte	.LFE70-.LFB70
+ 2960 0040 00000000 		.4byte	.LFB63
+ 2961 0044 38010000 		.4byte	.LFE63-.LFB63
+ 2962 0048 00000000 		.4byte	.LFB65
+ 2963 004c AC010000 		.4byte	.LFE65-.LFB65
+ 2964 0050 00000000 		.4byte	0
+ 2965 0054 00000000 		.4byte	0
+ 2966              		.section	.debug_ranges,"",%progbits
+ 2967              	.Ldebug_ranges0:
+ 2968 0000 00000000 		.4byte	.LFB64
+ 2969 0004 1A000000 		.4byte	.LFE64
+ 2970 0008 00000000 		.4byte	.LFB66
+ 2971 000c 38000000 		.4byte	.LFE66
+ 2972 0010 00000000 		.4byte	.LFB67
+ 2973 0014 48000000 		.4byte	.LFE67
+ 2974 0018 00000000 		.4byte	.LFB68
+ 2975 001c 68000000 		.4byte	.LFE68
+ 2976 0020 00000000 		.4byte	.LFB69
+ 2977 0024 0C000000 		.4byte	.LFE69
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 63
+
+
+ 2978 0028 00000000 		.4byte	.LFB70
+ 2979 002c 1C000000 		.4byte	.LFE70
+ 2980 0030 00000000 		.4byte	.LFB63
+ 2981 0034 38010000 		.4byte	.LFE63
+ 2982 0038 00000000 		.4byte	.LFB65
+ 2983 003c AC010000 		.4byte	.LFE65
+ 2984 0040 00000000 		.4byte	0
+ 2985 0044 00000000 		.4byte	0
+ 2986              		.section	.debug_line,"",%progbits
+ 2987              	.Ldebug_line0:
+ 2988 0000 6B030000 		.section	.debug_str,"MS",%progbits,1
+ 2988      0200AF01 
+ 2988      00000201 
+ 2988      FB0E0D00 
+ 2988      01010101 
+ 2989              	.LASF47:
+ 2990 0000 73657443 		.ascii	"setClockDivider\000"
+ 2990      6C6F636B 
+ 2990      44697669 
+ 2990      64657200 
+ 2991              	.LASF79:
+ 2992 0010 6D617853 		.ascii	"maxScanSpeed\000"
+ 2992      63616E53 
+ 2992      70656564 
+ 2992      00
+ 2993              	.LASF45:
+ 2994 001d 6E657752 		.ascii	"newResolution\000"
+ 2994      65736F6C 
+ 2994      7574696F 
+ 2994      6E00
+ 2995              	.LASF73:
+ 2996 002b 6D617852 		.ascii	"maxResolution\000"
+ 2996      65736F6C 
+ 2996      7574696F 
+ 2996      6E00
+ 2997              	.LASF56:
+ 2998 0039 74656D70 		.ascii	"tempIDAC\000"
+ 2998      49444143 
+ 2998      00
+ 2999              	.LASF72:
+ 3000 0042 64656C61 		.ascii	"delayBetweenLoops\000"
+ 3000      79426574 
+ 3000      7765656E 
+ 3000      4C6F6F70 
+ 3000      7300
+ 3001              	.LASF49:
+ 3002 0054 73657449 		.ascii	"setIDAC\000"
+ 3002      44414300 
+ 3003              	.LASF28:
+ 3004 005c 65657072 		.ascii	"eepromSize\000"
+ 3004      6F6D5369 
+ 3004      7A6500
+ 3005              	.LASF93:
+ 3006 0067 43795F45 		.ascii	"Cy_Em_EEPROM_Read\000"
+ 3006      6D5F4545 
+ 3006      50524F4D 
+ 3006      5F526561 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 64
+
+
+ 3006      6400
+ 3007              	.LASF95:
+ 3008 0079 43617053 		.ascii	"CapSense_InitializeAllBaselines\000"
+ 3008      656E7365 
+ 3008      5F496E69 
+ 3008      7469616C 
+ 3008      697A6541 
+ 3009              	.LASF103:
+ 3010 0099 5553425F 		.ascii	"USB_MIDI_OUT_Service\000"
+ 3010      4D494449 
+ 3010      5F4F5554 
+ 3010      5F536572 
+ 3010      76696365 
+ 3011              	.LASF100:
+ 3012 00ae 5553425F 		.ascii	"USB_GetConfiguration\000"
+ 3012      47657443 
+ 3012      6F6E6669 
+ 3012      67757261 
+ 3012      74696F6E 
+ 3013              	.LASF64:
+ 3014 00c3 45455052 		.ascii	"EEPROMarray\000"
+ 3014      4F4D6172 
+ 3014      72617900 
+ 3015              	.LASF43:
+ 3016 00cf 73657452 		.ascii	"setResolution\000"
+ 3016      65736F6C 
+ 3016      7574696F 
+ 3016      6E00
+ 3017              	.LASF65:
+ 3018 00dd 63617053 		.ascii	"capSensorsPrev\000"
+ 3018      656E736F 
+ 3018      72735072 
+ 3018      657600
+ 3019              	.LASF8:
+ 3020 00ec 5F5F7569 		.ascii	"__uint32_t\000"
+ 3020      6E743332 
+ 3020      5F7400
+ 3021              	.LASF27:
+ 3022 00f7 6C617374 		.ascii	"lastWrRowAddr\000"
+ 3022      5772526F 
+ 3022      77416464 
+ 3022      7200
+ 3023              	.LASF97:
+ 3024 0105 43617053 		.ascii	"CapSense_UpdateEnabledBaselines\000"
+ 3024      656E7365 
+ 3024      5F557064 
+ 3024      61746545 
+ 3024      6E61626C 
+ 3025              	.LASF4:
+ 3026 0125 5F5F7569 		.ascii	"__uint16_t\000"
+ 3026      6E743136 
+ 3026      5F7400
+ 3027              	.LASF92:
+ 3028 0130 5553425F 		.ascii	"USB_Start\000"
+ 3028      53746172 
+ 3028      7400
+ 3029              	.LASF31:
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 65
+
+
+ 3030 013a 626C6F63 		.ascii	"blockingWrite\000"
+ 3030      6B696E67 
+ 3030      57726974 
+ 3030      6500
+ 3031              	.LASF101:
+ 3032 0148 5553425F 		.ascii	"USB_MIDI_Init\000"
+ 3032      4D494449 
+ 3032      5F496E69 
+ 3032      7400
+ 3033              	.LASF55:
+ 3034 0156 74656D70 		.ascii	"tempClockDivider\000"
+ 3034      436C6F63 
+ 3034      6B446976 
+ 3034      69646572 
+ 3034      00
+ 3035              	.LASF38:
+ 3036 0167 43595F45 		.ascii	"CY_EM_EEPROM_WRITE_FAIL\000"
+ 3036      4D5F4545 
+ 3036      50524F4D 
+ 3036      5F575249 
+ 3036      54455F46 
+ 3037              	.LASF18:
+ 3038 017f 75696E74 		.ascii	"uint16\000"
+ 3038      313600
+ 3039              	.LASF42:
+ 3040 0186 73657453 		.ascii	"setScanSpeed\000"
+ 3040      63616E53 
+ 3040      70656564 
+ 3040      00
+ 3041              	.LASF75:
+ 3042 0193 6D617849 		.ascii	"maxIDAC\000"
+ 3042      44414300 
+ 3043              	.LASF104:
+ 3044 019b 43795F45 		.ascii	"Cy_Em_EEPROM_Write\000"
+ 3044      6D5F4545 
+ 3044      50524F4D 
+ 3044      5F577269 
+ 3044      746500
+ 3045              	.LASF81:
+ 3046 01ae 73656E73 		.ascii	"sensorResolution\000"
+ 3046      6F725265 
+ 3046      736F6C75 
+ 3046      74696F6E 
+ 3046      00
+ 3047              	.LASF41:
+ 3048 01bf 73657441 		.ascii	"setActiveSensors\000"
+ 3048      63746976 
+ 3048      6553656E 
+ 3048      736F7273 
+ 3048      00
+ 3049              	.LASF17:
+ 3050 01d0 75696E74 		.ascii	"uint8\000"
+ 3050      3800
+ 3051              	.LASF48:
+ 3052 01d6 6E657743 		.ascii	"newClockDivider\000"
+ 3052      6C6F636B 
+ 3052      44697669 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 66
+
+
+ 3052      64657200 
+ 3053              	.LASF82:
+ 3054 01e6 43617053 		.ascii	"CapSense_widgetResolution\000"
+ 3054      656E7365 
+ 3054      5F776964 
+ 3054      67657452 
+ 3054      65736F6C 
+ 3055              	.LASF98:
+ 3056 0200 43617053 		.ascii	"CapSense_ScanEnabledWidgets\000"
+ 3056      656E7365 
+ 3056      5F536361 
+ 3056      6E456E61 
+ 3056      626C6564 
+ 3057              	.LASF67:
+ 3058 021c 72617756 		.ascii	"rawVsCooked\000"
+ 3058      73436F6F 
+ 3058      6B656400 
+ 3059              	.LASF77:
+ 3060 0228 636C6F63 		.ascii	"clockDividerLowByte\000"
+ 3060      6B446976 
+ 3060      69646572 
+ 3060      4C6F7742 
+ 3060      79746500 
+ 3061              	.LASF84:
+ 3062 023c 43617053 		.ascii	"CapSense_analogSwitchDivider\000"
+ 3062      656E7365 
+ 3062      5F616E61 
+ 3062      6C6F6753 
+ 3062      77697463 
+ 3063              	.LASF20:
+ 3064 0259 666C6F61 		.ascii	"float\000"
+ 3064      7400
+ 3065              	.LASF86:
+ 3066 025f 4C454431 		.ascii	"LED1_Write\000"
+ 3066      5F577269 
+ 3066      746500
+ 3067              	.LASF10:
+ 3068 026a 6C6F6E67 		.ascii	"long long int\000"
+ 3068      206C6F6E 
+ 3068      6720696E 
+ 3068      7400
+ 3069              	.LASF70:
+ 3070 0278 6D617843 		.ascii	"maxClockDivider\000"
+ 3070      6C6F636B 
+ 3070      44697669 
+ 3070      64657200 
+ 3071              	.LASF7:
+ 3072 0288 6C6F6E67 		.ascii	"long int\000"
+ 3072      20696E74 
+ 3072      00
+ 3073              	.LASF78:
+ 3074 0291 49444143 		.ascii	"IDACLowByte\000"
+ 3074      4C6F7742 
+ 3074      79746500 
+ 3075              	.LASF58:
+ 3076 029d 43617053 		.ascii	"CapSense_sensorRaw\000"
+ 3076      656E7365 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 67
+
+
+ 3076      5F73656E 
+ 3076      736F7252 
+ 3076      617700
+ 3077              	.LASF2:
+ 3078 02b0 73686F72 		.ascii	"short int\000"
+ 3078      7420696E 
+ 3078      7400
+ 3079              	.LASF3:
+ 3080 02ba 5F5F7569 		.ascii	"__uint8_t\000"
+ 3080      6E74385F 
+ 3080      7400
+ 3081              	.LASF89:
+ 3082 02c4 43617053 		.ascii	"CapSense_SetScanSpeed\000"
+ 3082      656E7365 
+ 3082      5F536574 
+ 3082      5363616E 
+ 3082      53706565 
+ 3083              	.LASF46:
+ 3084 02da 74656D70 		.ascii	"tempRes\000"
+ 3084      52657300 
+ 3085              	.LASF53:
+ 3086 02e2 5553425F 		.ascii	"USB_callbackLocalMidiEvent\000"
+ 3086      63616C6C 
+ 3086      6261636B 
+ 3086      4C6F6361 
+ 3086      6C4D6964 
+ 3087              	.LASF60:
+ 3088 02fd 456D5F45 		.ascii	"Em_EEPROM_context\000"
+ 3088      4550524F 
+ 3088      4D5F636F 
+ 3088      6E746578 
+ 3088      7400
+ 3089              	.LASF23:
+ 3090 030f 6C6F6E67 		.ascii	"long double\000"
+ 3090      20646F75 
+ 3090      626C6500 
+ 3091              	.LASF1:
+ 3092 031b 756E7369 		.ascii	"unsigned char\000"
+ 3092      676E6564 
+ 3092      20636861 
+ 3092      7200
+ 3093              	.LASF71:
+ 3094 0329 6D696E43 		.ascii	"minClockDivider\000"
+ 3094      6C6F636B 
+ 3094      44697669 
+ 3094      64657200 
+ 3095              	.LASF11:
+ 3096 0339 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 3096      206C6F6E 
+ 3096      6720756E 
+ 3096      7369676E 
+ 3096      65642069 
+ 3097              	.LASF16:
+ 3098 0350 75696E74 		.ascii	"uint32_t\000"
+ 3098      33325F74 
+ 3098      00
+ 3099              	.LASF36:
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 68
+
+
+ 3100 0359 43595F45 		.ascii	"CY_EM_EEPROM_BAD_CHECKSUM\000"
+ 3100      4D5F4545 
+ 3100      50524F4D 
+ 3100      5F424144 
+ 3100      5F434845 
+ 3101              	.LASF94:
+ 3102 0373 43617053 		.ascii	"CapSense_Start\000"
+ 3102      656E7365 
+ 3102      5F537461 
+ 3102      727400
+ 3103              	.LASF12:
+ 3104 0382 756E7369 		.ascii	"unsigned int\000"
+ 3104      676E6564 
+ 3104      20696E74 
+ 3104      00
+ 3105              	.LASF32:
+ 3106 038f 75736572 		.ascii	"userFlashStartAddr\000"
+ 3106      466C6173 
+ 3106      68537461 
+ 3106      72744164 
+ 3106      647200
+ 3107              	.LASF14:
+ 3108 03a2 75696E74 		.ascii	"uint16_t\000"
+ 3108      31365F74 
+ 3108      00
+ 3109              	.LASF59:
+ 3110 03ab 43617053 		.ascii	"CapSense_sensorSignal\000"
+ 3110      656E7365 
+ 3110      5F73656E 
+ 3110      736F7253 
+ 3110      69676E61 
+ 3111              	.LASF9:
+ 3112 03c1 6C6F6E67 		.ascii	"long unsigned int\000"
+ 3112      20756E73 
+ 3112      69676E65 
+ 3112      6420696E 
+ 3112      7400
+ 3113              	.LASF102:
+ 3114 03d3 5553425F 		.ascii	"USB_MIDI_IN_Service\000"
+ 3114      4D494449 
+ 3114      5F494E5F 
+ 3114      53657276 
+ 3114      69636500 
+ 3115              	.LASF50:
+ 3116 03e7 6E657749 		.ascii	"newIDAC\000"
+ 3116      44414300 
+ 3117              	.LASF37:
+ 3118 03ef 43595F45 		.ascii	"CY_EM_EEPROM_BAD_DATA\000"
+ 3118      4D5F4545 
+ 3118      50524F4D 
+ 3118      5F424144 
+ 3118      5F444154 
+ 3119              	.LASF88:
+ 3120 0405 43617053 		.ascii	"CapSense_DisableWidget\000"
+ 3120      656E7365 
+ 3120      5F446973 
+ 3120      61626C65 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 69
+
+
+ 3120      57696467 
+ 3121              	.LASF68:
+ 3122 041c 6D617841 		.ascii	"maxActiveSensors\000"
+ 3122      63746976 
+ 3122      6553656E 
+ 3122      736F7273 
+ 3122      00
+ 3123              	.LASF5:
+ 3124 042d 73686F72 		.ascii	"short unsigned int\000"
+ 3124      7420756E 
+ 3124      7369676E 
+ 3124      65642069 
+ 3124      6E7400
+ 3125              	.LASF83:
+ 3126 0440 43617053 		.ascii	"CapSense_idacSettings\000"
+ 3126      656E7365 
+ 3126      5F696461 
+ 3126      63536574 
+ 3126      74696E67 
+ 3127              	.LASF22:
+ 3128 0456 63686172 		.ascii	"char\000"
+ 3128      00
+ 3129              	.LASF108:
+ 3130 045b 6D61696E 		.ascii	"main\000"
+ 3130      00
+ 3131              	.LASF15:
+ 3132 0460 696E7433 		.ascii	"int32_t\000"
+ 3132      325F7400 
+ 3133              	.LASF57:
+ 3134 0468 74656D70 		.ascii	"tempScanSpeed\000"
+ 3134      5363616E 
+ 3134      53706565 
+ 3134      6400
+ 3135              	.LASF34:
+ 3136 0476 43595F45 		.ascii	"CY_EM_EEPROM_SUCCESS\000"
+ 3136      4D5F4545 
+ 3136      50524F4D 
+ 3136      5F535543 
+ 3136      43455353 
+ 3137              	.LASF25:
+ 3138 048b 776C456E 		.ascii	"wlEndAddr\000"
+ 3138      64416464 
+ 3138      7200
+ 3139              	.LASF30:
+ 3140 0495 72656475 		.ascii	"redundantCopy\000"
+ 3140      6E64616E 
+ 3140      74436F70 
+ 3140      7900
+ 3141              	.LASF33:
+ 3142 04a3 63795F73 		.ascii	"cy_stc_eeprom_context_t\000"
+ 3142      74635F65 
+ 3142      6570726F 
+ 3142      6D5F636F 
+ 3142      6E746578 
+ 3143              	.LASF61:
+ 3144 04bb 456D5F45 		.ascii	"Em_EEPROM_em_EepromStorage\000"
+ 3144      4550524F 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 70
+
+
+ 3144      4D5F656D 
+ 3144      5F456570 
+ 3144      726F6D53 
+ 3145              	.LASF39:
+ 3146 04d6 63795F65 		.ascii	"cy_en_em_eeprom_status_t\000"
+ 3146      6E5F656D 
+ 3146      5F656570 
+ 3146      726F6D5F 
+ 3146      73746174 
+ 3147              	.LASF106:
+ 3148 04ef 6D61696E 		.ascii	"main.c\000"
+ 3148      2E6300
+ 3149              	.LASF40:
+ 3150 04f6 43617053 		.ascii	"CapSense_DisplayState\000"
+ 3150      656E7365 
+ 3150      5F446973 
+ 3150      706C6179 
+ 3150      53746174 
+ 3151              	.LASF35:
+ 3152 050c 43595F45 		.ascii	"CY_EM_EEPROM_BAD_PARAM\000"
+ 3152      4D5F4545 
+ 3152      50524F4D 
+ 3152      5F424144 
+ 3152      5F504152 
+ 3153              	.LASF80:
+ 3154 0523 6D696E53 		.ascii	"minScanSpeed\000"
+ 3154      63616E53 
+ 3154      70656564 
+ 3154      00
+ 3155              	.LASF69:
+ 3156 0530 636C6F63 		.ascii	"clockDivider\000"
+ 3156      6B446976 
+ 3156      69646572 
+ 3156      00
+ 3157              	.LASF99:
+ 3158 053d 5553425F 		.ascii	"USB_IsConfigurationChanged\000"
+ 3158      4973436F 
+ 3158      6E666967 
+ 3158      75726174 
+ 3158      696F6E43 
+ 3159              	.LASF54:
+ 3160 0558 6361626C 		.ascii	"cable\000"
+ 3160      6500
+ 3161              	.LASF76:
+ 3162 055e 6D696E49 		.ascii	"minIDAC\000"
+ 3162      44414300 
+ 3163              	.LASF52:
+ 3164 0566 74656D70 		.ascii	"tempSensor\000"
+ 3164      53656E73 
+ 3164      6F7200
+ 3165              	.LASF19:
+ 3166 0571 75696E74 		.ascii	"uint32\000"
+ 3166      333200
+ 3167              	.LASF91:
+ 3168 0578 456D5F45 		.ascii	"Em_EEPROM_Init\000"
+ 3168      4550524F 
+ 3168      4D5F496E 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 71
+
+
+ 3168      697400
+ 3169              	.LASF6:
+ 3170 0587 5F5F696E 		.ascii	"__int32_t\000"
+ 3170      7433325F 
+ 3170      7400
+ 3171              	.LASF87:
+ 3172 0591 43617053 		.ascii	"CapSense_EnableWidget\000"
+ 3172      656E7365 
+ 3172      5F456E61 
+ 3172      626C6557 
+ 3172      69646765 
+ 3173              	.LASF0:
+ 3174 05a7 7369676E 		.ascii	"signed char\000"
+ 3174      65642063 
+ 3174      68617200 
+ 3175              	.LASF13:
+ 3176 05b3 75696E74 		.ascii	"uint8_t\000"
+ 3176      385F7400 
+ 3177              	.LASF96:
+ 3178 05bb 43617053 		.ascii	"CapSense_IsBusy\000"
+ 3178      656E7365 
+ 3178      5F497342 
+ 3178      75737900 
+ 3179              	.LASF24:
+ 3180 05cb 73697A65 		.ascii	"sizetype\000"
+ 3180      74797065 
+ 3180      00
+ 3181              	.LASF74:
+ 3182 05d4 6D696E52 		.ascii	"minResolution\000"
+ 3182      65736F6C 
+ 3182      7574696F 
+ 3182      6E00
+ 3183              	.LASF63:
+ 3184 05e2 65657072 		.ascii	"eepromReturnValue\000"
+ 3184      6F6D5265 
+ 3184      7475726E 
+ 3184      56616C75 
+ 3184      6500
+ 3185              	.LASF21:
+ 3186 05f4 646F7562 		.ascii	"double\000"
+ 3186      6C6500
+ 3187              	.LASF90:
+ 3188 05fb 5553425F 		.ascii	"USB_PutUsbMidiIn\000"
+ 3188      50757455 
+ 3188      73624D69 
+ 3188      6469496E 
+ 3188      00
+ 3189              	.LASF29:
+ 3190 060c 77656172 		.ascii	"wearLevelingFactor\000"
+ 3190      4C657665 
+ 3190      6C696E67 
+ 3190      46616374 
+ 3190      6F7200
+ 3191              	.LASF62:
+ 3192 061f 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 3192      52784275 
+ 3192      66666572 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccUrH2Ie.s 			page 72
+
+
+ 3192      00
+ 3193              	.LASF105:
+ 3194 062c 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 3194      43313120 
+ 3194      352E342E 
+ 3194      31203230 
+ 3194      31363036 
+ 3195 065f 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 3195      20726576 
+ 3195      6973696F 
+ 3195      6E203233 
+ 3195      37373135 
+ 3196 0692 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 3196      66756E63 
+ 3196      74696F6E 
+ 3196      2D736563 
+ 3196      74696F6E 
+ 3197              	.LASF51:
+ 3198 06ba 6D696469 		.ascii	"midiMsg\000"
+ 3198      4D736700 
+ 3199              	.LASF107:
+ 3200 06c2 433A5C55 		.ascii	"C:\\Users\\JeffSnyder\\Documents\\SnyderphonicsDevK"
+ 3200      73657273 
+ 3200      5C4A6566 
+ 3200      66536E79 
+ 3200      6465725C 
+ 3201 06f1 69745C77 		.ascii	"it\\weston_1\\weston_1.cydsn\000"
+ 3201      6573746F 
+ 3201      6E5F315C 
+ 3201      77657374 
+ 3201      6F6E5F31 
+ 3202              	.LASF66:
+ 3203 070c 6E756D41 		.ascii	"numActiveSensors\000"
+ 3203      63746976 
+ 3203      6553656E 
+ 3203      736F7273 
+ 3203      00
+ 3204              	.LASF85:
+ 3205 071d 43617053 		.ascii	"CapSense_CheckIsWidgetActive\000"
+ 3205      656E7365 
+ 3205      5F436865 
+ 3205      636B4973 
+ 3205      57696467 
+ 3206              	.LASF26:
+ 3207 073a 6E756D62 		.ascii	"numberOfRows\000"
+ 3207      65724F66 
+ 3207      526F7773 
+ 3207      00
+ 3208              	.LASF44:
+ 3209 0747 6E657753 		.ascii	"newSpeed\000"
+ 3209      70656564 
+ 3209      00
+ 3210              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

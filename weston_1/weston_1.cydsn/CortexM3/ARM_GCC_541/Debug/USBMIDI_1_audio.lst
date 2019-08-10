@@ -1,0 +1,976 @@
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"USBMIDI_1_audio.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.USBMIDI_1_DispatchAUDIOClassRqst,"ax",%progbits
+  20              		.align	2
+  21              		.global	USBMIDI_1_DispatchAUDIOClassRqst
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	USBMIDI_1_DispatchAUDIOClassRqst, %function
+  25              	USBMIDI_1_DispatchAUDIOClassRqst:
+  26              	.LFB0:
+  27              		.file 1 "Generated_Source\\PSoC5\\USBMIDI_1_audio.c"
+   1:Generated_Source\PSoC5/USBMIDI_1_audio.c **** /***************************************************************************//**
+   2:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * \file USBMIDI_1_audio.c
+   3:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * \version 3.20
+   4:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *
+   5:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * \brief
+   6:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *  This file contains the USB AUDIO Class request handler.
+   7:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *
+   8:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * Related Document:
+   9:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *  Universal Serial Bus Device Class Definition for Audio Devices Release 1.0
+  10:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *
+  11:Generated_Source\PSoC5/USBMIDI_1_audio.c **** ********************************************************************************
+  12:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * \copyright
+  13:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * Copyright 2008-2016, Cypress Semiconductor Corporation.  All rights reserved.
+  14:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * You may use this file only in accordance with the license, terms, conditions,
+  15:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  16:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * the software package with which this file was provided.
+  17:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *******************************************************************************/
+  18:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+  19:Generated_Source\PSoC5/USBMIDI_1_audio.c **** #include "USBMIDI_1_audio.h"
+  20:Generated_Source\PSoC5/USBMIDI_1_audio.c **** #include "USBMIDI_1_pvt.h"
+  21:Generated_Source\PSoC5/USBMIDI_1_audio.c **** #include "cyapicallbacks.h"
+  22:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+  23:Generated_Source\PSoC5/USBMIDI_1_audio.c **** #if defined(USBMIDI_1_ENABLE_AUDIO_CLASS)
+  24:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+  25:Generated_Source\PSoC5/USBMIDI_1_audio.c **** /***************************************
+  26:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * Custom Declarations
+  27:Generated_Source\PSoC5/USBMIDI_1_audio.c **** ***************************************/
+  28:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+  29:Generated_Source\PSoC5/USBMIDI_1_audio.c **** /* `#START CUSTOM_DECLARATIONS` Place your declaration here */
+  30:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 2
+
+
+  31:Generated_Source\PSoC5/USBMIDI_1_audio.c **** /* `#END` */
+  32:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+  33:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+  34:Generated_Source\PSoC5/USBMIDI_1_audio.c **** #if !defined(USER_SUPPLIED_AUDIO_HANDLER)
+  35:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+  36:Generated_Source\PSoC5/USBMIDI_1_audio.c **** /***************************************
+  37:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *    AUDIO Variables
+  38:Generated_Source\PSoC5/USBMIDI_1_audio.c **** ***************************************/
+  39:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+  40:Generated_Source\PSoC5/USBMIDI_1_audio.c **** #if defined(USBMIDI_1_ENABLE_AUDIO_STREAMING)
+  41:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     /** Contains the current audio sample frequency. It is set by the host using a SET_CUR request 
+  42:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     volatile uint8 USBMIDI_1_currentSampleFrequency[USBMIDI_1_MAX_EP][USBMIDI_1_SAMPLE_FREQ_LEN];
+  43:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     /** Used as a flag for the user code, to inform it that the host has been sent a request 
+  44:Generated_Source\PSoC5/USBMIDI_1_audio.c ****      * to change the sample frequency. The sample frequency will be sent on the next OUT transactio
+  45:Generated_Source\PSoC5/USBMIDI_1_audio.c ****      * It contains the endpoint address when set. The following code is recommended for 
+  46:Generated_Source\PSoC5/USBMIDI_1_audio.c ****      * detecting new sample frequency in main code:
+  47:Generated_Source\PSoC5/USBMIDI_1_audio.c ****      * \snippet  /USBFS_sut_02.cydsn/main.c Detecting new Sample Frequency
+  48:Generated_Source\PSoC5/USBMIDI_1_audio.c ****      *     
+  49:Generated_Source\PSoC5/USBMIDI_1_audio.c ****      * The USBFS_transferState variable is checked to make sure that the transfer completes. */
+  50:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     volatile uint8 USBMIDI_1_frequencyChanged;
+  51:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     /** Contains the mute configuration set by the host.*/
+  52:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     volatile uint8 USBMIDI_1_currentMute;
+  53:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     /** Contains the volume level set by the host.*/
+  54:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     volatile uint8 USBMIDI_1_currentVolume[USBMIDI_1_VOLUME_LEN];
+  55:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     volatile uint8 USBMIDI_1_minimumVolume[USBMIDI_1_VOLUME_LEN] = {USBMIDI_1_VOL_MIN_LSB,
+  56:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                                                                                   USBMIDI_1_VOL_MIN
+  57:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     volatile uint8 USBMIDI_1_maximumVolume[USBMIDI_1_VOLUME_LEN] = {USBMIDI_1_VOL_MAX_LSB,
+  58:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                                                                                   USBMIDI_1_VOL_MAX
+  59:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     volatile uint8 USBMIDI_1_resolutionVolume[USBMIDI_1_VOLUME_LEN] = {USBMIDI_1_VOL_RES_LSB,
+  60:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                                                                                      USBMIDI_1_VOL_
+  61:Generated_Source\PSoC5/USBMIDI_1_audio.c **** #endif /*  USBMIDI_1_ENABLE_AUDIO_STREAMING */
+  62:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+  63:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+  64:Generated_Source\PSoC5/USBMIDI_1_audio.c **** /*******************************************************************************
+  65:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * Function Name: USBMIDI_1_DispatchAUDIOClassRqst
+  66:Generated_Source\PSoC5/USBMIDI_1_audio.c **** ****************************************************************************//**
+  67:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *
+  68:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *  This routine dispatches class requests
+  69:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *
+  70:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * \return
+  71:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *  Results of Audio Class request handling: 
+  72:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *  - USBMIDI_1_TRUE  - request was handled without errors
+  73:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *  - USBMIDI_1_FALSE - error occurs during handling of request     
+  74:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *
+  75:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * \globalvars
+  76:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *   USBMIDI_1_currentSampleFrequency: Contains the current audio Sample
+  77:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *       Frequency. It is set by the Host using SET_CUR request to the endpoint.
+  78:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *   USBMIDI_1_frequencyChanged: This variable is used as a flag for the
+  79:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *       user code, to be aware that Host has been sent request for changing
+  80:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *       Sample Frequency. Sample frequency will be sent on the next OUT
+  81:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *       transaction. It is contains endpoint address when set. The following
+  82:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *       code is recommended for detecting new Sample Frequency in main code:
+  83:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *       
+  84:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *  \snippet  /USBFS_sut_02.cydsn/main.c Detecting new Sample Frequency
+  85:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *      
+  86:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *   USBMIDI_1_transferState variable is checked to be sure that transfer
+  87:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *              completes.
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 3
+
+
+  88:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *   USBMIDI_1_currentMute: Contains mute configuration set by Host.
+  89:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *   USBMIDI_1_currentVolume: Contains volume level set by Host.
+  90:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *
+  91:Generated_Source\PSoC5/USBMIDI_1_audio.c **** * \reentrant
+  92:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *  No.
+  93:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *
+  94:Generated_Source\PSoC5/USBMIDI_1_audio.c **** *******************************************************************************/
+  95:Generated_Source\PSoC5/USBMIDI_1_audio.c **** uint8 USBMIDI_1_DispatchAUDIOClassRqst(void) 
+  96:Generated_Source\PSoC5/USBMIDI_1_audio.c **** {
+  28              		.loc 1 96 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.LVL0:
+  97:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     uint8 requestHandled = USBMIDI_1_FALSE;
+  98:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     
+  99:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     uint8 RqstRcpt = (uint8)(USBMIDI_1_bmRequestTypeReg & USBMIDI_1_RQST_RCPT_MASK);
+  34              		.loc 1 99 0
+  35 0000 0E4A     		ldr	r2, .L6
+  36 0002 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  37 0004 03F00303 		and	r3, r3, #3
+  38              	.LVL1:
+ 100:Generated_Source\PSoC5/USBMIDI_1_audio.c **** #if defined(USBMIDI_1_ENABLE_AUDIO_STREAMING)
+ 101:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     uint8 wValueHi = (uint8) USBMIDI_1_wValueHiReg;
+ 102:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     uint8 epNumber = (uint8) USBMIDI_1_wIndexLoReg & USBMIDI_1_DIR_UNUSED;
+ 103:Generated_Source\PSoC5/USBMIDI_1_audio.c **** #endif /* (USBMIDI_1_ENABLE_AUDIO_STREAMING) */
+ 104:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     
+ 105:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     /* Check request direction: D2H or H2D. */
+ 106:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     if (0u != (USBMIDI_1_bmRequestTypeReg & USBMIDI_1_RQST_DIR_D2H))
+  39              		.loc 1 106 0
+  40 0008 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+  41 000a 12F0800F 		tst	r2, #128
+  42 000e 09D0     		beq	.L2
+ 107:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     {
+ 108:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         /* Handle direction from device to host. */
+ 109:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         
+ 110:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         if (USBMIDI_1_RQST_RCPT_EP == RqstRcpt)
+  43              		.loc 1 110 0
+  44 0010 022B     		cmp	r3, #2
+  45 0012 02D1     		bne	.L3
+ 111:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         {
+ 112:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             /* Request recipient is to endpoint. */
+ 113:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             switch (USBMIDI_1_bRequestReg)
+  46              		.loc 1 113 0
+  47 0014 094B     		ldr	r3, .L6
+  48              	.LVL2:
+  49 0016 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+  50 0018 0DE0     		b	.L4
+  51              	.LVL3:
+  52              	.L3:
+ 114:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             {
+ 115:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 case USBMIDI_1_GET_CUR:
+ 116:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #if defined(USBMIDI_1_ENABLE_AUDIO_STREAMING)
+ 117:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     if (wValueHi == USBMIDI_1_SAMPLING_FREQ_CONTROL)
+ 118:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ 119:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                          /* point Control Selector is Sampling Frequency */
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 4
+
+
+ 120:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.wCount = USBMIDI_1_SAMPLE_FREQ_LEN;
+ 121:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.pData  = USBMIDI_1_currentSampleFrequency[epNumber];
+ 122:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         
+ 123:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         requestHandled   = USBMIDI_1_InitControlRead();
+ 124:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ 125:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #endif /* (USBMIDI_1_ENABLE_AUDIO_STREAMING) */
+ 126:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 
+ 127:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* `#START AUDIO_READ_REQUESTS` Place other request handler here */
+ 128:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 129:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* `#END` */
+ 130:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 
+ 131:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #ifdef USBMIDI_1_DISPATCH_AUDIO_CLASS_AUDIO_READ_REQUESTS_CALLBACK    
+ 132:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     USBMIDI_1_DispatchAUDIOClass_AUDIO_READ_REQUESTS_Callback();
+ 133:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #endif /* (USBMIDI_1_DISPATCH_AUDIO_CLASS_AUDIO_READ_REQUESTS_CALLBACK) */         
+ 134:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 break;
+ 135:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 
+ 136:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 default:
+ 137:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* Do not handle this request unless callback is defined. */
+ 138:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     break;
+ 139:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             }
+ 140:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         
+ 141:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         }
+ 142:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         else if (USBMIDI_1_RQST_RCPT_IFC == RqstRcpt)
+  53              		.loc 1 142 0
+  54 001a 012B     		cmp	r3, #1
+  55 001c 0BD1     		bne	.L4
+ 143:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         {
+ 144:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             /* Request recipient is interface or entity ID. */
+ 145:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             switch (USBMIDI_1_bRequestReg)
+  56              		.loc 1 145 0
+  57 001e 074B     		ldr	r3, .L6
+  58              	.LVL4:
+  59 0020 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+  60 0022 08E0     		b	.L4
+  61              	.LVL5:
+  62              	.L2:
+ 146:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             {
+ 147:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 case USBMIDI_1_GET_CUR:
+ 148:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #if defined(USBMIDI_1_ENABLE_AUDIO_STREAMING)
+ 149:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     if (wValueHi == USBMIDI_1_MUTE_CONTROL)
+ 150:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ 151:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#START MUTE_CONTROL_GET_REQUEST` Place multi-channel handler here */
+ 152:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 153:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#END` */
+ 154:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 155:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #ifdef USBMIDI_1_DISPATCH_AUDIO_CLASS_MUTE_CONTROL_GET_REQUEST_CALLBACK
+ 156:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_DispatchAUDIOClass_MUTE_CONTROL_GET_REQUEST_Callback();
+ 157:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #endif /* (USBMIDI_1_DISPATCH_AUDIO_CLASS_MUTE_CONTROL_GET_REQUEST_CALLBACK) */
+ 158:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 159:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* Entity ID Control Selector is MUTE */
+ 160:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.wCount = 1u;
+ 161:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.pData  = &USBMIDI_1_currentMute;
+ 162:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         
+ 163:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         requestHandled = USBMIDI_1_InitControlRead();
+ 164:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ 165:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     else if (wValueHi == USBMIDI_1_VOLUME_CONTROL)
+ 166:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 5
+
+
+ 167:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#START VOLUME_CONTROL_GET_REQUEST` Place multi-channel handler here */
+ 168:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 169:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#END` */
+ 170:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 171:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #ifdef USBMIDI_1_DISPATCH_AUDIO_CLASS_VOLUME_CONTROL_GET_REQUEST_CALLBACK
+ 172:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_DispatchAUDIOClass_VOLUME_CONTROL_GET_REQUEST_Callback();
+ 173:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #endif /* (USBMIDI_1_DISPATCH_AUDIO_CLASS_VOLUME_CONTROL_GET_REQUEST_CALLBACK) 
+ 174:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 175:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* Entity ID Control Selector is VOLUME, */
+ 176:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.wCount = USBMIDI_1_VOLUME_LEN;
+ 177:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.pData  = USBMIDI_1_currentVolume;
+ 178:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         
+ 179:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         requestHandled = USBMIDI_1_InitControlRead();
+ 180:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ 181:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     else
+ 182:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ 183:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#START OTHER_GET_CUR_REQUESTS` Place other request handler here */
+ 184:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 185:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#END` */
+ 186:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 187:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #ifdef USBMIDI_1_DISPATCH_AUDIO_CLASS_OTHER_GET_CUR_REQUESTS_CALLBACK
+ 188:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_DispatchAUDIOClass_OTHER_GET_CUR_REQUESTS_Callback();
+ 189:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #endif /* (USBMIDI_1_DISPATCH_AUDIO_CLASS_OTHER_GET_CUR_REQUESTS_CALLBACK) */
+ 190:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ 191:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     break;
+ 192:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     
+ 193:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 case USBMIDI_1_GET_MIN:
+ 194:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     if (wValueHi == USBMIDI_1_VOLUME_CONTROL)
+ 195:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ 196:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* Entity ID Control Selector is VOLUME, */
+ 197:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.wCount = USBMIDI_1_VOLUME_LEN;
+ 198:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.pData  = &USBMIDI_1_minimumVolume[0];
+ 199:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         
+ 200:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         requestHandled = USBMIDI_1_InitControlRead();
+ 201:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ 202:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     break;
+ 203:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     
+ 204:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 case USBMIDI_1_GET_MAX:
+ 205:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     if (wValueHi == USBMIDI_1_VOLUME_CONTROL)
+ 206:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ 207:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* Entity ID Control Selector is VOLUME, */
+ 208:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.wCount = USBMIDI_1_VOLUME_LEN;
+ 209:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.pData  = &USBMIDI_1_maximumVolume[0];
+ 210:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         
+ 211:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         requestHandled = USBMIDI_1_InitControlRead();
+ 212:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ 213:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     break;
+ 214:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     
+ 215:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 case USBMIDI_1_GET_RES:
+ 216:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     if (wValueHi == USBMIDI_1_VOLUME_CONTROL)
+ 217:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ 218:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                          /* Entity ID Control Selector is VOLUME, */
+ 219:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.wCount = USBMIDI_1_VOLUME_LEN;
+ 220:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.pData  = &USBMIDI_1_resolutionVolume[0];
+ 221:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         
+ 222:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         requestHandled   = USBMIDI_1_InitControlRead();
+ 223:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 6
+
+
+ 224:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     break;
+ 225:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     
+ 226:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 /* The contents of the status message is reserved for future use.
+ 227:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 * For the time being, a null packet should be returned in the data stage of the
+ 228:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 * control transfer, and the received null packet should be ACKed.
+ 229:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 */
+ 230:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 case USBMIDI_1_GET_STAT:
+ 231:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     USBMIDI_1_currentTD.wCount = 0u;    
+ 232:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     
+ 233:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     requestHandled = USBMIDI_1_InitControlWrite();
+ 234:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 235:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #endif /* (USBMIDI_1_ENABLE_AUDIO_STREAMING) */
+ 236:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 
+ 237:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* `#START AUDIO_WRITE_REQUESTS` Place other request handler here */
+ 238:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 239:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* `#END` */
+ 240:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 
+ 241:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #ifdef USBMIDI_1_DISPATCH_AUDIO_CLASS_AUDIO_WRITE_REQUESTS_CALLBACK
+ 242:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     USBMIDI_1_DispatchAUDIOClass_AUDIO_WRITE_REQUESTS_Callback();
+ 243:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #endif /* (USBMIDI_1_DISPATCH_AUDIO_CLASS_AUDIO_WRITE_REQUESTS_CALLBACK) */
+ 244:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     break;
+ 245:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 
+ 246:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 default:
+ 247:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* Do not handle this request. */
+ 248:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     break;
+ 249:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             }
+ 250:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         }
+ 251:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         else
+ 252:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         {   
+ 253:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             /* Do not handle other requests recipients. */
+ 254:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         }
+ 255:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     }
+ 256:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     else
+ 257:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     {
+ 258:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         /* Handle direction from host to device. */
+ 259:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         
+ 260:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         if (USBMIDI_1_RQST_RCPT_EP == RqstRcpt)
+  63              		.loc 1 260 0
+  64 0024 022B     		cmp	r3, #2
+  65 0026 02D1     		bne	.L5
+ 261:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         {
+ 262:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             /* Request recipient is endpoint. */
+ 263:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             switch (USBMIDI_1_bRequestReg)
+  66              		.loc 1 263 0
+  67 0028 044B     		ldr	r3, .L6
+  68              	.LVL6:
+  69 002a 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+  70 002c 03E0     		b	.L4
+  71              	.LVL7:
+  72              	.L5:
+ 264:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             {
+ 265:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 case USBMIDI_1_SET_CUR:
+ 266:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #if defined(USBMIDI_1_ENABLE_AUDIO_STREAMING)
+ 267:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     if (wValueHi == USBMIDI_1_SAMPLING_FREQ_CONTROL)
+ 268:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ 269:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                          /* point Control Selector is Sampling Frequency */
+ 270:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.wCount = USBMIDI_1_SAMPLE_FREQ_LEN;
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 7
+
+
+ 271:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.pData  = USBMIDI_1_currentSampleFrequency[epNumber];
+ 272:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_frequencyChanged = (uint8) epNumber;
+ 273:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         
+ 274:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         requestHandled   = USBMIDI_1_InitControlWrite();
+ 275:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ 276:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #endif /* (USBMIDI_1_ENABLE_AUDIO_STREAMING) */
+ 277:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 278:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* `#START AUDIO_SAMPLING_FREQ_REQUESTS` Place other request handler here */
+ 279:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 280:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* `#END` */
+ 281:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 282:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #ifdef USBMIDI_1_DISPATCH_AUDIO_CLASS_AUDIO_SAMPLING_FREQ_REQUESTS_CALLBACK
+ 283:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     USBMIDI_1_DispatchAUDIOClass_AUDIO_SAMPLING_FREQ_REQUESTS_Callback();
+ 284:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #endif /* (USBMIDI_1_DISPATCH_AUDIO_CLASS_AUDIO_SAMPLING_FREQ_REQUESTS_CALLBACK) */
+ 285:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     break;
+ 286:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 
+ 287:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 default:
+ 288:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* Do not handle this request. */
+ 289:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     break;
+ 290:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             }
+ 291:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         }
+ 292:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         else if(USBMIDI_1_RQST_RCPT_IFC == RqstRcpt)
+  73              		.loc 1 292 0
+  74 002e 012B     		cmp	r3, #1
+  75 0030 01D1     		bne	.L4
+ 293:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         {
+ 294:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             /* Request recipient is interface or entity ID. */
+ 295:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             switch (USBMIDI_1_bRequestReg)
+  76              		.loc 1 295 0
+  77 0032 024B     		ldr	r3, .L6
+  78              	.LVL8:
+  79 0034 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+  80              	.L4:
+ 296:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             {
+ 297:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 case USBMIDI_1_SET_CUR:
+ 298:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #if defined(USBMIDI_1_ENABLE_AUDIO_STREAMING)
+ 299:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     if (wValueHi == USBMIDI_1_MUTE_CONTROL)
+ 300:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ 301:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#START MUTE_SET_REQUEST` Place multi-channel handler here */
+ 302:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 303:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#END` */
+ 304:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 305:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #ifdef USBMIDI_1_DISPATCH_AUDIO_CLASS_MUTE_SET_REQUEST_CALLBACK
+ 306:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_DispatchAUDIOClass_MUTE_SET_REQUEST_Callback();
+ 307:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #endif /* (USBMIDI_1_DISPATCH_AUDIO_CLASS_MUTE_SET_REQUEST_CALLBACK) */
+ 308:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 309:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* Entity ID Control Selector is MUTE */
+ 310:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.wCount = 1u;
+ 311:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.pData  = &USBMIDI_1_currentMute;
+ 312:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         
+ 313:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         requestHandled = USBMIDI_1_InitControlWrite();
+ 314:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ 315:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     else if (wValueHi == USBMIDI_1_VOLUME_CONTROL)
+ 316:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ 317:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#START VOLUME_CONTROL_SET_REQUEST` Place multi-channel handler here */
+ 318:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 319:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#END` */
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 8
+
+
+ 320:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 321:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #ifdef USBMIDI_1_DISPATCH_AUDIO_CLASS_VOLUME_CONTROL_SET_REQUEST_CALLBACK
+ 322:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_DispatchAUDIOClass_VOLUME_CONTROL_SET_REQUEST_Callback();
+ 323:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #endif /* (USBMIDI_1_DISPATCH_AUDIO_CLASS_VOLUME_CONTROL_SET_REQUEST_CALLBACK) 
+ 324:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 325:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* Entity ID Control Selector is VOLUME */
+ 326:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.wCount = USBMIDI_1_VOLUME_LEN;
+ 327:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_currentTD.pData  = USBMIDI_1_currentVolume;
+ 328:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         
+ 329:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         requestHandled = USBMIDI_1_InitControlWrite();
+ 330:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ 331:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     else
+ 332:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     {
+ 333:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#START OTHER_SET_CUR_REQUESTS` Place other request handler here */
+ 334:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 335:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         /* `#END` */
+ 336:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 337:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #ifdef USBMIDI_1_DISPATCH_AUDIO_CLASS_OTHER_SET_CUR_REQUESTS_CALLBACK
+ 338:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                         USBMIDI_1_DispatchAUDIOClass_OTHER_SET_CUR_REQUESTS_Callback();
+ 339:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     #endif /* (USBMIDI_1_DISPATCH_AUDIO_CLASS_OTHER_SET_CUR_REQUESTS_CALLBACK) */
+ 340:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     }
+ 341:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #endif /*  USBMIDI_1_ENABLE_AUDIO_STREAMING */
+ 342:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 
+ 343:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 
+ 344:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* `#START AUDIO_CONTROL_SEL_REQUESTS` Place other request handler here */
+ 345:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 346:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* `#END` */
+ 347:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     
+ 348:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #ifdef USBMIDI_1_DISPATCH_AUDIO_CLASS_AUDIO_CONTROL_SEL_REQUESTS_CALLBACK
+ 349:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     USBMIDI_1_DispatchAUDIOClass_AUDIO_CONTROL_SEL_REQUESTS_Callback();
+ 350:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 #endif /* (USBMIDI_1_DISPATCH_AUDIO_CLASS_AUDIO_CONTROL_SEL_REQUESTS_CALLBACK) */
+ 351:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 break;
+ 352:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 353:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 default:
+ 354:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                     /* Do not handle this request. */
+ 355:Generated_Source\PSoC5/USBMIDI_1_audio.c ****                 break;
+ 356:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             }
+ 357:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         }
+ 358:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         else
+ 359:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         {
+ 360:Generated_Source\PSoC5/USBMIDI_1_audio.c ****             /* Do not handle other requests recipients. */
+ 361:Generated_Source\PSoC5/USBMIDI_1_audio.c ****         }
+ 362:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     }
+ 363:Generated_Source\PSoC5/USBMIDI_1_audio.c **** 
+ 364:Generated_Source\PSoC5/USBMIDI_1_audio.c ****     return (requestHandled);
+ 365:Generated_Source\PSoC5/USBMIDI_1_audio.c **** }
+  81              		.loc 1 365 0
+  82 0036 0020     		movs	r0, #0
+  83 0038 7047     		bx	lr
+  84              	.L7:
+  85 003a 00BF     		.align	2
+  86              	.L6:
+  87 003c 00600040 		.word	1073766400
+  88              		.cfi_endproc
+  89              	.LFE0:
+  90              		.size	USBMIDI_1_DispatchAUDIOClassRqst, .-USBMIDI_1_DispatchAUDIOClassRqst
+  91              		.text
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 9
+
+
+  92              	.Letext0:
+  93              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
+  94              		.file 3 "Generated_Source\\PSoC5\\USBMIDI_1.h"
+  95              		.section	.debug_info,"",%progbits
+  96              	.Ldebug_info0:
+  97 0000 F8000000 		.4byte	0xf8
+  98 0004 0400     		.2byte	0x4
+  99 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 100 000a 04       		.byte	0x4
+ 101 000b 01       		.uleb128 0x1
+ 102 000c 65000000 		.4byte	.LASF18
+ 103 0010 0C       		.byte	0xc
+ 104 0011 7D010000 		.4byte	.LASF19
+ 105 0015 22000000 		.4byte	.LASF20
+ 106 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 107 001d 00000000 		.4byte	0
+ 108 0021 00000000 		.4byte	.Ldebug_line0
+ 109 0025 02       		.uleb128 0x2
+ 110 0026 01       		.byte	0x1
+ 111 0027 06       		.byte	0x6
+ 112 0028 C0010000 		.4byte	.LASF0
+ 113 002c 02       		.uleb128 0x2
+ 114 002d 01       		.byte	0x1
+ 115 002e 08       		.byte	0x8
+ 116 002f 37010000 		.4byte	.LASF1
+ 117 0033 02       		.uleb128 0x2
+ 118 0034 02       		.byte	0x2
+ 119 0035 05       		.byte	0x5
+ 120 0036 D8010000 		.4byte	.LASF2
+ 121 003a 02       		.uleb128 0x2
+ 122 003b 02       		.byte	0x2
+ 123 003c 07       		.byte	0x7
+ 124 003d AD010000 		.4byte	.LASF3
+ 125 0041 02       		.uleb128 0x2
+ 126 0042 04       		.byte	0x4
+ 127 0043 05       		.byte	0x5
+ 128 0044 53010000 		.4byte	.LASF4
+ 129 0048 02       		.uleb128 0x2
+ 130 0049 04       		.byte	0x4
+ 131 004a 07       		.byte	0x7
+ 132 004b F9000000 		.4byte	.LASF5
+ 133 004f 02       		.uleb128 0x2
+ 134 0050 08       		.byte	0x8
+ 135 0051 05       		.byte	0x5
+ 136 0052 00000000 		.4byte	.LASF6
+ 137 0056 02       		.uleb128 0x2
+ 138 0057 08       		.byte	0x8
+ 139 0058 07       		.byte	0x7
+ 140 0059 1A010000 		.4byte	.LASF7
+ 141 005d 03       		.uleb128 0x3
+ 142 005e 04       		.byte	0x4
+ 143 005f 05       		.byte	0x5
+ 144 0060 696E7400 		.ascii	"int\000"
+ 145 0064 02       		.uleb128 0x2
+ 146 0065 04       		.byte	0x4
+ 147 0066 07       		.byte	0x7
+ 148 0067 15000000 		.4byte	.LASF8
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 10
+
+
+ 149 006b 04       		.uleb128 0x4
+ 150 006c F3000000 		.4byte	.LASF14
+ 151 0070 02       		.byte	0x2
+ 152 0071 E401     		.2byte	0x1e4
+ 153 0073 2C000000 		.4byte	0x2c
+ 154 0077 02       		.uleb128 0x2
+ 155 0078 04       		.byte	0x4
+ 156 0079 04       		.byte	0x4
+ 157 007a 31010000 		.4byte	.LASF9
+ 158 007e 02       		.uleb128 0x2
+ 159 007f 08       		.byte	0x8
+ 160 0080 04       		.byte	0x4
+ 161 0081 A6010000 		.4byte	.LASF10
+ 162 0085 02       		.uleb128 0x2
+ 163 0086 01       		.byte	0x1
+ 164 0087 08       		.byte	0x8
+ 165 0088 45010000 		.4byte	.LASF11
+ 166 008c 02       		.uleb128 0x2
+ 167 008d 08       		.byte	0x8
+ 168 008e 04       		.byte	0x4
+ 169 008f CC010000 		.4byte	.LASF12
+ 170 0093 02       		.uleb128 0x2
+ 171 0094 04       		.byte	0x4
+ 172 0095 07       		.byte	0x7
+ 173 0096 FC010000 		.4byte	.LASF13
+ 174 009a 05       		.uleb128 0x5
+ 175 009b 08       		.byte	0x8
+ 176 009c 03       		.byte	0x3
+ 177 009d C5       		.byte	0xc5
+ 178 009e AF000000 		.4byte	0xaf
+ 179 00a2 06       		.uleb128 0x6
+ 180 00a3 0E000000 		.4byte	.LASF21
+ 181 00a7 03       		.byte	0x3
+ 182 00a8 C7       		.byte	0xc7
+ 183 00a9 AF000000 		.4byte	0xaf
+ 184 00ad 00       		.byte	0
+ 185 00ae 00       		.byte	0
+ 186 00af 07       		.uleb128 0x7
+ 187 00b0 6B000000 		.4byte	0x6b
+ 188 00b4 BF000000 		.4byte	0xbf
+ 189 00b8 08       		.uleb128 0x8
+ 190 00b9 93000000 		.4byte	0x93
+ 191 00bd 07       		.byte	0x7
+ 192 00be 00       		.byte	0
+ 193 00bf 09       		.uleb128 0x9
+ 194 00c0 E2010000 		.4byte	.LASF15
+ 195 00c4 03       		.byte	0x3
+ 196 00c5 C8       		.byte	0xc8
+ 197 00c6 9A000000 		.4byte	0x9a
+ 198 00ca 0A       		.uleb128 0xa
+ 199 00cb 5C010000 		.4byte	.LASF22
+ 200 00cf 01       		.byte	0x1
+ 201 00d0 5F       		.byte	0x5f
+ 202 00d1 6B000000 		.4byte	0x6b
+ 203 00d5 00000000 		.4byte	.LFB0
+ 204 00d9 40000000 		.4byte	.LFE0-.LFB0
+ 205 00dd 01       		.uleb128 0x1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 11
+
+
+ 206 00de 9C       		.byte	0x9c
+ 207 00df 0B       		.uleb128 0xb
+ 208 00e0 0B010000 		.4byte	.LASF16
+ 209 00e4 01       		.byte	0x1
+ 210 00e5 61       		.byte	0x61
+ 211 00e6 6B000000 		.4byte	0x6b
+ 212 00ea 00       		.byte	0
+ 213 00eb 0C       		.uleb128 0xc
+ 214 00ec 4A010000 		.4byte	.LASF17
+ 215 00f0 01       		.byte	0x1
+ 216 00f1 63       		.byte	0x63
+ 217 00f2 6B000000 		.4byte	0x6b
+ 218 00f6 00000000 		.4byte	.LLST0
+ 219 00fa 00       		.byte	0
+ 220 00fb 00       		.byte	0
+ 221              		.section	.debug_abbrev,"",%progbits
+ 222              	.Ldebug_abbrev0:
+ 223 0000 01       		.uleb128 0x1
+ 224 0001 11       		.uleb128 0x11
+ 225 0002 01       		.byte	0x1
+ 226 0003 25       		.uleb128 0x25
+ 227 0004 0E       		.uleb128 0xe
+ 228 0005 13       		.uleb128 0x13
+ 229 0006 0B       		.uleb128 0xb
+ 230 0007 03       		.uleb128 0x3
+ 231 0008 0E       		.uleb128 0xe
+ 232 0009 1B       		.uleb128 0x1b
+ 233 000a 0E       		.uleb128 0xe
+ 234 000b 55       		.uleb128 0x55
+ 235 000c 17       		.uleb128 0x17
+ 236 000d 11       		.uleb128 0x11
+ 237 000e 01       		.uleb128 0x1
+ 238 000f 10       		.uleb128 0x10
+ 239 0010 17       		.uleb128 0x17
+ 240 0011 00       		.byte	0
+ 241 0012 00       		.byte	0
+ 242 0013 02       		.uleb128 0x2
+ 243 0014 24       		.uleb128 0x24
+ 244 0015 00       		.byte	0
+ 245 0016 0B       		.uleb128 0xb
+ 246 0017 0B       		.uleb128 0xb
+ 247 0018 3E       		.uleb128 0x3e
+ 248 0019 0B       		.uleb128 0xb
+ 249 001a 03       		.uleb128 0x3
+ 250 001b 0E       		.uleb128 0xe
+ 251 001c 00       		.byte	0
+ 252 001d 00       		.byte	0
+ 253 001e 03       		.uleb128 0x3
+ 254 001f 24       		.uleb128 0x24
+ 255 0020 00       		.byte	0
+ 256 0021 0B       		.uleb128 0xb
+ 257 0022 0B       		.uleb128 0xb
+ 258 0023 3E       		.uleb128 0x3e
+ 259 0024 0B       		.uleb128 0xb
+ 260 0025 03       		.uleb128 0x3
+ 261 0026 08       		.uleb128 0x8
+ 262 0027 00       		.byte	0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 12
+
+
+ 263 0028 00       		.byte	0
+ 264 0029 04       		.uleb128 0x4
+ 265 002a 16       		.uleb128 0x16
+ 266 002b 00       		.byte	0
+ 267 002c 03       		.uleb128 0x3
+ 268 002d 0E       		.uleb128 0xe
+ 269 002e 3A       		.uleb128 0x3a
+ 270 002f 0B       		.uleb128 0xb
+ 271 0030 3B       		.uleb128 0x3b
+ 272 0031 05       		.uleb128 0x5
+ 273 0032 49       		.uleb128 0x49
+ 274 0033 13       		.uleb128 0x13
+ 275 0034 00       		.byte	0
+ 276 0035 00       		.byte	0
+ 277 0036 05       		.uleb128 0x5
+ 278 0037 13       		.uleb128 0x13
+ 279 0038 01       		.byte	0x1
+ 280 0039 0B       		.uleb128 0xb
+ 281 003a 0B       		.uleb128 0xb
+ 282 003b 3A       		.uleb128 0x3a
+ 283 003c 0B       		.uleb128 0xb
+ 284 003d 3B       		.uleb128 0x3b
+ 285 003e 0B       		.uleb128 0xb
+ 286 003f 01       		.uleb128 0x1
+ 287 0040 13       		.uleb128 0x13
+ 288 0041 00       		.byte	0
+ 289 0042 00       		.byte	0
+ 290 0043 06       		.uleb128 0x6
+ 291 0044 0D       		.uleb128 0xd
+ 292 0045 00       		.byte	0
+ 293 0046 03       		.uleb128 0x3
+ 294 0047 0E       		.uleb128 0xe
+ 295 0048 3A       		.uleb128 0x3a
+ 296 0049 0B       		.uleb128 0xb
+ 297 004a 3B       		.uleb128 0x3b
+ 298 004b 0B       		.uleb128 0xb
+ 299 004c 49       		.uleb128 0x49
+ 300 004d 13       		.uleb128 0x13
+ 301 004e 38       		.uleb128 0x38
+ 302 004f 0B       		.uleb128 0xb
+ 303 0050 00       		.byte	0
+ 304 0051 00       		.byte	0
+ 305 0052 07       		.uleb128 0x7
+ 306 0053 01       		.uleb128 0x1
+ 307 0054 01       		.byte	0x1
+ 308 0055 49       		.uleb128 0x49
+ 309 0056 13       		.uleb128 0x13
+ 310 0057 01       		.uleb128 0x1
+ 311 0058 13       		.uleb128 0x13
+ 312 0059 00       		.byte	0
+ 313 005a 00       		.byte	0
+ 314 005b 08       		.uleb128 0x8
+ 315 005c 21       		.uleb128 0x21
+ 316 005d 00       		.byte	0
+ 317 005e 49       		.uleb128 0x49
+ 318 005f 13       		.uleb128 0x13
+ 319 0060 2F       		.uleb128 0x2f
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 13
+
+
+ 320 0061 0B       		.uleb128 0xb
+ 321 0062 00       		.byte	0
+ 322 0063 00       		.byte	0
+ 323 0064 09       		.uleb128 0x9
+ 324 0065 16       		.uleb128 0x16
+ 325 0066 00       		.byte	0
+ 326 0067 03       		.uleb128 0x3
+ 327 0068 0E       		.uleb128 0xe
+ 328 0069 3A       		.uleb128 0x3a
+ 329 006a 0B       		.uleb128 0xb
+ 330 006b 3B       		.uleb128 0x3b
+ 331 006c 0B       		.uleb128 0xb
+ 332 006d 49       		.uleb128 0x49
+ 333 006e 13       		.uleb128 0x13
+ 334 006f 00       		.byte	0
+ 335 0070 00       		.byte	0
+ 336 0071 0A       		.uleb128 0xa
+ 337 0072 2E       		.uleb128 0x2e
+ 338 0073 01       		.byte	0x1
+ 339 0074 3F       		.uleb128 0x3f
+ 340 0075 19       		.uleb128 0x19
+ 341 0076 03       		.uleb128 0x3
+ 342 0077 0E       		.uleb128 0xe
+ 343 0078 3A       		.uleb128 0x3a
+ 344 0079 0B       		.uleb128 0xb
+ 345 007a 3B       		.uleb128 0x3b
+ 346 007b 0B       		.uleb128 0xb
+ 347 007c 27       		.uleb128 0x27
+ 348 007d 19       		.uleb128 0x19
+ 349 007e 49       		.uleb128 0x49
+ 350 007f 13       		.uleb128 0x13
+ 351 0080 11       		.uleb128 0x11
+ 352 0081 01       		.uleb128 0x1
+ 353 0082 12       		.uleb128 0x12
+ 354 0083 06       		.uleb128 0x6
+ 355 0084 40       		.uleb128 0x40
+ 356 0085 18       		.uleb128 0x18
+ 357 0086 9742     		.uleb128 0x2117
+ 358 0088 19       		.uleb128 0x19
+ 359 0089 00       		.byte	0
+ 360 008a 00       		.byte	0
+ 361 008b 0B       		.uleb128 0xb
+ 362 008c 34       		.uleb128 0x34
+ 363 008d 00       		.byte	0
+ 364 008e 03       		.uleb128 0x3
+ 365 008f 0E       		.uleb128 0xe
+ 366 0090 3A       		.uleb128 0x3a
+ 367 0091 0B       		.uleb128 0xb
+ 368 0092 3B       		.uleb128 0x3b
+ 369 0093 0B       		.uleb128 0xb
+ 370 0094 49       		.uleb128 0x49
+ 371 0095 13       		.uleb128 0x13
+ 372 0096 1C       		.uleb128 0x1c
+ 373 0097 0B       		.uleb128 0xb
+ 374 0098 00       		.byte	0
+ 375 0099 00       		.byte	0
+ 376 009a 0C       		.uleb128 0xc
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 14
+
+
+ 377 009b 34       		.uleb128 0x34
+ 378 009c 00       		.byte	0
+ 379 009d 03       		.uleb128 0x3
+ 380 009e 0E       		.uleb128 0xe
+ 381 009f 3A       		.uleb128 0x3a
+ 382 00a0 0B       		.uleb128 0xb
+ 383 00a1 3B       		.uleb128 0x3b
+ 384 00a2 0B       		.uleb128 0xb
+ 385 00a3 49       		.uleb128 0x49
+ 386 00a4 13       		.uleb128 0x13
+ 387 00a5 02       		.uleb128 0x2
+ 388 00a6 17       		.uleb128 0x17
+ 389 00a7 00       		.byte	0
+ 390 00a8 00       		.byte	0
+ 391 00a9 00       		.byte	0
+ 392              		.section	.debug_loc,"",%progbits
+ 393              	.Ldebug_loc0:
+ 394              	.LLST0:
+ 395 0000 08000000 		.4byte	.LVL1
+ 396 0004 16000000 		.4byte	.LVL2
+ 397 0008 0100     		.2byte	0x1
+ 398 000a 53       		.byte	0x53
+ 399 000b 1A000000 		.4byte	.LVL3
+ 400 000f 20000000 		.4byte	.LVL4
+ 401 0013 0100     		.2byte	0x1
+ 402 0015 53       		.byte	0x53
+ 403 0016 24000000 		.4byte	.LVL5
+ 404 001a 2A000000 		.4byte	.LVL6
+ 405 001e 0100     		.2byte	0x1
+ 406 0020 53       		.byte	0x53
+ 407 0021 2E000000 		.4byte	.LVL7
+ 408 0025 34000000 		.4byte	.LVL8
+ 409 0029 0100     		.2byte	0x1
+ 410 002b 53       		.byte	0x53
+ 411 002c 00000000 		.4byte	0
+ 412 0030 00000000 		.4byte	0
+ 413              		.section	.debug_aranges,"",%progbits
+ 414 0000 1C000000 		.4byte	0x1c
+ 415 0004 0200     		.2byte	0x2
+ 416 0006 00000000 		.4byte	.Ldebug_info0
+ 417 000a 04       		.byte	0x4
+ 418 000b 00       		.byte	0
+ 419 000c 0000     		.2byte	0
+ 420 000e 0000     		.2byte	0
+ 421 0010 00000000 		.4byte	.LFB0
+ 422 0014 40000000 		.4byte	.LFE0-.LFB0
+ 423 0018 00000000 		.4byte	0
+ 424 001c 00000000 		.4byte	0
+ 425              		.section	.debug_ranges,"",%progbits
+ 426              	.Ldebug_ranges0:
+ 427 0000 00000000 		.4byte	.LFB0
+ 428 0004 40000000 		.4byte	.LFE0
+ 429 0008 00000000 		.4byte	0
+ 430 000c 00000000 		.4byte	0
+ 431              		.section	.debug_line,"",%progbits
+ 432              	.Ldebug_line0:
+ 433 0000 86000000 		.section	.debug_str,"MS",%progbits,1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 15
+
+
+ 433      02005B00 
+ 433      00000201 
+ 433      FB0E0D00 
+ 433      01010101 
+ 434              	.LASF6:
+ 435 0000 6C6F6E67 		.ascii	"long long int\000"
+ 435      206C6F6E 
+ 435      6720696E 
+ 435      7400
+ 436              	.LASF21:
+ 437 000e 65704461 		.ascii	"epData\000"
+ 437      746100
+ 438              	.LASF8:
+ 439 0015 756E7369 		.ascii	"unsigned int\000"
+ 439      676E6564 
+ 439      20696E74 
+ 439      00
+ 440              	.LASF20:
+ 441 0022 433A5C55 		.ascii	"C:\\Users\\JeffSnyder\\Documents\\PSoC Creator\\wes"
+ 441      73657273 
+ 441      5C4A6566 
+ 441      66536E79 
+ 441      6465725C 
+ 442 0050 746F6E5F 		.ascii	"ton_1\\weston_1.cydsn\000"
+ 442      315C7765 
+ 442      73746F6E 
+ 442      5F312E63 
+ 442      7964736E 
+ 443              	.LASF18:
+ 444 0065 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 444      43313120 
+ 444      352E342E 
+ 444      31203230 
+ 444      31363036 
+ 445 0098 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 445      20726576 
+ 445      6973696F 
+ 445      6E203233 
+ 445      37373135 
+ 446 00cb 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 446      66756E63 
+ 446      74696F6E 
+ 446      2D736563 
+ 446      74696F6E 
+ 447              	.LASF14:
+ 448 00f3 75696E74 		.ascii	"uint8\000"
+ 448      3800
+ 449              	.LASF5:
+ 450 00f9 6C6F6E67 		.ascii	"long unsigned int\000"
+ 450      20756E73 
+ 450      69676E65 
+ 450      6420696E 
+ 450      7400
+ 451              	.LASF16:
+ 452 010b 72657175 		.ascii	"requestHandled\000"
+ 452      65737448 
+ 452      616E646C 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 16
+
+
+ 452      656400
+ 453              	.LASF7:
+ 454 011a 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 454      206C6F6E 
+ 454      6720756E 
+ 454      7369676E 
+ 454      65642069 
+ 455              	.LASF9:
+ 456 0131 666C6F61 		.ascii	"float\000"
+ 456      7400
+ 457              	.LASF1:
+ 458 0137 756E7369 		.ascii	"unsigned char\000"
+ 458      676E6564 
+ 458      20636861 
+ 458      7200
+ 459              	.LASF11:
+ 460 0145 63686172 		.ascii	"char\000"
+ 460      00
+ 461              	.LASF17:
+ 462 014a 52717374 		.ascii	"RqstRcpt\000"
+ 462      52637074 
+ 462      00
+ 463              	.LASF4:
+ 464 0153 6C6F6E67 		.ascii	"long int\000"
+ 464      20696E74 
+ 464      00
+ 465              	.LASF22:
+ 466 015c 5553424D 		.ascii	"USBMIDI_1_DispatchAUDIOClassRqst\000"
+ 466      4944495F 
+ 466      315F4469 
+ 466      73706174 
+ 466      63684155 
+ 467              	.LASF19:
+ 468 017d 47656E65 		.ascii	"Generated_Source\\PSoC5\\USBMIDI_1_audio.c\000"
+ 468      72617465 
+ 468      645F536F 
+ 468      75726365 
+ 468      5C50536F 
+ 469              	.LASF10:
+ 470 01a6 646F7562 		.ascii	"double\000"
+ 470      6C6500
+ 471              	.LASF3:
+ 472 01ad 73686F72 		.ascii	"short unsigned int\000"
+ 472      7420756E 
+ 472      7369676E 
+ 472      65642069 
+ 472      6E7400
+ 473              	.LASF0:
+ 474 01c0 7369676E 		.ascii	"signed char\000"
+ 474      65642063 
+ 474      68617200 
+ 475              	.LASF12:
+ 476 01cc 6C6F6E67 		.ascii	"long double\000"
+ 476      20646F75 
+ 476      626C6500 
+ 477              	.LASF2:
+ 478 01d8 73686F72 		.ascii	"short int\000"
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc9Bc0cI.s 			page 17
+
+
+ 478      7420696E 
+ 478      7400
+ 479              	.LASF15:
+ 480 01e2 5553424D 		.ascii	"USBMIDI_1_ep0_data_struct\000"
+ 480      4944495F 
+ 480      315F6570 
+ 480      305F6461 
+ 480      74615F73 
+ 481              	.LASF13:
+ 482 01fc 73697A65 		.ascii	"sizetype\000"
+ 482      74797065 
+ 482      00
+ 483              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

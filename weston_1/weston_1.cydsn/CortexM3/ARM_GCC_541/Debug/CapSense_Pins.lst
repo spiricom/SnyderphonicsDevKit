@@ -1,0 +1,779 @@
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"CapSense_Pins.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.CapSense_SetAllSensorsDriveMode,"ax",%progbits
+  20              		.align	2
+  21              		.global	CapSense_SetAllSensorsDriveMode
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	CapSense_SetAllSensorsDriveMode, %function
+  25              	CapSense_SetAllSensorsDriveMode:
+  26              	.LFB0:
+  27              		.file 1 "Generated_Source\\PSoC5\\CapSense_Pins.c"
+   1:Generated_Source\PSoC5/CapSense_Pins.c **** /*******************************************************************************
+   2:Generated_Source\PSoC5/CapSense_Pins.c **** * File Name: CapSense_Pins.c
+   3:Generated_Source\PSoC5/CapSense_Pins.c **** * Version 3.50
+   4:Generated_Source\PSoC5/CapSense_Pins.c **** *
+   5:Generated_Source\PSoC5/CapSense_Pins.c **** * Description:
+   6:Generated_Source\PSoC5/CapSense_Pins.c **** *  This file contains API to enable firmware control of a Pins component.
+   7:Generated_Source\PSoC5/CapSense_Pins.c **** *
+   8:Generated_Source\PSoC5/CapSense_Pins.c **** * Note:
+   9:Generated_Source\PSoC5/CapSense_Pins.c **** *
+  10:Generated_Source\PSoC5/CapSense_Pins.c **** ********************************************************************************
+  11:Generated_Source\PSoC5/CapSense_Pins.c **** * Copyright 2008-2013, Cypress Semiconductor Corporation.  All rights reserved.
+  12:Generated_Source\PSoC5/CapSense_Pins.c **** * You may use this file only in accordance with the license, terms, conditions,
+  13:Generated_Source\PSoC5/CapSense_Pins.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  14:Generated_Source\PSoC5/CapSense_Pins.c **** * the software package with which this file was provided.
+  15:Generated_Source\PSoC5/CapSense_Pins.c **** *******************************************************************************/
+  16:Generated_Source\PSoC5/CapSense_Pins.c **** 
+  17:Generated_Source\PSoC5/CapSense_Pins.c **** #include "CapSense_Pins.h"
+  18:Generated_Source\PSoC5/CapSense_Pins.c **** 
+  19:Generated_Source\PSoC5/CapSense_Pins.c **** 
+  20:Generated_Source\PSoC5/CapSense_Pins.c **** /*******************************************************************************
+  21:Generated_Source\PSoC5/CapSense_Pins.c **** * Function Name: CapSense_SetAllSensorsDriveMode
+  22:Generated_Source\PSoC5/CapSense_Pins.c **** ********************************************************************************
+  23:Generated_Source\PSoC5/CapSense_Pins.c **** *
+  24:Generated_Source\PSoC5/CapSense_Pins.c **** * Summary:
+  25:Generated_Source\PSoC5/CapSense_Pins.c **** *  Sets the drive mode for the all pins used by capacitive sensors within 
+  26:Generated_Source\PSoC5/CapSense_Pins.c **** *  CapSense component.
+  27:Generated_Source\PSoC5/CapSense_Pins.c **** * 
+  28:Generated_Source\PSoC5/CapSense_Pins.c **** * Parameters:  
+  29:Generated_Source\PSoC5/CapSense_Pins.c **** *  mode: Desired drive mode.
+  30:Generated_Source\PSoC5/CapSense_Pins.c **** *
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 2
+
+
+  31:Generated_Source\PSoC5/CapSense_Pins.c **** * Return: 
+  32:Generated_Source\PSoC5/CapSense_Pins.c **** *  None
+  33:Generated_Source\PSoC5/CapSense_Pins.c **** *
+  34:Generated_Source\PSoC5/CapSense_Pins.c **** *******************************************************************************/
+  35:Generated_Source\PSoC5/CapSense_Pins.c **** void CapSense_SetAllSensorsDriveMode(uint8 mode) 
+  36:Generated_Source\PSoC5/CapSense_Pins.c **** {
+  28              		.loc 1 36 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.LVL0:
+  37:Generated_Source\PSoC5/CapSense_Pins.c ****     /* Set pins drive mode */
+  38:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button0__BTN, mode);
+  34              		.loc 1 38 0
+  35 0000 4F4A     		ldr	r2, .L2
+  36 0002 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  37 0004 00F00E00 		and	r0, r0, #14
+  38              	.LVL1:
+  39 0008 03F0F103 		and	r3, r3, #241
+  40 000c 0343     		orrs	r3, r3, r0
+  41 000e 1370     		strb	r3, [r2]
+  39:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button1__BTN, mode);
+  42              		.loc 1 39 0
+  43 0010 0132     		adds	r2, r2, #1
+  44 0012 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  45 0014 03F0F103 		and	r3, r3, #241
+  46 0018 0343     		orrs	r3, r3, r0
+  47 001a 1370     		strb	r3, [r2]
+  40:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button2__BTN, mode);
+  48              		.loc 1 40 0
+  49 001c 0232     		adds	r2, r2, #2
+  50 001e 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  51 0020 03F0F103 		and	r3, r3, #241
+  52 0024 0343     		orrs	r3, r3, r0
+  53 0026 1370     		strb	r3, [r2]
+  41:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button3__BTN, mode);
+  54              		.loc 1 41 0
+  55 0028 0132     		adds	r2, r2, #1
+  56 002a 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  57 002c 03F0F103 		and	r3, r3, #241
+  58 0030 0343     		orrs	r3, r3, r0
+  59 0032 1370     		strb	r3, [r2]
+  42:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button4__BTN, mode);
+  60              		.loc 1 42 0
+  61 0034 0132     		adds	r2, r2, #1
+  62 0036 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  63 0038 03F0F103 		and	r3, r3, #241
+  64 003c 0343     		orrs	r3, r3, r0
+  65 003e 1370     		strb	r3, [r2]
+  43:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button5__BTN, mode);
+  66              		.loc 1 43 0
+  67 0040 113A     		subs	r2, r2, #17
+  68 0042 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  69 0044 03F0F103 		and	r3, r3, #241
+  70 0048 0343     		orrs	r3, r3, r0
+  71 004a 1370     		strb	r3, [r2]
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 3
+
+
+  44:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button6__BTN, mode);
+  72              		.loc 1 44 0
+  73 004c 0132     		adds	r2, r2, #1
+  74 004e 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  75 0050 03F0F103 		and	r3, r3, #241
+  76 0054 0343     		orrs	r3, r3, r0
+  77 0056 1370     		strb	r3, [r2]
+  45:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button7__BTN, mode);
+  78              		.loc 1 45 0
+  79 0058 0132     		adds	r2, r2, #1
+  80 005a 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  81 005c 03F0F103 		and	r3, r3, #241
+  82 0060 0343     		orrs	r3, r3, r0
+  83 0062 1370     		strb	r3, [r2]
+  46:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button8__BTN, mode);
+  84              		.loc 1 46 0
+  85 0064 0132     		adds	r2, r2, #1
+  86 0066 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  87 0068 03F0F103 		and	r3, r3, #241
+  88 006c 0343     		orrs	r3, r3, r0
+  89 006e 1370     		strb	r3, [r2]
+  47:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button9__BTN, mode);
+  90              		.loc 1 47 0
+  91 0070 0A3A     		subs	r2, r2, #10
+  92 0072 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  93 0074 03F0F103 		and	r3, r3, #241
+  94 0078 0343     		orrs	r3, r3, r0
+  95 007a 1370     		strb	r3, [r2]
+  48:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button10__BTN, mode);
+  96              		.loc 1 48 0
+  97 007c 0132     		adds	r2, r2, #1
+  98 007e 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+  99 0080 03F0F103 		and	r3, r3, #241
+ 100 0084 0343     		orrs	r3, r3, r0
+ 101 0086 1370     		strb	r3, [r2]
+  49:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button11__BTN, mode);
+ 102              		.loc 1 49 0
+ 103 0088 0132     		adds	r2, r2, #1
+ 104 008a 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 105 008c 03F0F103 		and	r3, r3, #241
+ 106 0090 0343     		orrs	r3, r3, r0
+ 107 0092 1370     		strb	r3, [r2]
+  50:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button12__BTN, mode);
+ 108              		.loc 1 50 0
+ 109 0094 0C32     		adds	r2, r2, #12
+ 110 0096 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 111 0098 03F0F103 		and	r3, r3, #241
+ 112 009c 0343     		orrs	r3, r3, r0
+ 113 009e 1370     		strb	r3, [r2]
+  51:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button13__BTN, mode);
+ 114              		.loc 1 51 0
+ 115 00a0 0132     		adds	r2, r2, #1
+ 116 00a2 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 117 00a4 03F0F103 		and	r3, r3, #241
+ 118 00a8 0343     		orrs	r3, r3, r0
+ 119 00aa 1370     		strb	r3, [r2]
+  52:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button14__BTN, mode);
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 4
+
+
+ 120              		.loc 1 52 0
+ 121 00ac 0132     		adds	r2, r2, #1
+ 122 00ae 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 123 00b0 03F0F103 		and	r3, r3, #241
+ 124 00b4 0343     		orrs	r3, r3, r0
+ 125 00b6 1370     		strb	r3, [r2]
+  53:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button15__BTN, mode);
+ 126              		.loc 1 53 0
+ 127 00b8 0132     		adds	r2, r2, #1
+ 128 00ba 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 129 00bc 03F0F103 		and	r3, r3, #241
+ 130 00c0 0343     		orrs	r3, r3, r0
+ 131 00c2 1370     		strb	r3, [r2]
+  54:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button16__BTN, mode);
+ 132              		.loc 1 54 0
+ 133 00c4 0132     		adds	r2, r2, #1
+ 134 00c6 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 135 00c8 03F0F103 		and	r3, r3, #241
+ 136 00cc 0343     		orrs	r3, r3, r0
+ 137 00ce 1370     		strb	r3, [r2]
+  55:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button17__BTN, mode);
+ 138              		.loc 1 55 0
+ 139 00d0 0D3A     		subs	r2, r2, #13
+ 140 00d2 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 141 00d4 03F0F103 		and	r3, r3, #241
+ 142 00d8 0343     		orrs	r3, r3, r0
+ 143 00da 1370     		strb	r3, [r2]
+  56:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button18__BTN, mode);
+ 144              		.loc 1 56 0
+ 145 00dc 1432     		adds	r2, r2, #20
+ 146 00de 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 147 00e0 03F0F103 		and	r3, r3, #241
+ 148 00e4 0343     		orrs	r3, r3, r0
+ 149 00e6 1370     		strb	r3, [r2]
+  57:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button19__BTN, mode);
+ 150              		.loc 1 57 0
+ 151 00e8 0132     		adds	r2, r2, #1
+ 152 00ea 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 153 00ec 03F0F103 		and	r3, r3, #241
+ 154 00f0 0343     		orrs	r3, r3, r0
+ 155 00f2 1370     		strb	r3, [r2]
+  58:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button20__BTN, mode);
+ 156              		.loc 1 58 0
+ 157 00f4 1F3A     		subs	r2, r2, #31
+ 158 00f6 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 159 00f8 03F0F103 		and	r3, r3, #241
+ 160 00fc 0343     		orrs	r3, r3, r0
+ 161 00fe 1370     		strb	r3, [r2]
+  59:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button21__BTN, mode);
+ 162              		.loc 1 59 0
+ 163 0100 0132     		adds	r2, r2, #1
+ 164 0102 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 165 0104 03F0F103 		and	r3, r3, #241
+ 166 0108 0343     		orrs	r3, r3, r0
+ 167 010a 1370     		strb	r3, [r2]
+  60:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button22__BTN, mode);
+ 168              		.loc 1 60 0
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 5
+
+
+ 169 010c 0F32     		adds	r2, r2, #15
+ 170 010e 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 171 0110 03F0F103 		and	r3, r3, #241
+ 172 0114 0343     		orrs	r3, r3, r0
+ 173 0116 1370     		strb	r3, [r2]
+  61:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button23__BTN, mode);
+ 174              		.loc 1 61 0
+ 175 0118 6832     		adds	r2, r2, #104
+ 176 011a 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 177 011c 03F0F103 		and	r3, r3, #241
+ 178 0120 0343     		orrs	r3, r3, r0
+ 179 0122 1370     		strb	r3, [r2]
+  62:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button24__BTN, mode);
+ 180              		.loc 1 62 0
+ 181 0124 0132     		adds	r2, r2, #1
+ 182 0126 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 183 0128 03F0F103 		and	r3, r3, #241
+ 184 012c 0343     		orrs	r3, r3, r0
+ 185 012e 1370     		strb	r3, [r2]
+  63:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_PortCH0__Button25__BTN, mode);
+ 186              		.loc 1 63 0
+ 187 0130 0432     		adds	r2, r2, #4
+ 188 0132 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 189 0134 03F0F103 		and	r3, r3, #241
+ 190 0138 1843     		orrs	r0, r0, r3
+ 191 013a 1070     		strb	r0, [r2]
+ 192 013c 7047     		bx	lr
+ 193              	.L3:
+ 194 013e 00BF     		.align	2
+ 195              	.L2:
+ 196 0140 18500040 		.word	1073762328
+ 197              		.cfi_endproc
+ 198              	.LFE0:
+ 199              		.size	CapSense_SetAllSensorsDriveMode, .-CapSense_SetAllSensorsDriveMode
+ 200              		.section	.text.CapSense_SetAllCmodsDriveMode,"ax",%progbits
+ 201              		.align	2
+ 202              		.global	CapSense_SetAllCmodsDriveMode
+ 203              		.thumb
+ 204              		.thumb_func
+ 205              		.type	CapSense_SetAllCmodsDriveMode, %function
+ 206              	CapSense_SetAllCmodsDriveMode:
+ 207              	.LFB1:
+  64:Generated_Source\PSoC5/CapSense_Pins.c **** 
+  65:Generated_Source\PSoC5/CapSense_Pins.c **** }
+  66:Generated_Source\PSoC5/CapSense_Pins.c **** 
+  67:Generated_Source\PSoC5/CapSense_Pins.c **** 
+  68:Generated_Source\PSoC5/CapSense_Pins.c **** 
+  69:Generated_Source\PSoC5/CapSense_Pins.c **** /*******************************************************************************
+  70:Generated_Source\PSoC5/CapSense_Pins.c **** * Function Name: CapSense_SetAllCmodsDriveMode
+  71:Generated_Source\PSoC5/CapSense_Pins.c **** ********************************************************************************
+  72:Generated_Source\PSoC5/CapSense_Pins.c **** *
+  73:Generated_Source\PSoC5/CapSense_Pins.c **** * Summary:
+  74:Generated_Source\PSoC5/CapSense_Pins.c **** *  Sets the drive mode for the all pins used by Cmod capacitors within CapSense 
+  75:Generated_Source\PSoC5/CapSense_Pins.c **** *  component.
+  76:Generated_Source\PSoC5/CapSense_Pins.c **** * 
+  77:Generated_Source\PSoC5/CapSense_Pins.c **** * Parameters:  
+  78:Generated_Source\PSoC5/CapSense_Pins.c **** *  mode: Desired drive mode.
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 6
+
+
+  79:Generated_Source\PSoC5/CapSense_Pins.c **** *
+  80:Generated_Source\PSoC5/CapSense_Pins.c **** * Return: 
+  81:Generated_Source\PSoC5/CapSense_Pins.c **** *  None
+  82:Generated_Source\PSoC5/CapSense_Pins.c **** *
+  83:Generated_Source\PSoC5/CapSense_Pins.c **** *******************************************************************************/
+  84:Generated_Source\PSoC5/CapSense_Pins.c **** void CapSense_SetAllCmodsDriveMode(uint8 mode) 
+  85:Generated_Source\PSoC5/CapSense_Pins.c **** {
+ 208              		.loc 1 85 0
+ 209              		.cfi_startproc
+ 210              		@ args = 0, pretend = 0, frame = 0
+ 211              		@ frame_needed = 0, uses_anonymous_args = 0
+ 212              		@ link register save eliminated.
+ 213              	.LVL2:
+  86:Generated_Source\PSoC5/CapSense_Pins.c ****    /* Set pins drive mode */
+  87:Generated_Source\PSoC5/CapSense_Pins.c ****     CyPins_SetPinDriveMode(CapSense_CmodCH0_Cmod_CH0, mode);
+ 214              		.loc 1 87 0
+ 215 0000 044A     		ldr	r2, .L5
+ 216 0002 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 217 0004 03F0F103 		and	r3, r3, #241
+ 218 0008 00F00E00 		and	r0, r0, #14
+ 219              	.LVL3:
+ 220 000c 1843     		orrs	r0, r0, r3
+ 221 000e 1070     		strb	r0, [r2]
+ 222 0010 7047     		bx	lr
+ 223              	.L6:
+ 224 0012 00BF     		.align	2
+ 225              	.L5:
+ 226 0014 7C500040 		.word	1073762428
+ 227              		.cfi_endproc
+ 228              	.LFE1:
+ 229              		.size	CapSense_SetAllCmodsDriveMode, .-CapSense_SetAllCmodsDriveMode
+ 230              		.text
+ 231              	.Letext0:
+ 232              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
+ 233              		.section	.debug_info,"",%progbits
+ 234              	.Ldebug_info0:
+ 235 0000 EE000000 		.4byte	0xee
+ 236 0004 0400     		.2byte	0x4
+ 237 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 238 000a 04       		.byte	0x4
+ 239 000b 01       		.uleb128 0x1
+ 240 000c BD000000 		.4byte	.LASF17
+ 241 0010 0C       		.byte	0xc
+ 242 0011 21000000 		.4byte	.LASF18
+ 243 0015 7A000000 		.4byte	.LASF19
+ 244 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 245 001d 00000000 		.4byte	0
+ 246 0021 00000000 		.4byte	.Ldebug_line0
+ 247 0025 02       		.uleb128 0x2
+ 248 0026 01       		.byte	0x1
+ 249 0027 06       		.byte	0x6
+ 250 0028 C1010000 		.4byte	.LASF0
+ 251 002c 02       		.uleb128 0x2
+ 252 002d 01       		.byte	0x1
+ 253 002e 08       		.byte	0x8
+ 254 002f 98010000 		.4byte	.LASF1
+ 255 0033 02       		.uleb128 0x2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 7
+
+
+ 256 0034 02       		.byte	0x2
+ 257 0035 05       		.byte	0x5
+ 258 0036 D9010000 		.4byte	.LASF2
+ 259 003a 02       		.uleb128 0x2
+ 260 003b 02       		.byte	0x2
+ 261 003c 07       		.byte	0x7
+ 262 003d 0E000000 		.4byte	.LASF3
+ 263 0041 02       		.uleb128 0x2
+ 264 0042 04       		.byte	0x4
+ 265 0043 05       		.byte	0x5
+ 266 0044 AB010000 		.4byte	.LASF4
+ 267 0048 02       		.uleb128 0x2
+ 268 0049 04       		.byte	0x4
+ 269 004a 07       		.byte	0x7
+ 270 004b 69010000 		.4byte	.LASF5
+ 271 004f 02       		.uleb128 0x2
+ 272 0050 08       		.byte	0x8
+ 273 0051 05       		.byte	0x5
+ 274 0052 00000000 		.4byte	.LASF6
+ 275 0056 02       		.uleb128 0x2
+ 276 0057 08       		.byte	0x8
+ 277 0058 07       		.byte	0x7
+ 278 0059 7B010000 		.4byte	.LASF7
+ 279 005d 03       		.uleb128 0x3
+ 280 005e 04       		.byte	0x4
+ 281 005f 05       		.byte	0x5
+ 282 0060 696E7400 		.ascii	"int\000"
+ 283 0064 02       		.uleb128 0x2
+ 284 0065 04       		.byte	0x4
+ 285 0066 07       		.byte	0x7
+ 286 0067 48000000 		.4byte	.LASF8
+ 287 006b 04       		.uleb128 0x4
+ 288 006c BB010000 		.4byte	.LASF12
+ 289 0070 02       		.byte	0x2
+ 290 0071 E401     		.2byte	0x1e4
+ 291 0073 2C000000 		.4byte	0x2c
+ 292 0077 02       		.uleb128 0x2
+ 293 0078 04       		.byte	0x4
+ 294 0079 04       		.byte	0x4
+ 295 007a 92010000 		.4byte	.LASF9
+ 296 007e 02       		.uleb128 0x2
+ 297 007f 08       		.byte	0x8
+ 298 0080 04       		.byte	0x4
+ 299 0081 B4010000 		.4byte	.LASF10
+ 300 0085 02       		.uleb128 0x2
+ 301 0086 01       		.byte	0x1
+ 302 0087 08       		.byte	0x8
+ 303 0088 A6010000 		.4byte	.LASF11
+ 304 008c 04       		.uleb128 0x4
+ 305 008d E3010000 		.4byte	.LASF13
+ 306 0091 02       		.byte	0x2
+ 307 0092 8E02     		.2byte	0x28e
+ 308 0094 98000000 		.4byte	0x98
+ 309 0098 05       		.uleb128 0x5
+ 310 0099 6B000000 		.4byte	0x6b
+ 311 009d 02       		.uleb128 0x2
+ 312 009e 08       		.byte	0x8
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 8
+
+
+ 313 009f 04       		.byte	0x4
+ 314 00a0 CD010000 		.4byte	.LASF14
+ 315 00a4 02       		.uleb128 0x2
+ 316 00a5 04       		.byte	0x4
+ 317 00a6 07       		.byte	0x7
+ 318 00a7 E8010000 		.4byte	.LASF15
+ 319 00ab 06       		.uleb128 0x6
+ 320 00ac 55000000 		.4byte	.LASF20
+ 321 00b0 01       		.byte	0x1
+ 322 00b1 23       		.byte	0x23
+ 323 00b2 00000000 		.4byte	.LFB0
+ 324 00b6 44010000 		.4byte	.LFE0-.LFB0
+ 325 00ba 01       		.uleb128 0x1
+ 326 00bb 9C       		.byte	0x9c
+ 327 00bc D0000000 		.4byte	0xd0
+ 328 00c0 07       		.uleb128 0x7
+ 329 00c1 75000000 		.4byte	.LASF16
+ 330 00c5 01       		.byte	0x1
+ 331 00c6 23       		.byte	0x23
+ 332 00c7 6B000000 		.4byte	0x6b
+ 333 00cb 00000000 		.4byte	.LLST0
+ 334 00cf 00       		.byte	0
+ 335 00d0 08       		.uleb128 0x8
+ 336 00d1 4B010000 		.4byte	.LASF21
+ 337 00d5 01       		.byte	0x1
+ 338 00d6 54       		.byte	0x54
+ 339 00d7 00000000 		.4byte	.LFB1
+ 340 00db 18000000 		.4byte	.LFE1-.LFB1
+ 341 00df 01       		.uleb128 0x1
+ 342 00e0 9C       		.byte	0x9c
+ 343 00e1 07       		.uleb128 0x7
+ 344 00e2 75000000 		.4byte	.LASF16
+ 345 00e6 01       		.byte	0x1
+ 346 00e7 54       		.byte	0x54
+ 347 00e8 6B000000 		.4byte	0x6b
+ 348 00ec 21000000 		.4byte	.LLST1
+ 349 00f0 00       		.byte	0
+ 350 00f1 00       		.byte	0
+ 351              		.section	.debug_abbrev,"",%progbits
+ 352              	.Ldebug_abbrev0:
+ 353 0000 01       		.uleb128 0x1
+ 354 0001 11       		.uleb128 0x11
+ 355 0002 01       		.byte	0x1
+ 356 0003 25       		.uleb128 0x25
+ 357 0004 0E       		.uleb128 0xe
+ 358 0005 13       		.uleb128 0x13
+ 359 0006 0B       		.uleb128 0xb
+ 360 0007 03       		.uleb128 0x3
+ 361 0008 0E       		.uleb128 0xe
+ 362 0009 1B       		.uleb128 0x1b
+ 363 000a 0E       		.uleb128 0xe
+ 364 000b 55       		.uleb128 0x55
+ 365 000c 17       		.uleb128 0x17
+ 366 000d 11       		.uleb128 0x11
+ 367 000e 01       		.uleb128 0x1
+ 368 000f 10       		.uleb128 0x10
+ 369 0010 17       		.uleb128 0x17
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 9
+
+
+ 370 0011 00       		.byte	0
+ 371 0012 00       		.byte	0
+ 372 0013 02       		.uleb128 0x2
+ 373 0014 24       		.uleb128 0x24
+ 374 0015 00       		.byte	0
+ 375 0016 0B       		.uleb128 0xb
+ 376 0017 0B       		.uleb128 0xb
+ 377 0018 3E       		.uleb128 0x3e
+ 378 0019 0B       		.uleb128 0xb
+ 379 001a 03       		.uleb128 0x3
+ 380 001b 0E       		.uleb128 0xe
+ 381 001c 00       		.byte	0
+ 382 001d 00       		.byte	0
+ 383 001e 03       		.uleb128 0x3
+ 384 001f 24       		.uleb128 0x24
+ 385 0020 00       		.byte	0
+ 386 0021 0B       		.uleb128 0xb
+ 387 0022 0B       		.uleb128 0xb
+ 388 0023 3E       		.uleb128 0x3e
+ 389 0024 0B       		.uleb128 0xb
+ 390 0025 03       		.uleb128 0x3
+ 391 0026 08       		.uleb128 0x8
+ 392 0027 00       		.byte	0
+ 393 0028 00       		.byte	0
+ 394 0029 04       		.uleb128 0x4
+ 395 002a 16       		.uleb128 0x16
+ 396 002b 00       		.byte	0
+ 397 002c 03       		.uleb128 0x3
+ 398 002d 0E       		.uleb128 0xe
+ 399 002e 3A       		.uleb128 0x3a
+ 400 002f 0B       		.uleb128 0xb
+ 401 0030 3B       		.uleb128 0x3b
+ 402 0031 05       		.uleb128 0x5
+ 403 0032 49       		.uleb128 0x49
+ 404 0033 13       		.uleb128 0x13
+ 405 0034 00       		.byte	0
+ 406 0035 00       		.byte	0
+ 407 0036 05       		.uleb128 0x5
+ 408 0037 35       		.uleb128 0x35
+ 409 0038 00       		.byte	0
+ 410 0039 49       		.uleb128 0x49
+ 411 003a 13       		.uleb128 0x13
+ 412 003b 00       		.byte	0
+ 413 003c 00       		.byte	0
+ 414 003d 06       		.uleb128 0x6
+ 415 003e 2E       		.uleb128 0x2e
+ 416 003f 01       		.byte	0x1
+ 417 0040 3F       		.uleb128 0x3f
+ 418 0041 19       		.uleb128 0x19
+ 419 0042 03       		.uleb128 0x3
+ 420 0043 0E       		.uleb128 0xe
+ 421 0044 3A       		.uleb128 0x3a
+ 422 0045 0B       		.uleb128 0xb
+ 423 0046 3B       		.uleb128 0x3b
+ 424 0047 0B       		.uleb128 0xb
+ 425 0048 27       		.uleb128 0x27
+ 426 0049 19       		.uleb128 0x19
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 10
+
+
+ 427 004a 11       		.uleb128 0x11
+ 428 004b 01       		.uleb128 0x1
+ 429 004c 12       		.uleb128 0x12
+ 430 004d 06       		.uleb128 0x6
+ 431 004e 40       		.uleb128 0x40
+ 432 004f 18       		.uleb128 0x18
+ 433 0050 9742     		.uleb128 0x2117
+ 434 0052 19       		.uleb128 0x19
+ 435 0053 01       		.uleb128 0x1
+ 436 0054 13       		.uleb128 0x13
+ 437 0055 00       		.byte	0
+ 438 0056 00       		.byte	0
+ 439 0057 07       		.uleb128 0x7
+ 440 0058 05       		.uleb128 0x5
+ 441 0059 00       		.byte	0
+ 442 005a 03       		.uleb128 0x3
+ 443 005b 0E       		.uleb128 0xe
+ 444 005c 3A       		.uleb128 0x3a
+ 445 005d 0B       		.uleb128 0xb
+ 446 005e 3B       		.uleb128 0x3b
+ 447 005f 0B       		.uleb128 0xb
+ 448 0060 49       		.uleb128 0x49
+ 449 0061 13       		.uleb128 0x13
+ 450 0062 02       		.uleb128 0x2
+ 451 0063 17       		.uleb128 0x17
+ 452 0064 00       		.byte	0
+ 453 0065 00       		.byte	0
+ 454 0066 08       		.uleb128 0x8
+ 455 0067 2E       		.uleb128 0x2e
+ 456 0068 01       		.byte	0x1
+ 457 0069 3F       		.uleb128 0x3f
+ 458 006a 19       		.uleb128 0x19
+ 459 006b 03       		.uleb128 0x3
+ 460 006c 0E       		.uleb128 0xe
+ 461 006d 3A       		.uleb128 0x3a
+ 462 006e 0B       		.uleb128 0xb
+ 463 006f 3B       		.uleb128 0x3b
+ 464 0070 0B       		.uleb128 0xb
+ 465 0071 27       		.uleb128 0x27
+ 466 0072 19       		.uleb128 0x19
+ 467 0073 11       		.uleb128 0x11
+ 468 0074 01       		.uleb128 0x1
+ 469 0075 12       		.uleb128 0x12
+ 470 0076 06       		.uleb128 0x6
+ 471 0077 40       		.uleb128 0x40
+ 472 0078 18       		.uleb128 0x18
+ 473 0079 9742     		.uleb128 0x2117
+ 474 007b 19       		.uleb128 0x19
+ 475 007c 00       		.byte	0
+ 476 007d 00       		.byte	0
+ 477 007e 00       		.byte	0
+ 478              		.section	.debug_loc,"",%progbits
+ 479              	.Ldebug_loc0:
+ 480              	.LLST0:
+ 481 0000 00000000 		.4byte	.LVL0
+ 482 0004 08000000 		.4byte	.LVL1
+ 483 0008 0100     		.2byte	0x1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 11
+
+
+ 484 000a 50       		.byte	0x50
+ 485 000b 08000000 		.4byte	.LVL1
+ 486 000f 44010000 		.4byte	.LFE0
+ 487 0013 0400     		.2byte	0x4
+ 488 0015 F3       		.byte	0xf3
+ 489 0016 01       		.uleb128 0x1
+ 490 0017 50       		.byte	0x50
+ 491 0018 9F       		.byte	0x9f
+ 492 0019 00000000 		.4byte	0
+ 493 001d 00000000 		.4byte	0
+ 494              	.LLST1:
+ 495 0021 00000000 		.4byte	.LVL2
+ 496 0025 0C000000 		.4byte	.LVL3
+ 497 0029 0100     		.2byte	0x1
+ 498 002b 50       		.byte	0x50
+ 499 002c 0C000000 		.4byte	.LVL3
+ 500 0030 18000000 		.4byte	.LFE1
+ 501 0034 0400     		.2byte	0x4
+ 502 0036 F3       		.byte	0xf3
+ 503 0037 01       		.uleb128 0x1
+ 504 0038 50       		.byte	0x50
+ 505 0039 9F       		.byte	0x9f
+ 506 003a 00000000 		.4byte	0
+ 507 003e 00000000 		.4byte	0
+ 508              		.section	.debug_aranges,"",%progbits
+ 509 0000 24000000 		.4byte	0x24
+ 510 0004 0200     		.2byte	0x2
+ 511 0006 00000000 		.4byte	.Ldebug_info0
+ 512 000a 04       		.byte	0x4
+ 513 000b 00       		.byte	0
+ 514 000c 0000     		.2byte	0
+ 515 000e 0000     		.2byte	0
+ 516 0010 00000000 		.4byte	.LFB0
+ 517 0014 44010000 		.4byte	.LFE0-.LFB0
+ 518 0018 00000000 		.4byte	.LFB1
+ 519 001c 18000000 		.4byte	.LFE1-.LFB1
+ 520 0020 00000000 		.4byte	0
+ 521 0024 00000000 		.4byte	0
+ 522              		.section	.debug_ranges,"",%progbits
+ 523              	.Ldebug_ranges0:
+ 524 0000 00000000 		.4byte	.LFB0
+ 525 0004 44010000 		.4byte	.LFE0
+ 526 0008 00000000 		.4byte	.LFB1
+ 527 000c 18000000 		.4byte	.LFE1
+ 528 0010 00000000 		.4byte	0
+ 529 0014 00000000 		.4byte	0
+ 530              		.section	.debug_line,"",%progbits
+ 531              	.Ldebug_line0:
+ 532 0000 8A000000 		.section	.debug_str,"MS",%progbits,1
+ 532      02004A00 
+ 532      00000201 
+ 532      FB0E0D00 
+ 532      01010101 
+ 533              	.LASF6:
+ 534 0000 6C6F6E67 		.ascii	"long long int\000"
+ 534      206C6F6E 
+ 534      6720696E 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 12
+
+
+ 534      7400
+ 535              	.LASF3:
+ 536 000e 73686F72 		.ascii	"short unsigned int\000"
+ 536      7420756E 
+ 536      7369676E 
+ 536      65642069 
+ 536      6E7400
+ 537              	.LASF18:
+ 538 0021 47656E65 		.ascii	"Generated_Source\\PSoC5\\CapSense_Pins.c\000"
+ 538      72617465 
+ 538      645F536F 
+ 538      75726365 
+ 538      5C50536F 
+ 539              	.LASF8:
+ 540 0048 756E7369 		.ascii	"unsigned int\000"
+ 540      676E6564 
+ 540      20696E74 
+ 540      00
+ 541              	.LASF20:
+ 542 0055 43617053 		.ascii	"CapSense_SetAllSensorsDriveMode\000"
+ 542      656E7365 
+ 542      5F536574 
+ 542      416C6C53 
+ 542      656E736F 
+ 543              	.LASF16:
+ 544 0075 6D6F6465 		.ascii	"mode\000"
+ 544      00
+ 545              	.LASF19:
+ 546 007a 433A5C55 		.ascii	"C:\\Users\\JeffSnyder\\Documents\\PSoC Creator\\wes"
+ 546      73657273 
+ 546      5C4A6566 
+ 546      66536E79 
+ 546      6465725C 
+ 547 00a8 746F6E5F 		.ascii	"ton_1\\weston_1.cydsn\000"
+ 547      315C7765 
+ 547      73746F6E 
+ 547      5F312E63 
+ 547      7964736E 
+ 548              	.LASF17:
+ 549 00bd 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 549      43313120 
+ 549      352E342E 
+ 549      31203230 
+ 549      31363036 
+ 550 00f0 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 550      20726576 
+ 550      6973696F 
+ 550      6E203233 
+ 550      37373135 
+ 551 0123 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 551      66756E63 
+ 551      74696F6E 
+ 551      2D736563 
+ 551      74696F6E 
+ 552              	.LASF21:
+ 553 014b 43617053 		.ascii	"CapSense_SetAllCmodsDriveMode\000"
+ 553      656E7365 
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc4Jcmma.s 			page 13
+
+
+ 553      5F536574 
+ 553      416C6C43 
+ 553      6D6F6473 
+ 554              	.LASF5:
+ 555 0169 6C6F6E67 		.ascii	"long unsigned int\000"
+ 555      20756E73 
+ 555      69676E65 
+ 555      6420696E 
+ 555      7400
+ 556              	.LASF7:
+ 557 017b 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 557      206C6F6E 
+ 557      6720756E 
+ 557      7369676E 
+ 557      65642069 
+ 558              	.LASF9:
+ 559 0192 666C6F61 		.ascii	"float\000"
+ 559      7400
+ 560              	.LASF1:
+ 561 0198 756E7369 		.ascii	"unsigned char\000"
+ 561      676E6564 
+ 561      20636861 
+ 561      7200
+ 562              	.LASF11:
+ 563 01a6 63686172 		.ascii	"char\000"
+ 563      00
+ 564              	.LASF4:
+ 565 01ab 6C6F6E67 		.ascii	"long int\000"
+ 565      20696E74 
+ 565      00
+ 566              	.LASF10:
+ 567 01b4 646F7562 		.ascii	"double\000"
+ 567      6C6500
+ 568              	.LASF12:
+ 569 01bb 75696E74 		.ascii	"uint8\000"
+ 569      3800
+ 570              	.LASF0:
+ 571 01c1 7369676E 		.ascii	"signed char\000"
+ 571      65642063 
+ 571      68617200 
+ 572              	.LASF14:
+ 573 01cd 6C6F6E67 		.ascii	"long double\000"
+ 573      20646F75 
+ 573      626C6500 
+ 574              	.LASF2:
+ 575 01d9 73686F72 		.ascii	"short int\000"
+ 575      7420696E 
+ 575      7400
+ 576              	.LASF13:
+ 577 01e3 72656738 		.ascii	"reg8\000"
+ 577      00
+ 578              	.LASF15:
+ 579 01e8 73697A65 		.ascii	"sizetype\000"
+ 579      74797065 
+ 579      00
+ 580              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

@@ -152,6 +152,10 @@
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC5\USB_Dp_aliases.h</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC5\USB_Dp.c</File>
           <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC5\USB_Dp.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC5\SleepTimer.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC5\SleepTimer.h</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC5\Sleep_isr.c</File>
+          <File BuildType="BUILD" Toolchain="">Generated_Source\PSoC5\Sleep_isr.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\Export\ARM_GCC_Generic\CapSense_CSD_v3_50">

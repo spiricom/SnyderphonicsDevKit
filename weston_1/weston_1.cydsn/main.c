@@ -27,7 +27,7 @@
 #define MIDI_CC_NUMBER        (1u)
 #define MIDI_CC_VALUE      (2u)
 
-
+#define USB_SUSPEND_TIMEOUT     (2u)
 
 /*Logical Size of Em_EEPROM*/
 #define LOGICAL_EEPROM_SIZE     15u
@@ -76,6 +76,23 @@ extern uint8 CapSense_widgetResolution[];
 extern uint8 CapSense_idacSettings[];
 extern uint8 CapSense_analogSwitchDivider;
 
+volatile uint8 usbActivityCounter = 0u;
+
+CY_ISR(SleepIsr)
+{
+    /* Check USB activity */
+    if(0u != USB_CheckActivity()) 
+    {
+        usbActivityCounter = 0u;
+    } 
+    else 
+    {
+        usbActivityCounter++;
+    }
+    /* Clear Pending Interrupt */
+    SleepTimer_GetStatus();
+}
+
 
 int main(void)
 {
@@ -108,6 +125,28 @@ int main(void)
     
     while(1u)
     {
+       
+        /* Host can send double SET_INTERFACE request */
+        if(0u != USB_IsConfigurationChanged())
+        {
+            /* Initialize IN endpoints when device configured */
+            if(0u != USB_GetConfiguration())   
+            {
+                /* Start ISR to determine sleep condition */		
+                Sleep_isr_StartEx(SleepIsr);
+                
+                /* Start SleepTimer's operation */
+                SleepTimer_Start();
+                
+            	/* Enable output endpoint */
+                USB_MIDI_Init();
+            }
+            else
+            {
+                SleepTimer_Stop();
+            }    
+        }        
+        
         /* Check whether the scanning of all enabled widgets is completed. */
         if(0u == CapSense_IsBusy())
         {
@@ -122,18 +161,7 @@ int main(void)
             CapSense_DisplayState();
             
             
-            /* Host can send double SET_INTERFACE request */
-            if(0u != USB_IsConfigurationChanged())
-            {
-                /* Initialize IN endpoints when device configured */
-                if(0u != USB_GetConfiguration())   
-                {
-                    
-                	/* Enable output endpoint */
-                    USB_MIDI_Init();
-                }
-
-            }        
+           
             
             /* Service USB MIDI when device is configured */
             if(0u != USB_GetConfiguration())    
@@ -180,6 +208,32 @@ int main(void)
                     //store values for future comparison
                     capSensorsPrev[i] = tempSensor;
         		}
+                
+                            // Check if host requested USB Suspend 
+                if( usbActivityCounter >= USB_SUSPEND_TIMEOUT ) 
+                {
+                    // Disable USBFS block and set DP Interrupt for wake-up 
+                    // from sleep mode. 
+
+                    USB_Suspend(); 
+                    // Prepares system clocks for sleep mode 
+                    CyPmSaveClocks();
+                    
+                    // Switch to the Sleep Mode for the PSoC 3 or PSoC 5LP devices:
+                    //  - PM_SLEEP_TIME_NONE: wakeup time is defined by PICU source
+                    //  - PM_SLEEP_SRC_PICU: PICU wakeup source 
+                    
+                    CyPmSleep(PM_SLEEP_TIME_NONE, PM_SLEEP_SRC_PICU);
+                    // Restore clock configuration 
+                    CyPmRestoreClocks();
+                    // Enable USBFS block after power-down mode 
+                    USB_Resume();
+                    
+                    // Enable output endpoint 
+                    USB_MIDI_Init();
+
+                    usbActivityCounter = 0u; // Re-init USB Activity Counter
+                }
             }
         }
     }

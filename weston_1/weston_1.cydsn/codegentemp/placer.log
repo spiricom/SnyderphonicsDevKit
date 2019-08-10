@@ -6,7 +6,7 @@
 
 #Build Date:         Dec  5 2017 15:35:27
 
-#File Generated:     Aug 9 2019 22:10:17
+#File Generated:     Aug 9 2019 22:26:57
 
 #Purpose:            
 
@@ -110,7 +110,7 @@ Clock: MIDI1_UART_IntClock  | Frequency:   1.4 MHz | Target:   0.3 MHz
 ======================================================================
                      End of Clock Summary
 ######################################################################
-D2088: Phase 7, elapsed time : 0.3 (sec)
+D2088: Phase 7, elapsed time : 0.4 (sec)
 
 Final Design Statistics
     Number of Combinational MCs 	:	14
@@ -141,13 +141,13 @@ analysis after routing.
                      Clock Summary 
 ======================================================================
 Number of clocks: 7
-Clock: CapSense_IntClock    | Frequency:  53.8 MHz | Target:  24.0 MHz
-Clock: CyBUS_CLK            | Frequency:   1.4 MHz | Target:  24.0 MHz
+Clock: CapSense_IntClock    | Frequency:  49.6 MHz | Target:  24.0 MHz
+Clock: CyBUS_CLK            | Frequency:   1.5 MHz | Target:  24.0 MHz
 Clock: CyILO                | Frequency: N/A       | Target:   0.1 MHz
 Clock: CyIMO                | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyMASTER_CLK         | Frequency: N/A       | Target:  24.0 MHz
 Clock: CyPLL_OUT            | Frequency: N/A       | Target:  24.0 MHz
-Clock: MIDI1_UART_IntClock  | Frequency:   1.4 MHz | Target:   0.3 MHz
+Clock: MIDI1_UART_IntClock  | Frequency:   1.5 MHz | Target:   0.3 MHz
 
 ======================================================================
                      End of Clock Summary
@@ -158,5 +158,5 @@ D2088: Phase 8, elapsed time : 0.0 (sec)
 
 D2054: Placement of the design completed successfully
 
-I2076: Total run-time: 1.0 sec.
+I2076: Total run-time: 1.1 sec.
 

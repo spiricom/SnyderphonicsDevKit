@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc49pel9.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
   28:Generated_Source\PSoC5/USB_vnd.c **** 
   29:Generated_Source\PSoC5/USB_vnd.c **** 
   30:Generated_Source\PSoC5/USB_vnd.c **** /*******************************************************************************
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc49pel9.s 			page 2
 
 
   31:Generated_Source\PSoC5/USB_vnd.c **** * Function Name: USB_HandleVendorRqst
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
   70:Generated_Source\PSoC5/USB_vnd.c ****         }
   71:Generated_Source\PSoC5/USB_vnd.c ****     }
   72:Generated_Source\PSoC5/USB_vnd.c **** 
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc49pel9.s 			page 3
 
 
   73:Generated_Source\PSoC5/USB_vnd.c ****     /* `#START VENDOR_SPECIFIC_CODE` Place your vendor specific request here */
@@ -155,40 +155,40 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
   61 0006 00000000 		.4byte	.Ldebug_abbrev0
   62 000a 04       		.byte	0x4
   63 000b 01       		.uleb128 0x1
-  64 000c 65000000 		.4byte	.LASF16
+  64 000c 22000000 		.4byte	.LASF16
   65 0010 0C       		.byte	0xc
-  66 0011 37010000 		.4byte	.LASF17
-  67 0015 22000000 		.4byte	.LASF18
+  66 0011 3E010000 		.4byte	.LASF17
+  67 0015 F4000000 		.4byte	.LASF18
   68 0019 00000000 		.4byte	.Ldebug_ranges0+0
   69 001d 00000000 		.4byte	0
   70 0021 00000000 		.4byte	.Ldebug_line0
   71 0025 02       		.uleb128 0x2
   72 0026 01       		.byte	0x1
   73 0027 06       		.byte	0x6
-  74 0028 B7010000 		.4byte	.LASF0
+  74 0028 BE010000 		.4byte	.LASF0
   75 002c 02       		.uleb128 0x2
   76 002d 01       		.byte	0x1
   77 002e 08       		.byte	0x8
-  78 002f 58010000 		.4byte	.LASF1
+  78 002f 5F010000 		.4byte	.LASF1
   79 0033 02       		.uleb128 0x2
   80 0034 02       		.byte	0x2
   81 0035 05       		.byte	0x5
-  82 0036 CF010000 		.4byte	.LASF2
+  82 0036 D6010000 		.4byte	.LASF2
   83 003a 02       		.uleb128 0x2
   84 003b 02       		.byte	0x2
   85 003c 07       		.byte	0x7
-  86 003d A4010000 		.4byte	.LASF3
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 4
+  86 003d AB010000 		.4byte	.LASF3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc49pel9.s 			page 4
 
 
   87 0041 02       		.uleb128 0x2
   88 0042 04       		.byte	0x4
   89 0043 05       		.byte	0x5
-  90 0044 6B010000 		.4byte	.LASF4
+  90 0044 72010000 		.4byte	.LASF4
   91 0048 02       		.uleb128 0x2
   92 0049 04       		.byte	0x4
   93 004a 07       		.byte	0x7
-  94 004b F9000000 		.4byte	.LASF5
+  94 004b B6000000 		.4byte	.LASF5
   95 004f 02       		.uleb128 0x2
   96 0050 08       		.byte	0x8
   97 0051 05       		.byte	0x5
@@ -196,7 +196,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
   99 0056 02       		.uleb128 0x2
  100 0057 08       		.byte	0x8
  101 0058 07       		.byte	0x7
- 102 0059 1A010000 		.4byte	.LASF7
+ 102 0059 D7000000 		.4byte	.LASF7
  103 005d 03       		.uleb128 0x3
  104 005e 04       		.byte	0x4
  105 005f 05       		.byte	0x5
@@ -206,30 +206,30 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
  109 0066 07       		.byte	0x7
  110 0067 15000000 		.4byte	.LASF8
  111 006b 04       		.uleb128 0x4
- 112 006c F3000000 		.4byte	.LASF14
+ 112 006c B0000000 		.4byte	.LASF14
  113 0070 02       		.byte	0x2
  114 0071 E401     		.2byte	0x1e4
  115 0073 2C000000 		.4byte	0x2c
  116 0077 02       		.uleb128 0x2
  117 0078 04       		.byte	0x4
  118 0079 04       		.byte	0x4
- 119 007a 31010000 		.4byte	.LASF9
+ 119 007a EE000000 		.4byte	.LASF9
  120 007e 02       		.uleb128 0x2
  121 007f 08       		.byte	0x8
  122 0080 04       		.byte	0x4
- 123 0081 9D010000 		.4byte	.LASF10
+ 123 0081 A4010000 		.4byte	.LASF10
  124 0085 02       		.uleb128 0x2
  125 0086 01       		.byte	0x1
  126 0087 08       		.byte	0x8
- 127 0088 66010000 		.4byte	.LASF11
+ 127 0088 6D010000 		.4byte	.LASF11
  128 008c 02       		.uleb128 0x2
  129 008d 08       		.byte	0x8
  130 008e 04       		.byte	0x4
- 131 008f C3010000 		.4byte	.LASF12
+ 131 008f CA010000 		.4byte	.LASF12
  132 0093 02       		.uleb128 0x2
  133 0094 04       		.byte	0x4
  134 0095 07       		.byte	0x7
- 135 0096 D9010000 		.4byte	.LASF13
+ 135 0096 E0010000 		.4byte	.LASF13
  136 009a 05       		.uleb128 0x5
  137 009b 08       		.byte	0x8
  138 009c 03       		.byte	0x3
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
  141 00a2 06       		.uleb128 0x6
  142 00a3 0E000000 		.4byte	.LASF19
  143 00a7 03       		.byte	0x3
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 5
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc49pel9.s 			page 5
 
 
  144 00a8 C7       		.byte	0xc7
@@ -253,12 +253,12 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
  153 00bd 07       		.byte	0x7
  154 00be 00       		.byte	0
  155 00bf 09       		.uleb128 0x9
- 156 00c0 74010000 		.4byte	.LASF15
+ 156 00c0 7B010000 		.4byte	.LASF15
  157 00c4 03       		.byte	0x3
  158 00c5 C8       		.byte	0xc8
  159 00c6 9A000000 		.4byte	0x9a
  160 00ca 0A       		.uleb128 0xa
- 161 00cb 88010000 		.4byte	.LASF20
+ 161 00cb 8F010000 		.4byte	.LASF20
  162 00cf 01       		.byte	0x1
  163 00d0 31       		.byte	0x31
  164 00d1 6B000000 		.4byte	0x6b
@@ -267,7 +267,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
  167 00dd 01       		.uleb128 0x1
  168 00de 9C       		.byte	0x9c
  169 00df 0B       		.uleb128 0xb
- 170 00e0 0B010000 		.4byte	.LASF21
+ 170 00e0 C8000000 		.4byte	.LASF21
  171 00e4 01       		.byte	0x1
  172 00e5 33       		.byte	0x33
  173 00e6 6B000000 		.4byte	0x6b
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
  198 0013 02       		.uleb128 0x2
  199 0014 24       		.uleb128 0x24
  200 0015 00       		.byte	0
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 6
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc49pel9.s 			page 6
 
 
  201 0016 0B       		.uleb128 0xb
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
  255 004c 49       		.uleb128 0x49
  256 004d 13       		.uleb128 0x13
  257 004e 38       		.uleb128 0x38
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 7
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc49pel9.s 			page 7
 
 
  258 004f 0B       		.uleb128 0xb
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
  312 0085 18       		.uleb128 0x18
  313 0086 9742     		.uleb128 0x2117
  314 0088 19       		.uleb128 0x19
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 8
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc49pel9.s 			page 8
 
 
  315 0089 00       		.byte	0
@@ -477,115 +477,115 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 1
  359      676E6564 
  359      20696E74 
  359      00
- 360              	.LASF18:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 9
+ 360              	.LASF16:
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc49pel9.s 			page 9
 
 
- 361 0022 433A5C55 		.ascii	"C:\\Users\\JeffSnyder\\Documents\\PSoC Creator\\wes"
- 361      73657273 
- 361      5C4A6566 
- 361      66536E79 
- 361      6465725C 
- 362 0050 746F6E5F 		.ascii	"ton_1\\weston_1.cydsn\000"
- 362      315C7765 
- 362      73746F6E 
- 362      5F312E63 
- 362      7964736E 
- 363              	.LASF16:
- 364 0065 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
- 364      43313120 
- 364      352E342E 
- 364      31203230 
- 364      31363036 
- 365 0098 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
- 365      20726576 
- 365      6973696F 
- 365      6E203233 
- 365      37373135 
- 366 00cb 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
- 366      66756E63 
- 366      74696F6E 
- 366      2D736563 
- 366      74696F6E 
- 367              	.LASF14:
- 368 00f3 75696E74 		.ascii	"uint8\000"
- 368      3800
- 369              	.LASF5:
- 370 00f9 6C6F6E67 		.ascii	"long unsigned int\000"
- 370      20756E73 
- 370      69676E65 
- 370      6420696E 
- 370      7400
- 371              	.LASF21:
- 372 010b 72657175 		.ascii	"requestHandled\000"
- 372      65737448 
- 372      616E646C 
- 372      656400
- 373              	.LASF7:
- 374 011a 6C6F6E67 		.ascii	"long long unsigned int\000"
- 374      206C6F6E 
- 374      6720756E 
- 374      7369676E 
- 374      65642069 
- 375              	.LASF9:
- 376 0131 666C6F61 		.ascii	"float\000"
- 376      7400
+ 361 0022 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 361      43313120 
+ 361      352E342E 
+ 361      31203230 
+ 361      31363036 
+ 362 0055 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 362      20726576 
+ 362      6973696F 
+ 362      6E203233 
+ 362      37373135 
+ 363 0088 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 363      66756E63 
+ 363      74696F6E 
+ 363      2D736563 
+ 363      74696F6E 
+ 364              	.LASF14:
+ 365 00b0 75696E74 		.ascii	"uint8\000"
+ 365      3800
+ 366              	.LASF5:
+ 367 00b6 6C6F6E67 		.ascii	"long unsigned int\000"
+ 367      20756E73 
+ 367      69676E65 
+ 367      6420696E 
+ 367      7400
+ 368              	.LASF21:
+ 369 00c8 72657175 		.ascii	"requestHandled\000"
+ 369      65737448 
+ 369      616E646C 
+ 369      656400
+ 370              	.LASF7:
+ 371 00d7 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 371      206C6F6E 
+ 371      6720756E 
+ 371      7369676E 
+ 371      65642069 
+ 372              	.LASF9:
+ 373 00ee 666C6F61 		.ascii	"float\000"
+ 373      7400
+ 374              	.LASF18:
+ 375 00f4 433A5C55 		.ascii	"C:\\Users\\JeffSnyder\\Documents\\SnyderphonicsDevK"
+ 375      73657273 
+ 375      5C4A6566 
+ 375      66536E79 
+ 375      6465725C 
+ 376 0123 69745C77 		.ascii	"it\\weston_1\\weston_1.cydsn\000"
+ 376      6573746F 
+ 376      6E5F315C 
+ 376      77657374 
+ 376      6F6E5F31 
  377              	.LASF17:
- 378 0137 47656E65 		.ascii	"Generated_Source\\PSoC5\\USB_vnd.c\000"
+ 378 013e 47656E65 		.ascii	"Generated_Source\\PSoC5\\USB_vnd.c\000"
  378      72617465 
  378      645F536F 
  378      75726365 
  378      5C50536F 
  379              	.LASF1:
- 380 0158 756E7369 		.ascii	"unsigned char\000"
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccJxQNsL.s 			page 10
+ 380 015f 756E7369 		.ascii	"unsigned char\000"
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\cc49pel9.s 			page 10
 
 
  380      676E6564 
  380      20636861 
  380      7200
  381              	.LASF11:
- 382 0166 63686172 		.ascii	"char\000"
+ 382 016d 63686172 		.ascii	"char\000"
  382      00
  383              	.LASF4:
- 384 016b 6C6F6E67 		.ascii	"long int\000"
+ 384 0172 6C6F6E67 		.ascii	"long int\000"
  384      20696E74 
  384      00
  385              	.LASF15:
- 386 0174 5553425F 		.ascii	"USB_ep0_data_struct\000"
+ 386 017b 5553425F 		.ascii	"USB_ep0_data_struct\000"
  386      6570305F 
  386      64617461 
  386      5F737472 
  386      75637400 
  387              	.LASF20:
- 388 0188 5553425F 		.ascii	"USB_HandleVendorRqst\000"
+ 388 018f 5553425F 		.ascii	"USB_HandleVendorRqst\000"
  388      48616E64 
  388      6C655665 
  388      6E646F72 
  388      52717374 
  389              	.LASF10:
- 390 019d 646F7562 		.ascii	"double\000"
+ 390 01a4 646F7562 		.ascii	"double\000"
  390      6C6500
  391              	.LASF3:
- 392 01a4 73686F72 		.ascii	"short unsigned int\000"
+ 392 01ab 73686F72 		.ascii	"short unsigned int\000"
  392      7420756E 
  392      7369676E 
  392      65642069 
  392      6E7400
  393              	.LASF0:
- 394 01b7 7369676E 		.ascii	"signed char\000"
+ 394 01be 7369676E 		.ascii	"signed char\000"
  394      65642063 
  394      68617200 
  395              	.LASF12:
- 396 01c3 6C6F6E67 		.ascii	"long double\000"
+ 396 01ca 6C6F6E67 		.ascii	"long double\000"
  396      20646F75 
  396      626C6500 
  397              	.LASF2:
- 398 01cf 73686F72 		.ascii	"short int\000"
+ 398 01d6 73686F72 		.ascii	"short int\000"
  398      7420696E 
  398      7400
  399              	.LASF13:
- 400 01d9 73697A65 		.ascii	"sizetype\000"
+ 400 01e0 73697A65 		.ascii	"sizetype\000"
  400      74797065 
  400      00
  401              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

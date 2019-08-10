@@ -35,6 +35,8 @@
 #include "LED1_aliases.h"
 #include "LED1.h"
 #include "Em_EEPROM.h"
+#include "Sleep_isr.h"
+#include "SleepTimer.h"
 #include "CapSense_CompCH0.h"
 #include "CapSense_IdacCH0.h"
 #include "CapSense_AMuxCH0.h"

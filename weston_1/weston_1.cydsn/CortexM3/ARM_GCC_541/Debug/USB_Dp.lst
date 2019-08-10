@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
   28:Generated_Source\PSoC5/USB_Dp.c **** *
   29:Generated_Source\PSoC5/USB_Dp.c **** * \brief Writes the value to the physical port (data output register), masking
   30:Generated_Source\PSoC5/USB_Dp.c **** *  and shifting the bits appropriately. 
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 2
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 2
 
 
   31:Generated_Source\PSoC5/USB_Dp.c **** *
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
   52              		.size	USB_Dp_Write, .-USB_Dp_Write
   53              		.section	.text.USB_Dp_SetDriveMode,"ax",%progbits
   54              		.align	2
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 3
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 3
 
 
   55              		.global	USB_Dp_SetDriveMode
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
   77 0012 00BF     		.align	2
   78              	.L5:
   79 0014 7E500040 		.word	1073762430
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 4
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 4
 
 
   80              		.cfi_endproc
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  110              		.align	2
  111              		.global	USB_Dp_ReadDataReg
  112              		.thumb
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 5
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 5
 
 
  113              		.thumb_func
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  139              		.thumb_func
  140              		.type	USB_Dp_SetInterruptMode, %function
  141              	USB_Dp_SetInterruptMode:
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 6
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 6
 
 
  142              	.LFB4:
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  151              	.LVL6:
  152 0004 80B2     		uxth	r0, r0
  153 0006 10B1     		cbz	r0, .L13
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 7
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 7
 
 
  190:Generated_Source\PSoC5/USB_Dp.c **** 		{ 
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  180              		@ link register save eliminated.
  218:Generated_Source\PSoC5/USB_Dp.c ****         return (USB_Dp_INTSTAT & USB_Dp_MASK) >> USB_Dp_SHIFT;
  181              		.loc 1 218 0
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 8
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 8
 
 
  182 0000 024B     		ldr	r3, .L18
@@ -446,15 +446,15 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  203 000b 01       		.uleb128 0x1
  204 000c 5F000000 		.4byte	.LASF24
  205 0010 0C       		.byte	0xc
- 206 0011 CE010000 		.4byte	.LASF25
- 207 0015 17010000 		.4byte	.LASF26
+ 206 0011 D5010000 		.4byte	.LASF25
+ 207 0015 1E010000 		.4byte	.LASF26
  208 0019 00000000 		.4byte	.Ldebug_ranges0+0
  209 001d 00000000 		.4byte	0
  210 0021 00000000 		.4byte	.Ldebug_line0
  211 0025 02       		.uleb128 0x2
  212 0026 01       		.byte	0x1
  213 0027 06       		.byte	0x6
- 214 0028 07020000 		.4byte	.LASF0
+ 214 0028 0E020000 		.4byte	.LASF0
  215 002c 02       		.uleb128 0x2
  216 002d 01       		.byte	0x1
  217 002e 08       		.byte	0x8
@@ -462,7 +462,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  219 0033 02       		.uleb128 0x2
  220 0034 02       		.byte	0x2
  221 0035 05       		.byte	0x5
- 222 0036 EE010000 		.4byte	.LASF2
+ 222 0036 F5010000 		.4byte	.LASF2
  223 003a 02       		.uleb128 0x2
  224 003b 02       		.byte	0x2
  225 003c 07       		.byte	0x7
@@ -470,7 +470,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  227 0041 02       		.uleb128 0x2
  228 0042 04       		.byte	0x4
  229 0043 05       		.byte	0x5
- 230 0044 FE010000 		.4byte	.LASF4
+ 230 0044 05020000 		.4byte	.LASF4
  231 0048 02       		.uleb128 0x2
  232 0049 04       		.byte	0x4
  233 004a 07       		.byte	0x7
@@ -478,14 +478,14 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  235 004f 02       		.uleb128 0x2
  236 0050 08       		.byte	0x8
  237 0051 05       		.byte	0x5
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 9
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 9
 
 
- 238 0052 AE010000 		.4byte	.LASF6
+ 238 0052 B5010000 		.4byte	.LASF6
  239 0056 02       		.uleb128 0x2
  240 0057 08       		.byte	0x8
  241 0058 07       		.byte	0x7
- 242 0059 7E010000 		.4byte	.LASF7
+ 242 0059 85010000 		.4byte	.LASF7
  243 005d 03       		.uleb128 0x3
  244 005e 04       		.byte	0x4
  245 005f 05       		.byte	0x5
@@ -493,14 +493,14 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  247 0064 02       		.uleb128 0x2
  248 0065 04       		.byte	0x4
  249 0066 07       		.byte	0x7
- 250 0067 71010000 		.4byte	.LASF8
+ 250 0067 78010000 		.4byte	.LASF8
  251 006b 04       		.uleb128 0x4
- 252 006c F8010000 		.4byte	.LASF9
+ 252 006c FF010000 		.4byte	.LASF9
  253 0070 02       		.byte	0x2
  254 0071 E401     		.2byte	0x1e4
  255 0073 2C000000 		.4byte	0x2c
  256 0077 04       		.uleb128 0x4
- 257 0078 61010000 		.4byte	.LASF10
+ 257 0078 68010000 		.4byte	.LASF10
  258 007c 02       		.byte	0x2
  259 007d E501     		.2byte	0x1e5
  260 007f 3A000000 		.4byte	0x3a
@@ -511,11 +511,11 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  265 008a 02       		.uleb128 0x2
  266 008b 08       		.byte	0x8
  267 008c 04       		.byte	0x4
- 268 008d 5A010000 		.4byte	.LASF12
+ 268 008d 17010000 		.4byte	.LASF12
  269 0091 02       		.uleb128 0x2
  270 0092 01       		.byte	0x1
  271 0093 08       		.byte	0x8
- 272 0094 C9010000 		.4byte	.LASF13
+ 272 0094 D0010000 		.4byte	.LASF13
  273 0098 04       		.uleb128 0x4
  274 0099 ED000000 		.4byte	.LASF14
  275 009d 02       		.byte	0x2
@@ -524,7 +524,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  278 00a4 05       		.uleb128 0x5
  279 00a5 6B000000 		.4byte	0x6b
  280 00a9 06       		.uleb128 0x6
- 281 00aa BC010000 		.4byte	.LASF15
+ 281 00aa C3010000 		.4byte	.LASF15
  282 00ae 01       		.byte	0x1
  283 00af 39       		.byte	0x39
  284 00b0 00000000 		.4byte	.LFB0
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  292 00c4 39       		.byte	0x39
  293 00c5 6B000000 		.4byte	0x6b
  294 00c9 00000000 		.4byte	.LLST0
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 10
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 10
 
 
  295 00cd 08       		.uleb128 0x8
@@ -550,7 +550,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  301 00d9 53       		.byte	0x53
  302 00da 00       		.byte	0
  303 00db 06       		.uleb128 0x6
- 304 00dc 9A010000 		.4byte	.LASF16
+ 304 00dc A1010000 		.4byte	.LASF16
  305 00e0 01       		.byte	0x1
  306 00e1 5A       		.byte	0x5a
  307 00e2 00000000 		.4byte	.LFB1
@@ -559,7 +559,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  310 00eb 9C       		.byte	0x9c
  311 00ec 00010000 		.4byte	0x100
  312 00f0 07       		.uleb128 0x7
- 313 00f1 95010000 		.4byte	.LASF18
+ 313 00f1 9C010000 		.4byte	.LASF18
  314 00f5 01       		.byte	0x1
  315 00f6 5A       		.byte	0x5a
  316 00f7 6B000000 		.4byte	0x6b
@@ -575,7 +575,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  326 0113 01       		.uleb128 0x1
  327 0114 9C       		.byte	0x9c
  328 0115 09       		.uleb128 0x9
- 329 0116 13020000 		.4byte	.LASF20
+ 329 0116 1A020000 		.4byte	.LASF20
  330 011a 01       		.byte	0x1
  331 011b 8D       		.byte	0x8d
  332 011c 6B000000 		.4byte	0x6b
@@ -593,16 +593,16 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  344 013a 9C       		.byte	0x9c
  345 013b 5E010000 		.4byte	0x15e
  346 013f 07       		.uleb128 0x7
- 347 0140 68010000 		.4byte	.LASF22
+ 347 0140 6F010000 		.4byte	.LASF22
  348 0144 01       		.byte	0x1
  349 0145 BB       		.byte	0xbb
  350 0146 77000000 		.4byte	0x77
  351 014a 42000000 		.4byte	.LLST2
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 11
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 11
 
 
  352 014e 07       		.uleb128 0x7
- 353 014f 95010000 		.4byte	.LASF18
+ 353 014f 9C010000 		.4byte	.LASF18
  354 0153 01       		.byte	0x1
  355 0154 BB       		.byte	0xbb
  356 0155 77000000 		.4byte	0x77
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  406 0023 3E       		.uleb128 0x3e
  407 0024 0B       		.uleb128 0xb
  408 0025 03       		.uleb128 0x3
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 12
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 12
 
 
  409 0026 08       		.uleb128 0x8
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  463 005d 0B       		.uleb128 0xb
  464 005e 3B       		.uleb128 0x3b
  465 005f 0B       		.uleb128 0xb
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 13
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 13
 
 
  466 0060 49       		.uleb128 0x49
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  520 000b 0A000000 		.4byte	.LVL2
  521 000f 18000000 		.4byte	.LFE0
  522 0013 0400     		.2byte	0x4
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 14
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 14
 
 
  523 0015 F3       		.byte	0xf3
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  577 000c 0000     		.2byte	0
  578 000e 0000     		.2byte	0
  579 0010 00000000 		.4byte	.LFB0
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 15
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 15
 
 
  580 0014 18000000 		.4byte	.LFE0-.LFB0
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  619      747300
  620              	.LASF19:
  621 003f 5553425F 		.ascii	"USB_Dp_Read\000"
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 16
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 16
 
 
  621      44705F52 
@@ -942,89 +942,89 @@ ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 1
  635      7369676E 
  635      65642069 
  635      6E7400
- 636              	.LASF26:
- 637 0117 433A5C55 		.ascii	"C:\\Users\\JeffSnyder\\Documents\\PSoC Creator\\wes"
- 637      73657273 
- 637      5C4A6566 
- 637      66536E79 
- 637      6465725C 
- 638 0145 746F6E5F 		.ascii	"ton_1\\weston_1.cydsn\000"
- 638      315C7765 
- 638      73746F6E 
- 638      5F312E63 
- 638      7964736E 
- 639              	.LASF12:
- 640 015a 646F7562 		.ascii	"double\000"
- 640      6C6500
+ 636              	.LASF12:
+ 637 0117 646F7562 		.ascii	"double\000"
+ 637      6C6500
+ 638              	.LASF26:
+ 639 011e 433A5C55 		.ascii	"C:\\Users\\JeffSnyder\\Documents\\SnyderphonicsDevK"
+ 639      73657273 
+ 639      5C4A6566 
+ 639      66536E79 
+ 639      6465725C 
+ 640 014d 69745C77 		.ascii	"it\\weston_1\\weston_1.cydsn\000"
+ 640      6573746F 
+ 640      6E5F315C 
+ 640      77657374 
+ 640      6F6E5F31 
  641              	.LASF10:
- 642 0161 75696E74 		.ascii	"uint16\000"
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 17
+ 642 0168 75696E74 		.ascii	"uint16\000"
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 17
 
 
  642      313600
  643              	.LASF22:
- 644 0168 706F7369 		.ascii	"position\000"
+ 644 016f 706F7369 		.ascii	"position\000"
  644      74696F6E 
  644      00
  645              	.LASF8:
- 646 0171 756E7369 		.ascii	"unsigned int\000"
+ 646 0178 756E7369 		.ascii	"unsigned int\000"
  646      676E6564 
  646      20696E74 
  646      00
  647              	.LASF7:
- 648 017e 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 648 0185 6C6F6E67 		.ascii	"long long unsigned int\000"
  648      206C6F6E 
  648      6720756E 
  648      7369676E 
  648      65642069 
  649              	.LASF18:
- 650 0195 6D6F6465 		.ascii	"mode\000"
+ 650 019c 6D6F6465 		.ascii	"mode\000"
  650      00
  651              	.LASF16:
- 652 019a 5553425F 		.ascii	"USB_Dp_SetDriveMode\000"
+ 652 01a1 5553425F 		.ascii	"USB_Dp_SetDriveMode\000"
  652      44705F53 
  652      65744472 
  652      6976654D 
  652      6F646500 
  653              	.LASF6:
- 654 01ae 6C6F6E67 		.ascii	"long long int\000"
+ 654 01b5 6C6F6E67 		.ascii	"long long int\000"
  654      206C6F6E 
  654      6720696E 
  654      7400
  655              	.LASF15:
- 656 01bc 5553425F 		.ascii	"USB_Dp_Write\000"
+ 656 01c3 5553425F 		.ascii	"USB_Dp_Write\000"
  656      44705F57 
  656      72697465 
  656      00
  657              	.LASF13:
- 658 01c9 63686172 		.ascii	"char\000"
+ 658 01d0 63686172 		.ascii	"char\000"
  658      00
  659              	.LASF25:
- 660 01ce 47656E65 		.ascii	"Generated_Source\\PSoC5\\USB_Dp.c\000"
+ 660 01d5 47656E65 		.ascii	"Generated_Source\\PSoC5\\USB_Dp.c\000"
  660      72617465 
  660      645F536F 
  660      75726365 
  660      5C50536F 
  661              	.LASF2:
- 662 01ee 73686F72 		.ascii	"short int\000"
+ 662 01f5 73686F72 		.ascii	"short int\000"
  662      7420696E 
  662      7400
  663              	.LASF9:
- 664 01f8 75696E74 		.ascii	"uint8\000"
+ 664 01ff 75696E74 		.ascii	"uint8\000"
  664      3800
  665              	.LASF4:
- 666 01fe 6C6F6E67 		.ascii	"long int\000"
+ 666 0205 6C6F6E67 		.ascii	"long int\000"
  666      20696E74 
  666      00
  667              	.LASF0:
- 668 0207 7369676E 		.ascii	"signed char\000"
-ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccYVHZXJ.s 			page 18
+ 668 020e 7369676E 		.ascii	"signed char\000"
+ARM GAS  C:\Users\JEFFSN~1\AppData\Local\Temp\ccztH2Xe.s 			page 18
 
 
  668      65642063 
  668      68617200 
  669              	.LASF20:
- 670 0213 5553425F 		.ascii	"USB_Dp_ReadDataReg\000"
+ 670 021a 5553425F 		.ascii	"USB_Dp_ReadDataReg\000"
  670      44705F52 
  670      65616444 
  670      61746152 

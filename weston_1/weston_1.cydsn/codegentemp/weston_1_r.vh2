@@ -1,5 +1,5 @@
 -- Project:   weston_1
--- Generated: 08/09/2019 22:10:19
+-- Generated: 08/09/2019 22:26:58
 -- PSoC Creator  4.2
 
 ENTITY weston_1 IS
@@ -18,6 +18,7 @@ ENTITY weston_1 IS
 END weston_1;
 
 ARCHITECTURE __DEFAULT__ OF weston_1 IS
+    SIGNAL CTW_OUT : bit;
     SIGNAL ClockBlock_100k : bit;
     SIGNAL ClockBlock_1k : bit;
     SIGNAL ClockBlock_32k : bit;
@@ -40,7 +41,7 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
     ATTRIBUTE placement_force OF Net_18 : SIGNAL IS "U(1,0,A)0";
     SIGNAL Net_19 : bit;
     SIGNAL \CapSense:ClockGen:clock_detect_reg\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:ClockGen:clock_detect_reg\ : SIGNAL IS "U(1,3,B)0";
+    ATTRIBUTE placement_force OF \CapSense:ClockGen:clock_detect_reg\ : SIGNAL IS "U(1,2,A)2";
     SIGNAL \CapSense:ClockGen:cmsb_reg\ : bit;
     SIGNAL \CapSense:ClockGen:control_0\ : bit;
     SIGNAL \CapSense:ClockGen:control_1\ : bit;
@@ -52,13 +53,13 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
     SIGNAL \CapSense:ClockGen:control_7\ : bit;
     SIGNAL \CapSense:ClockGen:cs_addr_1\ : bit;
     SIGNAL \CapSense:ClockGen:cstate_2\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:ClockGen:cstate_2\ : SIGNAL IS "U(0,3,A)2";
+    ATTRIBUTE placement_force OF \CapSense:ClockGen:cstate_2\ : SIGNAL IS "U(1,3,B)2";
     SIGNAL \CapSense:ClockGen:inter_reset\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:ClockGen:inter_reset\ : SIGNAL IS "U(0,3,A)1";
+    ATTRIBUTE placement_force OF \CapSense:ClockGen:inter_reset\ : SIGNAL IS "U(1,3,B)1";
     SIGNAL \CapSense:ClockGen:ppulse_equal\ : bit;
     SIGNAL \CapSense:ClockGen:ppulse_less\ : bit;
     SIGNAL \CapSense:ClockGen:tmp_ppulse_dly\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:ClockGen:tmp_ppulse_dly\ : SIGNAL IS "U(1,3,A)0";
+    ATTRIBUTE placement_force OF \CapSense:ClockGen:tmp_ppulse_dly\ : SIGNAL IS "U(1,2,A)0";
     SIGNAL \CapSense:ClockGen:tmp_ppulse_reg\ : bit;
     ATTRIBUTE placement_force OF \CapSense:ClockGen:tmp_ppulse_reg\ : SIGNAL IS "U(1,3,A)1";
     SIGNAL \\\CapSense:CmodCH0(0)\\__PA\ : bit;
@@ -66,23 +67,23 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
     SIGNAL \CapSense:DigitalClk\ : bit;
     SIGNAL \CapSense:IdacCH0:Net_123\ : bit;
     SIGNAL \CapSense:MeasureCH0:cs_addr_cnt_0\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_cnt_0\ : SIGNAL IS "U(0,2,B)2";
+    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_cnt_0\ : SIGNAL IS "U(0,3,B)2";
     SIGNAL \CapSense:MeasureCH0:cs_addr_cnt_1\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_cnt_1\ : SIGNAL IS "U(0,3,B)0";
+    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_cnt_1\ : SIGNAL IS "U(0,2,B)0";
     SIGNAL \CapSense:MeasureCH0:cs_addr_cnt_2\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_cnt_2\ : SIGNAL IS "U(0,2,B)1";
+    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_cnt_2\ : SIGNAL IS "U(0,3,B)1";
     SIGNAL \CapSense:MeasureCH0:cs_addr_win_0\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_win_0\ : SIGNAL IS "U(0,2,A)1";
+    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_win_0\ : SIGNAL IS "U(0,2,A)2";
     SIGNAL \CapSense:MeasureCH0:cs_addr_win_1\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_win_1\ : SIGNAL IS "U(0,2,A)2";
+    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_win_1\ : SIGNAL IS "U(0,3,A)3";
     SIGNAL \CapSense:MeasureCH0:cs_addr_win_2\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_win_2\ : SIGNAL IS "U(0,2,B)0";
+    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:cs_addr_win_2\ : SIGNAL IS "U(0,3,B)0";
     SIGNAL \CapSense:MeasureCH0:wndState_0\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:wndState_0\ : SIGNAL IS "U(0,3,B)1";
+    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:wndState_0\ : SIGNAL IS "U(0,2,A)1";
     SIGNAL \CapSense:MeasureCH0:wndState_1\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:wndState_1\ : SIGNAL IS "U(0,3,B)2";
+    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:wndState_1\ : SIGNAL IS "U(0,3,A)1";
     SIGNAL \CapSense:MeasureCH0:wndState_2\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:wndState_2\ : SIGNAL IS "U(0,3,B)3";
+    ATTRIBUTE placement_force OF \CapSense:MeasureCH0:wndState_2\ : SIGNAL IS "U(0,3,A)2";
     SIGNAL \CapSense:MeasureCH0:zc0\ : bit;
     SIGNAL \CapSense:MeasureCH0:zc1\ : bit;
     SIGNAL \CapSense:MeasureCH0:zw0\ : bit;
@@ -116,21 +117,21 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
     SIGNAL \\\CapSense:PortCH0(8)\\__PA\ : bit;
     SIGNAL \\\CapSense:PortCH0(9)\\__PA\ : bit;
     SIGNAL \CapSense:PreChargeClk\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:PreChargeClk\ : SIGNAL IS "U(1,2,A)2";
+    ATTRIBUTE placement_force OF \CapSense:PreChargeClk\ : SIGNAL IS "U(1,3,A)0";
     SIGNAL \CapSense:clk\ : bit;
     ATTRIBUTE udbclken_assigned OF \CapSense:clk\ : SIGNAL IS "True";
     ATTRIBUTE global_signal OF \CapSense:clk\ : SIGNAL IS true;
     SIGNAL \CapSense:clk_local\ : bit;
     SIGNAL \CapSense:mrst\ : bit;
-    ATTRIBUTE placement_force OF \CapSense:mrst\ : SIGNAL IS "U(0,3,A)3";
+    ATTRIBUTE placement_force OF \CapSense:mrst\ : SIGNAL IS "U(1,3,B)3";
     SIGNAL \MIDI1_UART:BUART:counter_load_not\ : bit;
     ATTRIBUTE placement_force OF \MIDI1_UART:BUART:counter_load_not\ : SIGNAL IS "U(1,0,B)1";
     SIGNAL \MIDI1_UART:BUART:pollcount_0\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:pollcount_0\ : SIGNAL IS "U(0,0,B)0";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:pollcount_0\ : SIGNAL IS "U(0,2,B)3";
     SIGNAL \MIDI1_UART:BUART:pollcount_1\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:pollcount_1\ : SIGNAL IS "U(0,0,A)1";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:pollcount_1\ : SIGNAL IS "U(0,0,B)1";
     SIGNAL \MIDI1_UART:BUART:rx_bitclk_enable\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_bitclk_enable\ : SIGNAL IS "U(0,0,A)3";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_bitclk_enable\ : SIGNAL IS "U(0,1,A)3";
     SIGNAL \MIDI1_UART:BUART:rx_count7_tc\ : bit;
     SIGNAL \MIDI1_UART:BUART:rx_count_0\ : bit;
     SIGNAL \MIDI1_UART:BUART:rx_count_1\ : bit;
@@ -140,27 +141,27 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
     SIGNAL \MIDI1_UART:BUART:rx_count_5\ : bit;
     SIGNAL \MIDI1_UART:BUART:rx_count_6\ : bit;
     SIGNAL \MIDI1_UART:BUART:rx_counter_load\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_counter_load\ : SIGNAL IS "U(0,1,A)1";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_counter_load\ : SIGNAL IS "U(1,1,A)1";
     SIGNAL \MIDI1_UART:BUART:rx_fifofull\ : bit;
     SIGNAL \MIDI1_UART:BUART:rx_fifonotempty\ : bit;
     SIGNAL \MIDI1_UART:BUART:rx_last\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_last\ : SIGNAL IS "U(0,0,B)1";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_last\ : SIGNAL IS "U(0,0,B)3";
     SIGNAL \MIDI1_UART:BUART:rx_load_fifo\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_load_fifo\ : SIGNAL IS "U(0,1,B)1";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_load_fifo\ : SIGNAL IS "U(0,1,B)3";
     SIGNAL \MIDI1_UART:BUART:rx_postpoll\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_postpoll\ : SIGNAL IS "U(0,0,A)2";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_postpoll\ : SIGNAL IS "U(0,0,B)2";
     SIGNAL \MIDI1_UART:BUART:rx_state_0\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_state_0\ : SIGNAL IS "U(0,1,A)0";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_state_0\ : SIGNAL IS "U(0,1,B)0";
     SIGNAL \MIDI1_UART:BUART:rx_state_2\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_state_2\ : SIGNAL IS "U(0,1,B)0";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_state_2\ : SIGNAL IS "U(0,1,B)2";
     SIGNAL \MIDI1_UART:BUART:rx_state_3\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_state_3\ : SIGNAL IS "U(0,1,A)2";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_state_3\ : SIGNAL IS "U(1,1,A)0";
     SIGNAL \MIDI1_UART:BUART:rx_state_stop1_reg\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_state_stop1_reg\ : SIGNAL IS "U(0,1,B)3";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_state_stop1_reg\ : SIGNAL IS "U(1,1,A)3";
     SIGNAL \MIDI1_UART:BUART:rx_status_3\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_status_3\ : SIGNAL IS "U(0,0,A)0";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_status_3\ : SIGNAL IS "U(0,0,B)0";
     SIGNAL \MIDI1_UART:BUART:rx_status_4\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_status_4\ : SIGNAL IS "U(0,0,B)3";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_status_4\ : SIGNAL IS "U(0,2,B)1";
     SIGNAL \MIDI1_UART:BUART:rx_status_5\ : bit;
     ATTRIBUTE placement_force OF \MIDI1_UART:BUART:rx_status_5\ : SIGNAL IS "U(0,2,A)3";
     SIGNAL \MIDI1_UART:BUART:tx_bitclk\ : bit;
@@ -168,20 +169,20 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
     SIGNAL \MIDI1_UART:BUART:tx_bitclk_enable_pre\ : bit;
     SIGNAL \MIDI1_UART:BUART:tx_counter_dp\ : bit;
     SIGNAL \MIDI1_UART:BUART:tx_ctrl_mark_last\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:tx_ctrl_mark_last\ : SIGNAL IS "U(0,2,B)3";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:tx_ctrl_mark_last\ : SIGNAL IS "U(1,0,B)3";
     SIGNAL \MIDI1_UART:BUART:tx_fifo_empty\ : bit;
     SIGNAL \MIDI1_UART:BUART:tx_fifo_notfull\ : bit;
     SIGNAL \MIDI1_UART:BUART:tx_shift_out\ : bit;
     SIGNAL \MIDI1_UART:BUART:tx_state_0\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:tx_state_0\ : SIGNAL IS "U(1,2,A)0";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:tx_state_0\ : SIGNAL IS "U(1,2,B)0";
     SIGNAL \MIDI1_UART:BUART:tx_state_1\ : bit;
     ATTRIBUTE placement_force OF \MIDI1_UART:BUART:tx_state_1\ : SIGNAL IS "U(1,0,A)1";
     SIGNAL \MIDI1_UART:BUART:tx_state_2\ : bit;
     ATTRIBUTE placement_force OF \MIDI1_UART:BUART:tx_state_2\ : SIGNAL IS "U(1,0,B)0";
     SIGNAL \MIDI1_UART:BUART:tx_status_0\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:tx_status_0\ : SIGNAL IS "U(1,2,A)1";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:tx_status_0\ : SIGNAL IS "U(1,2,B)1";
     SIGNAL \MIDI1_UART:BUART:tx_status_2\ : bit;
-    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:tx_status_2\ : SIGNAL IS "U(1,1,A)0";
+    ATTRIBUTE placement_force OF \MIDI1_UART:BUART:tx_status_2\ : SIGNAL IS "U(1,1,A)2";
     SIGNAL \MIDI1_UART:Net_9\ : bit;
     ATTRIBUTE udbclken_assigned OF \MIDI1_UART:Net_9\ : SIGNAL IS "True";
     ATTRIBUTE global_signal OF \MIDI1_UART:Net_9\ : SIGNAL IS true;
@@ -299,19 +300,19 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
     ATTRIBUTE lib_model OF LED1(0) : LABEL IS "iocell32";
     ATTRIBUTE Location OF LED1(0) : LABEL IS "P2[1]";
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:cs_addr_win_2\ : LABEL IS "macrocell1";
-    ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_win_2\ : LABEL IS "U(0,2)";
+    ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_win_2\ : LABEL IS "U(0,3)";
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:cs_addr_win_1\ : LABEL IS "macrocell2";
-    ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_win_1\ : LABEL IS "U(0,2)";
+    ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_win_1\ : LABEL IS "U(0,3)";
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:cs_addr_win_0\ : LABEL IS "macrocell3";
     ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_win_0\ : LABEL IS "U(0,2)";
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:cs_addr_cnt_2\ : LABEL IS "macrocell4";
-    ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_cnt_2\ : LABEL IS "U(0,2)";
+    ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_cnt_2\ : LABEL IS "U(0,3)";
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:cs_addr_cnt_1\ : LABEL IS "macrocell5";
-    ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_cnt_1\ : LABEL IS "U(0,3)";
+    ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_cnt_1\ : LABEL IS "U(0,2)";
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:cs_addr_cnt_0\ : LABEL IS "macrocell6";
-    ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_cnt_0\ : LABEL IS "U(0,2)";
+    ATTRIBUTE Location OF \CapSense:MeasureCH0:cs_addr_cnt_0\ : LABEL IS "U(0,3)";
     ATTRIBUTE lib_model OF \CapSense:PreChargeClk\ : LABEL IS "macrocell7";
-    ATTRIBUTE Location OF \CapSense:PreChargeClk\ : LABEL IS "U(1,2)";
+    ATTRIBUTE Location OF \CapSense:PreChargeClk\ : LABEL IS "U(1,3)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:counter_load_not\ : LABEL IS "macrocell8";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:counter_load_not\ : LABEL IS "U(1,0)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:tx_status_0\ : LABEL IS "macrocell9";
@@ -319,52 +320,53 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:tx_status_2\ : LABEL IS "macrocell10";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:tx_status_2\ : LABEL IS "U(1,1)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_counter_load\ : LABEL IS "macrocell11";
-    ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_counter_load\ : LABEL IS "U(0,1)";
+    ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_counter_load\ : LABEL IS "U(1,1)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_postpoll\ : LABEL IS "macrocell12";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_postpoll\ : LABEL IS "U(0,0)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_status_4\ : LABEL IS "macrocell13";
-    ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_status_4\ : LABEL IS "U(0,0)";
+    ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_status_4\ : LABEL IS "U(0,2)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_status_5\ : LABEL IS "macrocell14";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_status_5\ : LABEL IS "U(0,2)";
     ATTRIBUTE Location OF \CapSense:BufCH0\ : LABEL IS "F(CsAbuf,0)";
     ATTRIBUTE Location OF \CapSense:CompCH0:ctComp\ : LABEL IS "F(Comparator,0)";
     ATTRIBUTE Location OF \CapSense:IdacCH0:viDAC8\ : LABEL IS "F(VIDAC,0)";
-    ATTRIBUTE Location OF \CapSense:MeasureCH0:genblk1:SyncCMPR\ : LABEL IS "U(1,1)";
+    ATTRIBUTE Location OF \CapSense:MeasureCH0:genblk1:SyncCMPR\ : LABEL IS "U(0,3)";
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:UDB:Window:u0\ : LABEL IS "datapathcell1";
-    ATTRIBUTE Location OF \CapSense:MeasureCH0:UDB:Window:u0\ : LABEL IS "U(0,1)";
+    ATTRIBUTE Location OF \CapSense:MeasureCH0:UDB:Window:u0\ : LABEL IS "U(0,3)";
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:UDB:Counter:u0\ : LABEL IS "datapathcell2";
-    ATTRIBUTE Location OF \CapSense:MeasureCH0:UDB:Counter:u0\ : LABEL IS "U(0,3)";
+    ATTRIBUTE Location OF \CapSense:MeasureCH0:UDB:Counter:u0\ : LABEL IS "U(0,1)";
     ATTRIBUTE lib_model OF \CapSense:ClockGen:SyncCtrl:CtrlReg\ : LABEL IS "controlcell1";
-    ATTRIBUTE Location OF \CapSense:ClockGen:SyncCtrl:CtrlReg\ : LABEL IS "U(0,3)";
-    ATTRIBUTE Location OF \CapSense:ClockGen:ScanSpeed\ : LABEL IS "U(1,3)";
+    ATTRIBUTE Location OF \CapSense:ClockGen:SyncCtrl:CtrlReg\ : LABEL IS "U(1,3)";
+    ATTRIBUTE Location OF \CapSense:ClockGen:ScanSpeed\ : LABEL IS "U(0,2)";
     ATTRIBUTE lib_model OF \CapSense:ClockGen:UDB:PrescalerDp:u0\ : LABEL IS "datapathcell3";
     ATTRIBUTE Location OF \CapSense:ClockGen:UDB:PrescalerDp:u0\ : LABEL IS "U(1,3)";
     ATTRIBUTE lib_model OF \CapSense:ClockGen:sC16:PRSdp:u0\ : LABEL IS "datapathcell4";
     ATTRIBUTE Location OF \CapSense:ClockGen:sC16:PRSdp:u0\ : LABEL IS "U(1,2)";
     ATTRIBUTE lib_model OF \CapSense:ClockGen:sC16:PRSdp:u1\ : LABEL IS "datapathcell5";
     ATTRIBUTE Location OF \CapSense:ClockGen:sC16:PRSdp:u1\ : LABEL IS "U(0,2)";
-    ATTRIBUTE Location OF \CapSense:IsrCH0\ : LABEL IS "[IntrContainer=(0)][IntrId=(0)]";
-    ATTRIBUTE Location OF \MIDI1_UART:TXInternalInterrupt\ : LABEL IS "[IntrContainer=(0)][IntrId=(2)]";
-    ATTRIBUTE Location OF \MIDI1_UART:RXInternalInterrupt\ : LABEL IS "[IntrContainer=(0)][IntrId=(1)]";
+    ATTRIBUTE Location OF \CapSense:IsrCH0\ : LABEL IS "[IntrContainer=(0)][IntrId=(1)]";
+    ATTRIBUTE Location OF \MIDI1_UART:TXInternalInterrupt\ : LABEL IS "[IntrContainer=(0)][IntrId=(3)]";
+    ATTRIBUTE Location OF \MIDI1_UART:RXInternalInterrupt\ : LABEL IS "[IntrContainer=(0)][IntrId=(2)]";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:sTX:TxShifter:u0\ : LABEL IS "datapathcell6";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:sTX:TxShifter:u0\ : LABEL IS "U(1,1)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:sTX:sCLOCK:TxBitClkGen\ : LABEL IS "datapathcell7";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:sTX:sCLOCK:TxBitClkGen\ : LABEL IS "U(1,0)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:sTX:TxSts\ : LABEL IS "statusicell1";
-    ATTRIBUTE Location OF \MIDI1_UART:BUART:sTX:TxSts\ : LABEL IS "U(1,2)";
+    ATTRIBUTE Location OF \MIDI1_UART:BUART:sTX:TxSts\ : LABEL IS "U(1,1)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:sRX:RxShifter:u0\ : LABEL IS "datapathcell8";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:sRX:RxShifter:u0\ : LABEL IS "U(0,0)";
-    ATTRIBUTE Location OF \MIDI1_UART:BUART:sRX:RxBitCounter\ : LABEL IS "U(0,1)";
+    ATTRIBUTE Location OF \MIDI1_UART:BUART:sRX:RxBitCounter\ : LABEL IS "U(0,0)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:sRX:RxSts\ : LABEL IS "statusicell2";
-    ATTRIBUTE Location OF \MIDI1_UART:BUART:sRX:RxSts\ : LABEL IS "U(0,2)";
+    ATTRIBUTE Location OF \MIDI1_UART:BUART:sRX:RxSts\ : LABEL IS "U(0,1)";
     ATTRIBUTE Location OF \USB:dp_int\ : LABEL IS "[IntrContainer=(0)][IntrId=(12)]";
     ATTRIBUTE Location OF \USB:USB\ : LABEL IS "F(USB,0)";
-    ATTRIBUTE Location OF \USB:ep_2\ : LABEL IS "[IntrContainer=(0)][IntrId=(4)]";
-    ATTRIBUTE Location OF \USB:ep_1\ : LABEL IS "[IntrContainer=(0)][IntrId=(3)]";
+    ATTRIBUTE Location OF \USB:ep_2\ : LABEL IS "[IntrContainer=(0)][IntrId=(5)]";
+    ATTRIBUTE Location OF \USB:ep_1\ : LABEL IS "[IntrContainer=(0)][IntrId=(4)]";
     ATTRIBUTE Location OF \USB:ep_0\ : LABEL IS "[IntrContainer=(0)][IntrId=(24)]";
     ATTRIBUTE Location OF \USB:bus_reset\ : LABEL IS "[IntrContainer=(0)][IntrId=(23)]";
     ATTRIBUTE Location OF \USB:arb_int\ : LABEL IS "[IntrContainer=(0)][IntrId=(22)]";
     ATTRIBUTE Location OF \USB:sof_int\ : LABEL IS "[IntrContainer=(0)][IntrId=(21)]";
+    ATTRIBUTE Location OF Sleep_isr : LABEL IS "[IntrContainer=(0)][IntrId=(0)]";
     ATTRIBUTE lib_model OF \CapSense:Net_1603\ : LABEL IS "macrocell15";
     ATTRIBUTE Location OF \CapSense:Net_1603\ : LABEL IS "U(0,2)";
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:wndState_2\ : LABEL IS "macrocell16";
@@ -372,19 +374,19 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:wndState_1\ : LABEL IS "macrocell17";
     ATTRIBUTE Location OF \CapSense:MeasureCH0:wndState_1\ : LABEL IS "U(0,3)";
     ATTRIBUTE lib_model OF \CapSense:MeasureCH0:wndState_0\ : LABEL IS "macrocell18";
-    ATTRIBUTE Location OF \CapSense:MeasureCH0:wndState_0\ : LABEL IS "U(0,3)";
+    ATTRIBUTE Location OF \CapSense:MeasureCH0:wndState_0\ : LABEL IS "U(0,2)";
     ATTRIBUTE lib_model OF \CapSense:ClockGen:clock_detect_reg\ : LABEL IS "macrocell19";
-    ATTRIBUTE Location OF \CapSense:ClockGen:clock_detect_reg\ : LABEL IS "U(1,3)";
+    ATTRIBUTE Location OF \CapSense:ClockGen:clock_detect_reg\ : LABEL IS "U(1,2)";
     ATTRIBUTE lib_model OF \CapSense:ClockGen:tmp_ppulse_reg\ : LABEL IS "macrocell20";
     ATTRIBUTE Location OF \CapSense:ClockGen:tmp_ppulse_reg\ : LABEL IS "U(1,3)";
     ATTRIBUTE lib_model OF \CapSense:ClockGen:tmp_ppulse_dly\ : LABEL IS "macrocell21";
-    ATTRIBUTE Location OF \CapSense:ClockGen:tmp_ppulse_dly\ : LABEL IS "U(1,3)";
+    ATTRIBUTE Location OF \CapSense:ClockGen:tmp_ppulse_dly\ : LABEL IS "U(1,2)";
     ATTRIBUTE lib_model OF \CapSense:ClockGen:cstate_2\ : LABEL IS "macrocell22";
-    ATTRIBUTE Location OF \CapSense:ClockGen:cstate_2\ : LABEL IS "U(0,3)";
+    ATTRIBUTE Location OF \CapSense:ClockGen:cstate_2\ : LABEL IS "U(1,3)";
     ATTRIBUTE lib_model OF \CapSense:mrst\ : LABEL IS "macrocell23";
-    ATTRIBUTE Location OF \CapSense:mrst\ : LABEL IS "U(0,3)";
+    ATTRIBUTE Location OF \CapSense:mrst\ : LABEL IS "U(1,3)";
     ATTRIBUTE lib_model OF \CapSense:ClockGen:inter_reset\ : LABEL IS "macrocell24";
-    ATTRIBUTE Location OF \CapSense:ClockGen:inter_reset\ : LABEL IS "U(0,3)";
+    ATTRIBUTE Location OF \CapSense:ClockGen:inter_reset\ : LABEL IS "U(1,3)";
     ATTRIBUTE lib_model OF Net_18 : LABEL IS "macrocell25";
     ATTRIBUTE Location OF Net_18 : LABEL IS "U(1,0)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:tx_state_1\ : LABEL IS "macrocell26";
@@ -396,27 +398,28 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:tx_bitclk\ : LABEL IS "macrocell29";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:tx_bitclk\ : LABEL IS "U(1,0)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:tx_ctrl_mark_last\ : LABEL IS "macrocell30";
-    ATTRIBUTE Location OF \MIDI1_UART:BUART:tx_ctrl_mark_last\ : LABEL IS "U(0,2)";
+    ATTRIBUTE Location OF \MIDI1_UART:BUART:tx_ctrl_mark_last\ : LABEL IS "U(1,0)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_state_0\ : LABEL IS "macrocell31";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_state_0\ : LABEL IS "U(0,1)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_load_fifo\ : LABEL IS "macrocell32";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_load_fifo\ : LABEL IS "U(0,1)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_state_3\ : LABEL IS "macrocell33";
-    ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_state_3\ : LABEL IS "U(0,1)";
+    ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_state_3\ : LABEL IS "U(1,1)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_state_2\ : LABEL IS "macrocell34";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_state_2\ : LABEL IS "U(0,1)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_bitclk_enable\ : LABEL IS "macrocell35";
-    ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_bitclk_enable\ : LABEL IS "U(0,0)";
+    ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_bitclk_enable\ : LABEL IS "U(0,1)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_state_stop1_reg\ : LABEL IS "macrocell36";
-    ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_state_stop1_reg\ : LABEL IS "U(0,1)";
+    ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_state_stop1_reg\ : LABEL IS "U(1,1)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:pollcount_1\ : LABEL IS "macrocell37";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:pollcount_1\ : LABEL IS "U(0,0)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:pollcount_0\ : LABEL IS "macrocell38";
-    ATTRIBUTE Location OF \MIDI1_UART:BUART:pollcount_0\ : LABEL IS "U(0,0)";
+    ATTRIBUTE Location OF \MIDI1_UART:BUART:pollcount_0\ : LABEL IS "U(0,2)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_status_3\ : LABEL IS "macrocell39";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_status_3\ : LABEL IS "U(0,0)";
     ATTRIBUTE lib_model OF \MIDI1_UART:BUART:rx_last\ : LABEL IS "macrocell40";
     ATTRIBUTE Location OF \MIDI1_UART:BUART:rx_last\ : LABEL IS "U(0,0)";
+    ATTRIBUTE Location OF PM : LABEL IS "F(PM,0)";
     COMPONENT capsensecell
         PORT (
             lft : IN std_ulogic;
@@ -719,6 +722,14 @@ ARCHITECTURE __DEFAULT__ OF weston_1 IS
             cout : OUT std_ulogic;
             q : OUT std_ulogic;
             q_fixed : OUT std_ulogic);
+    END COMPONENT;
+    COMPONENT pmcell
+        PORT (
+            ctw_int : OUT std_ulogic;
+            ftw_int : OUT std_ulogic;
+            limact_int : OUT std_ulogic;
+            onepps_int : OUT std_ulogic;
+            pm_int : OUT std_ulogic);
     END COMPONENT;
     COMPONENT statusicell
         PORT (
@@ -2617,6 +2628,14 @@ BEGIN
             interrupt => Net_19,
             clock => ClockBlock_BUS_CLK);
 
+    Sleep_isr:interrupt
+        GENERIC MAP(
+            int_type => "10",
+            is_nmi => 0)
+        PORT MAP(
+            interrupt => CTW_OUT,
+            clock => ClockBlock_BUS_CLK);
+
     \CapSense:Net_1603\:macrocell
         GENERIC MAP(
             eqn_main => "(main_0 * main_1 * !main_2 * main_3 * !main_4 * !main_5 * !main_6) + (!main_2 * !main_3 * !main_4 * !main_5 * main_6 * main_7 * main_8)",
@@ -3015,5 +3034,9 @@ BEGIN
             q => \MIDI1_UART:BUART:rx_last\,
             clock_0 => \MIDI1_UART:Net_9\,
             main_0 => Net_11);
+
+    PM:pmcell
+        PORT MAP(
+            ctw_int => CTW_OUT);
 
 END __DEFAULT__;

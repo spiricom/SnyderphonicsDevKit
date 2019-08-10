@@ -62,6 +62,10 @@
   <file name="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\codegentemp\LED1.h" value="HEADER;;;;;LED1" />
   <file name="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\codegentemp\Em_EEPROM.c" value="SOURCE_C;CortexM3;;;;Em_EEPROM" />
   <file name="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\codegentemp\Em_EEPROM.h" value="HEADER;;;;;Em_EEPROM" />
+  <file name="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\codegentemp\Sleep_isr.c" value="SOURCE_C;CortexM3;;;;Sleep_isr" />
+  <file name="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\codegentemp\Sleep_isr.h" value="HEADER;;;;;Sleep_isr" />
+  <file name="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\codegentemp\SleepTimer.c" value="SOURCE_C;CortexM3;;;;SleepTimer" />
+  <file name="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\codegentemp\SleepTimer.h" value="HEADER;;;;;SleepTimer" />
   <file name="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\codegentemp\CapSense_CompCH0.c" value="SOURCE_C;CortexM3;;;;CapSense_CompCH0" />
   <file name="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\codegentemp\CapSense_CompCH0.h" value="HEADER;;;;;CapSense_CompCH0" />
   <file name="C:\Users\JeffSnyder\Documents\SnyderphonicsDevKit\weston_1\weston_1.cydsn\codegentemp\CapSense_CompCH0_PM.c" value="SOURCE_C;CortexM3;;;;CapSense_CompCH0" />
